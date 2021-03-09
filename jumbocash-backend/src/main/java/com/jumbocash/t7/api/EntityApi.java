@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public interface EntityApi {
     @RequestMapping(value = "/entity",
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<Void> addEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be added.", required=true, schema=@Schema()) @Valid @RequestBody Entity body);
+    ResponseEntity<Void> addEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be added.", required=true, schema=@Schema()) @Valid @RequestBody Entity entity);
 
 
     @Operation(summary = "Display entity by Entity ID.", description = "Display entity details.", tags={ "entity" })
@@ -50,25 +51,25 @@ public interface EntityApi {
     @RequestMapping(value = "/entity/{entityId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Entity> getEntitiesByEntityId(@Parameter(in = ParameterIn.PATH, description = "Entity ID", required=true, schema=@Schema()) @PathVariable("entityId") Long entityId);
+    ResponseEntity<Entity> getEntityByEntityId(@Parameter(in = ParameterIn.PATH, description = "Entity ID", required=true, schema=@Schema()) @PathVariable("entityId") BigInteger entityId);
 
 
     @Operation(summary = "Display all entities.", description = "Display all entities for an user.", tags={ "entity" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Entity.class)))) })
-    @RequestMapping(value = "/entity/{userId}",
+    @RequestMapping(value = "/entity/user/{userId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Entity>> getEntitiesByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") Long userId);
+    ResponseEntity<List<Entity>> getEntitiesByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") BigInteger userId);
 
 
     @Operation(summary = "Update entity details", description = "", tags={ "entity" })
-    @ApiResponses(value = { 
+    @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successful Operation") })
     @RequestMapping(value = "/entity",
-        consumes = { "application/json" }, 
+        consumes = { "application/json" },
         method = RequestMethod.PATCH)
-    ResponseEntity<Void> updateEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Entity body);
+    ResponseEntity<Void> updateEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Entity entity);
 
 }
 

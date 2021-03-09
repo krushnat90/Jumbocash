@@ -1,5 +1,6 @@
 package com.jumbocash.t7.model;
 
+import java.math.BigInteger;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -18,46 +19,19 @@ import javax.validation.constraints.*;
 
 public class Entity   {
   @JsonProperty("entityId")
-  private Long entityId = null;
+  private BigInteger entityId = null;
 
-  /**
-   * Gets or Sets entityType
-   */
-  public enum EntityTypeEnum {
-    CUSTOMER("customer"),
-    
-    VENDOR("vendor");
-
-    private String value;
-
-    EntityTypeEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static EntityTypeEnum fromValue(String text) {
-      for (EntityTypeEnum b : EntityTypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("entityType")
-  private EntityTypeEnum entityType = null;
+  private String entityType = null;
 
   @JsonProperty("entityName")
   private String entityName = null;
 
+  @JsonProperty("email")
+  private String email = null;
+
   @JsonProperty("phone")
-  private Long phone = null;
+  private BigInteger phone = null;
 
   @JsonProperty("address")
   private String address = null;
@@ -69,9 +43,9 @@ public class Entity   {
   private String state = null;
 
   @JsonProperty("zip")
-  private Long zip = null;
+  private Integer zip = null;
 
-  public Entity entityId(Long entityId) {
+  public Entity entityId(BigInteger entityId) {
     this.entityId = entityId;
     return this;
   }
@@ -82,15 +56,15 @@ public class Entity   {
    **/
   @Schema(description = "")
   
-    public Long getEntityId() {
+    public BigInteger getEntityId() {
     return entityId;
   }
 
-  public void setEntityId(Long entityId) {
+  public void setEntityId(BigInteger entityId) {
     this.entityId = entityId;
   }
 
-  public Entity entityType(EntityTypeEnum entityType) {
+  public Entity entityType(String entityType) {
     this.entityType = entityType;
     return this;
   }
@@ -101,11 +75,11 @@ public class Entity   {
    **/
   @Schema(description = "")
   
-    public EntityTypeEnum getEntityType() {
+    public String getEntityType() {
     return entityType;
   }
 
-  public void setEntityType(EntityTypeEnum entityType) {
+  public void setEntityType(String entityType) {
     this.entityType = entityType;
   }
 
@@ -113,6 +87,26 @@ public class Entity   {
     this.entityName = entityName;
     return this;
   }
+
+  public Entity email(String email) {
+    this.email = email;
+    return this;
+  }
+
+  /**
+   * Get email
+   * @return email
+   **/
+  @Schema(description = "")
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
 
   /**
    * Get entityName
@@ -128,7 +122,7 @@ public class Entity   {
     this.entityName = entityName;
   }
 
-  public Entity phone(Long phone) {
+  public Entity phone(BigInteger phone) {
     this.phone = phone;
     return this;
   }
@@ -139,11 +133,11 @@ public class Entity   {
    **/
   @Schema(description = "")
   
-    public Long getPhone() {
+    public BigInteger getPhone() {
     return phone;
   }
 
-  public void setPhone(Long phone) {
+  public void setPhone(BigInteger phone) {
     this.phone = phone;
   }
 
@@ -204,7 +198,7 @@ public class Entity   {
     this.state = state;
   }
 
-  public Entity zip(Long zip) {
+  public Entity zip(Integer zip) {
     this.zip = zip;
     return this;
   }
@@ -215,11 +209,11 @@ public class Entity   {
    **/
   @Schema(description = "")
   
-    public Long getZip() {
+    public Integer getZip() {
     return zip;
   }
 
-  public void setZip(Long zip) {
+  public void setZip(Integer zip) {
     this.zip = zip;
   }
 
@@ -236,6 +230,7 @@ public class Entity   {
     return Objects.equals(this.entityId, entity.entityId) &&
         Objects.equals(this.entityType, entity.entityType) &&
         Objects.equals(this.entityName, entity.entityName) &&
+            Objects.equals(this.email, entity.email) &&
         Objects.equals(this.phone, entity.phone) &&
         Objects.equals(this.address, entity.address) &&
         Objects.equals(this.city, entity.city) &&
@@ -245,7 +240,7 @@ public class Entity   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(entityId, entityType, entityName, phone, address, city, state, zip);
+    return Objects.hash(entityId, entityType, entityName, email, phone, address, city, state, zip);
   }
 
   @Override
@@ -256,6 +251,7 @@ public class Entity   {
     sb.append("    entityId: ").append(toIndentedString(entityId)).append("\n");
     sb.append("    entityType: ").append(toIndentedString(entityType)).append("\n");
     sb.append("    entityName: ").append(toIndentedString(entityName)).append("\n");
+    sb.append("    entityName: ").append(toIndentedString(email)).append("\n");
     sb.append("    phone: ").append(toIndentedString(phone)).append("\n");
     sb.append("    address: ").append(toIndentedString(address)).append("\n");
     sb.append("    city: ").append(toIndentedString(city)).append("\n");

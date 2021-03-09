@@ -1,7 +1,9 @@
 package com.jumbocash.t7.api;
 
+import com.jumbocash.t7.exception.JumbocashException;
 import com.jumbocash.t7.model.Entity;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jumbocash.t7.service.EntityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +32,7 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -42,48 +46,56 @@ public class EntityApiController implements EntityApi {
 
     private final HttpServletRequest request;
 
+    @Autowired
+    private EntityService entityService;
+
     @org.springframework.beans.factory.annotation.Autowired
     public EntityApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
     }
 
-    public ResponseEntity<Void> addEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be added.", required=true, schema=@Schema()) @Valid @RequestBody Entity body) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    public ResponseEntity<Entity> getEntitiesByEntityId(@Parameter(in = ParameterIn.PATH, description = "Entity ID", required=true, schema=@Schema()) @PathVariable("entityId") Long entityId) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Entity>(objectMapper.readValue("{\n  \"zip\" : 1,\n  \"address\" : \"address\",\n  \"phone\" : 6,\n  \"city\" : \"city\",\n  \"entityType\" : \"customer\",\n  \"entityName\" : \"entityName\",\n  \"entityId\" : 0,\n  \"state\" : \"state\"\n}", Entity.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Entity>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    public ResponseEntity<Void> addEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be added.", required = true, schema = @Schema()) @Valid @RequestBody Entity entity) {
+        try {
+            log.info("HI");
+            return new ResponseEntity<Void>(entityService.addNewEntity(entity), HttpStatus.OK);
+        } catch (JumbocashException je) {
+            log.error("Entry already present in database for Email ID : " + entity.getEmail());
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            log.error("Exception occurred in addEntity method for entity " + entity.toString() + " --> " + e.getMessage());
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return new ResponseEntity<Entity>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<List<Entity>> getEntitiesByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") Long userId) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<List<Entity>>(objectMapper.readValue("[ {\n  \"zip\" : 1,\n  \"address\" : \"address\",\n  \"phone\" : 6,\n  \"city\" : \"city\",\n  \"entityType\" : \"customer\",\n  \"entityName\" : \"entityName\",\n  \"entityId\" : 0,\n  \"state\" : \"state\"\n}, {\n  \"zip\" : 1,\n  \"address\" : \"address\",\n  \"phone\" : 6,\n  \"city\" : \"city\",\n  \"entityType\" : \"customer\",\n  \"entityName\" : \"entityName\",\n  \"entityId\" : 0,\n  \"state\" : \"state\"\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Entity>>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    public ResponseEntity<Entity> getEntityByEntityId(@Parameter(in = ParameterIn.PATH, description = "Entity ID", required = true, schema = @Schema()) @PathVariable("entityId") BigInteger entityId) {
+        try {
+            return new ResponseEntity<Entity>(entityService.getEntityByEntityId(entityId), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception occurred in getEntityByEntityId method for entity ID: " + entityId + " --> " + e.getMessage());
+            return new ResponseEntity<Entity>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return new ResponseEntity<List<Entity>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> updateEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Entity body) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<List<Entity>> getEntitiesByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required = true, schema = @Schema()) @PathVariable("userId") BigInteger userId) {
+        try {
+            return new ResponseEntity<List<Entity>>(entityService.getEntitiesByUserId(userId), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception occurred in getEntitiesByUserId method for user ID: " + userId + " --> " + e.getMessage());
+            return new ResponseEntity<List<Entity>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<Void> updateEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be updated.", required = true, schema = @Schema()) @Valid @RequestBody Entity entity) {
+        try {
+            return new ResponseEntity<Void>(entityService.updateExistingEntity(entity), HttpStatus.OK);
+        } catch (JumbocashException je) {
+            log.error("No entry found in database for Entity ID " + entity.getEntityId());
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            log.error("Exception occurred in updateEntity method for entity " + entity.toString() + " --> " + e.getMessage());
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
