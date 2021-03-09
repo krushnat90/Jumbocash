@@ -59,7 +59,7 @@ public interface TransactionApi {
     @RequestMapping(value = "/transaction/{userId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Transaction>> getTransactionByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") Long userId);
+    ResponseEntity<List<Transaction>> getTransactionsByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") Long userId);
 
 
     @Operation(summary = "Update transaction details", description = "", tags={ "transaction" })
