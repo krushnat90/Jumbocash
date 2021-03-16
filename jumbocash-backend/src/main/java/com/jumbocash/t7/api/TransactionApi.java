@@ -5,32 +5,27 @@
  */
 package com.jumbocash.t7.api;
 
+import java.math.BigInteger;
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 import com.jumbocash.t7.model.Transaction;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.CookieValue;
-
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-03-07T11:46:35.995Z[GMT]")
 public interface TransactionApi {
@@ -41,7 +36,7 @@ public interface TransactionApi {
     @RequestMapping(value = "/transaction",
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<Void> addTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be added.", required=true, schema=@Schema()) @Valid @RequestBody Transaction body);
+    ResponseEntity<Transaction> addTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be added.", required=true, schema=@Schema()) @Valid @RequestBody Transaction body);
 
 
     @Operation(summary = "Display transaction.", description = "Display transctions for a transaction ID.", tags={ "transaction" })
@@ -50,16 +45,16 @@ public interface TransactionApi {
     @RequestMapping(value = "/transaction/{transactionId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Transaction> getTransactionByTransactionId(@Parameter(in = ParameterIn.PATH, description = "Transaction ID", required=true, schema=@Schema()) @PathVariable("transactionId") Long transactionId);
+    ResponseEntity<Transaction> getTransactionByTransactionId(@Parameter(in = ParameterIn.PATH, description = "Transaction ID", required=true, schema=@Schema()) @PathVariable("transactionId") BigInteger transactionId);
 
 
     @Operation(summary = "Display all transaction.", description = "Display all transctions for an user.", tags={ "transaction" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Transaction.class)))) })
-    @RequestMapping(value = "/transaction/{userId}",
+    @RequestMapping(value = "/transaction/user/{userId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Transaction>> getTransactionsByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") Long userId);
+    ResponseEntity<List<Transaction>> getTransactionsByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") BigInteger userId);
 
 
     @Operation(summary = "Update transaction details", description = "", tags={ "transaction" })

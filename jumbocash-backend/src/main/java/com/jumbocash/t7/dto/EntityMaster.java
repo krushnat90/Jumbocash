@@ -1,18 +1,29 @@
 package com.jumbocash.t7.dto;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="ENTITY_MASTER")
 public class EntityMaster {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private BigInteger entityId;
-    private String entityTyp;
+    
+    @Column(name="entity_typ")
+    private String entityType;
     private String entityName;
     private String email;
     private BigInteger phone;
@@ -21,10 +32,23 @@ public class EntityMaster {
     private String state;
     private Integer zip;
 
-//    @OneToMany(mappedBy="UserEntityLnk")
-//    private UserEntityLnk userEntityLnk;
+    @ManyToMany
+    @JoinTable(name = "USER_ENTITY_LNK", joinColumns = @JoinColumn(name = "entityId"), inverseJoinColumns = @JoinColumn(name = "userId"))
+    private List<AppUser> users = new ArrayList<>();
 
-    public BigInteger getEntityId() {
+    public void addUser(AppUser user){
+    	this.users.add(user);
+    }
+    
+    public List<AppUser> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<AppUser> users) {
+		this.users = users;
+	}
+
+	public BigInteger getEntityId() {
         return entityId;
     }
 
@@ -32,12 +56,12 @@ public class EntityMaster {
         this.entityId = entityId;
     }
 
-    public String getEntityTyp() {
-        return entityTyp;
+    public String getEntityType() {
+        return entityType;
     }
 
-    public void setEntityTyp(String entityTyp) {
-        this.entityTyp = entityTyp;
+    public void setEntityType(String entityTyp) {
+        this.entityType = entityTyp;
     }
 
     public String getEntityName() {
@@ -110,7 +134,7 @@ public class EntityMaster {
     public String toString() {
         return "EntityMaster{" +
                 "entityId=" + entityId +
-                ", entityTyp='" + entityTyp + '\'' +
+                ", entityTyp='" + entityType + '\'' +
                 ", entityName='" + entityName + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNo=" + phone +

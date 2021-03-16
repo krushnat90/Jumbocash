@@ -3,30 +3,42 @@ package com.jumbocash.t7.dto;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import java.math.BigInteger;
 
 @Entity
+@Table(name = "USER_ENTITY_LNK")
 public class UserEntityLnk {
-    @Id
-    private BigInteger userId;
-    private BigInteger entityId;
 
-//    @M@OneToMany(mappedBy="UserEntityLnk")
-//    private UserEntityLnk userEntityLnk;
+	@Id
+	private BigInteger userId;
 
-    public BigInteger getUserId() {
-        return userId;
-    }
+	private BigInteger entityId;
 
-    public void setUserId(BigInteger userId) {
-        this.userId = userId;
-    }
+	public BigInteger getUserId() {
+		return userId;
+	}
 
-    public BigInteger getEntityId() {
-        return entityId;
-    }
+	public UserEntityLnk() {
+		super();
+	}
 
-    public void setEntityId(BigInteger entityId) {
-        this.entityId = entityId;
-    }
+	public UserEntityLnk(BigInteger userId, BigInteger entityId) {
+		super();
+		this.userId = userId;
+		this.entityId = entityId;
+	}
+
+	public void setUserId(BigInteger userId) {
+		this.userId = userId;
+	}
+
+	public BigInteger getEntityId() {
+		return entityId;
+	}
+
+	public void setEntityId(BigInteger entityId) {
+		this.entityId = entityId;
+	}
 }
