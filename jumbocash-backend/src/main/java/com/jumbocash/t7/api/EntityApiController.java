@@ -57,7 +57,6 @@ public class EntityApiController implements EntityApi {
 
     public ResponseEntity<Void> addEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be added.", required = true, schema = @Schema()) @Valid @RequestBody Entity entity) {
         try {
-            log.info("HI");
             return new ResponseEntity<Void>(entityService.addNewEntity(entity), HttpStatus.OK);
         } catch (JumbocashException je) {
             log.error("Entry already present in database for Email ID : " + entity.getEmail());

@@ -12,5 +12,7 @@ public interface EntityService {
     public Void updateExistingEntity(Entity entity) throws Exception;
     public Entity getEntityByEntityId(BigInteger entityId) throws Exception;
     public List<Entity> getEntitiesByUserId(BigInteger userId) throws Exception;
+    
+    boolean existsEntity(BigInteger entityId);
 
 }
