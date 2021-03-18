@@ -1,6 +1,8 @@
 package com.jumbocash.t7.api;
 
+import com.jumbocash.t7.dto.TranMaster;
 import com.jumbocash.t7.model.Transaction;
+import com.jumbocash.t7.service.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,61 +31,79 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-03-07T11:46:35.995Z[GMT]")
 @RestController
 public class TransactionApiController implements TransactionApi {
 
-    private static final Logger log = LoggerFactory.getLogger(TransactionApiController.class);
+	private static final Logger log = LoggerFactory.getLogger(TransactionApiController.class);
 
-    private final ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
-    private final HttpServletRequest request;
+	private final HttpServletRequest request;
 
-    @org.springframework.beans.factory.annotation.Autowired
-    public TransactionApiController(ObjectMapper objectMapper, HttpServletRequest request) {
-        this.objectMapper = objectMapper;
-        this.request = request;
-    }
+	private final TransactionService transactionService;
 
-    public ResponseEntity<Void> addTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be added.", required=true, schema=@Schema()) @Valid @RequestBody Transaction body) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
-    }
+	public TransactionApiController(ObjectMapper objectMapper, HttpServletRequest request,
+			TransactionService transactionService) {
+		super();
+		this.objectMapper = objectMapper;
+		this.request = request;
+		this.transactionService = transactionService;
+	}
 
-    public ResponseEntity<Transaction> getTransactionByTransactionId(@Parameter(in = ParameterIn.PATH, description = "Transaction ID", required=true, schema=@Schema()) @PathVariable("transactionId") Long transactionId) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Transaction>(objectMapper.readValue("{\n  \"tranId\" : 0,\n  \"amount\" : 6,\n  \"paymentMode\" : \"paymentMode\",\n  \"entityName\" : \"entityName\",\n  \"tranTimestamp\" : \"tranTimestamp\",\n  \"remarks\" : \"remarks\",\n  \"tranType\" : \"credit\",\n  \"tranStatus\" : \"pending\"\n}", Transaction.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Transaction>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+	public ResponseEntity<Transaction> addTransaction(
+			@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be added.", required = true, schema = @Schema()) @Valid @RequestBody Transaction body) {
+		
+		Optional<TranMaster> addedTransaction = transactionService.addTransaction(body);
+		
+		if(!addedTransaction.isPresent())
+			return ResponseEntity.badRequest().build();
+		
+		return ResponseEntity.ok(body);
+	}
 
-        return new ResponseEntity<Transaction>(HttpStatus.NOT_IMPLEMENTED);
-    }
+	public ResponseEntity<Transaction> getTransactionByTransactionId(
+			@Parameter(in = ParameterIn.PATH, description = "Transaction ID", required = true, schema = @Schema()) @PathVariable("transactionId") BigInteger transactionId) {
+			try {
+				
+				Optional<Transaction> transactionByTranId = transactionService.getTransactionByTranId(transactionId);
+				
+				return transactionByTranId.isPresent()?ResponseEntity.ok(transactionByTranId.get()):ResponseEntity.notFound().build();
+				
+			} catch (Exception e) {
+				log.error("Couldn't serialize response for content type application/json", e);
+				return new ResponseEntity<Transaction>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 
-    public ResponseEntity<List<Transaction>> getTransactionsByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") Long userId) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<List<Transaction>>(objectMapper.readValue("[ {\n  \"tranId\" : 0,\n  \"amount\" : 6,\n  \"paymentMode\" : \"paymentMode\",\n  \"entityName\" : \"entityName\",\n  \"tranTimestamp\" : \"tranTimestamp\",\n  \"remarks\" : \"remarks\",\n  \"tranType\" : \"credit\",\n  \"tranStatus\" : \"pending\"\n}, {\n  \"tranId\" : 0,\n  \"amount\" : 6,\n  \"paymentMode\" : \"paymentMode\",\n  \"entityName\" : \"entityName\",\n  \"tranTimestamp\" : \"tranTimestamp\",\n  \"remarks\" : \"remarks\",\n  \"tranType\" : \"credit\",\n  \"tranStatus\" : \"pending\"\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Transaction>>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+	}
 
-        return new ResponseEntity<List<Transaction>>(HttpStatus.NOT_IMPLEMENTED);
-    }
+	public ResponseEntity<List<Transaction>> getTransactionsByUserId(
+			@Parameter(in = ParameterIn.PATH, description = "User ID", required = true, schema = @Schema()) @PathVariable("userId") BigInteger userId) {
+			try {
+				
+				Optional<List<Transaction>> transactionsByUserId = transactionService.getTransactionsByUserId(userId);
+				
+				if(!transactionsByUserId.isPresent()){
+					return ResponseEntity.notFound().build();
+				}
+				
+				return ResponseEntity.ok(transactionsByUserId.get());
+				
+			} catch (Exception e) {
+				log.error("Couldn't serialize response for content type application/json", e);
+				return new ResponseEntity<List<Transaction>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 
-    public ResponseEntity<Void> updateTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Transaction body) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
-    }
+	}
+
+	public ResponseEntity<Void> updateTransaction(
+			@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be updated.", required = true, schema = @Schema()) @Valid @RequestBody Transaction body) {
+		String accept = request.getHeader("Accept");
+		return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+	}
 
 }

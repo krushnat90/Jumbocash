@@ -1,308 +1,277 @@
 package com.jumbocash.t7.model;
 
+import java.math.BigInteger;
 import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
  * Transaction
  */
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-03-07T11:46:35.995Z[GMT]")
 
+public class Transaction {
+	@JsonProperty("tranId")
+	private Long tranId = null;
 
-public class Transaction   {
-  @JsonProperty("tranId")
-  private Long tranId = null;
+	/**
+	 * Gets or Sets tranType
+	 */
 
-  /**
-   * Gets or Sets tranType
-   */
-  public enum TranTypeEnum {
-    CREDIT("credit"),
-    
-    DEBIT("debit");
+	@JsonProperty("tranType")
+	private String tranType = null;
 
-    private String value;
+	@JsonProperty("tranTimestamp")
+	private String lstUpdtTs = null;
 
-    TranTypeEnum(String value) {
-      this.value = value;
-    }
+	/**
+	 * Gets or Sets tranStatus
+	 */
 
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
+	@JsonProperty("tranStatus")
+	private String tranStatus = null;
 
-    @JsonCreator
-    public static TranTypeEnum fromValue(String text) {
-      for (TranTypeEnum b : TranTypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-  @JsonProperty("tranType")
-  private TranTypeEnum tranType = null;
+	@JsonProperty("entityId")
+	private BigInteger entityId = null;
+	
+	@JsonProperty("userId")
+	private BigInteger userId = null;
 
-  @JsonProperty("tranTimestamp")
-  private String tranTimestamp = null;
+	@JsonProperty("paymentMode")
+	private String paymentMode = null;
 
-  /**
-   * Gets or Sets tranStatus
-   */
-  public enum TranStatusEnum {
-    PENDING("pending"),
-    
-    DONE("done");
+	@JsonProperty("amount")
+	private Long amount = null;
 
-    private String value;
+	@JsonProperty("remarks")
+	private String remarks = null;
 
-    TranStatusEnum(String value) {
-      this.value = value;
-    }
+	public Transaction tranId(Long tranId) {
+		this.tranId = tranId;
+		return this;
+	}
 
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
+	/**
+	 * Get tranId
+	 * 
+	 * @return tranId
+	 **/
+	@Schema(description = "")
 
-    @JsonCreator
-    public static TranStatusEnum fromValue(String text) {
-      for (TranStatusEnum b : TranStatusEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-  @JsonProperty("tranStatus")
-  private TranStatusEnum tranStatus = null;
+	public Long getTranId() {
+		return tranId;
+	}
 
-  @JsonProperty("entityName")
-  private String entityName = null;
+	public void setTranId(Long tranId) {
+		this.tranId = tranId;
+	}
 
-  @JsonProperty("paymentMode")
-  private String paymentMode = null;
+	public Transaction tranType(String tranType) {
+		this.tranType = tranType;
+		return this;
+	}
 
-  @JsonProperty("amount")
-  private Long amount = null;
+	/**
+	 * Get tranType
+	 * 
+	 * @return tranType
+	 **/
+	@Schema(description = "")
 
-  @JsonProperty("remarks")
-  private String remarks = null;
+	public String getTranType() {
+		return tranType;
+	}
 
-  public Transaction tranId(Long tranId) {
-    this.tranId = tranId;
-    return this;
-  }
+	public void setTranType(String tranType) {
+		this.tranType = tranType;
+	}
 
-  /**
-   * Get tranId
-   * @return tranId
-   **/
-  @Schema(description = "")
-  
-    public Long getTranId() {
-    return tranId;
-  }
+	public Transaction lstUpdtTs(String tranTimestamp) {
+		this.lstUpdtTs = tranTimestamp;
+		return this;
+	}
 
-  public void setTranId(Long tranId) {
-    this.tranId = tranId;
-  }
+	/**
+	 * Get tranTimestamp
+	 * 
+	 * @return tranTimestamp
+	 **/
+	@Schema(description = "")
 
-  public Transaction tranType(TranTypeEnum tranType) {
-    this.tranType = tranType;
-    return this;
-  }
+	public String getlstUpdtTs() {
+		return lstUpdtTs;
+	}
 
-  /**
-   * Get tranType
-   * @return tranType
-   **/
-  @Schema(description = "")
-  
-    public TranTypeEnum getTranType() {
-    return tranType;
-  }
+	public void setlstUpdtTs(String tranTimestamp) {
+		this.lstUpdtTs = tranTimestamp;
+	}
 
-  public void setTranType(TranTypeEnum tranType) {
-    this.tranType = tranType;
-  }
+	public Transaction tranStatus(String tranStatus) {
+		this.tranStatus = tranStatus;
+		return this;
+	}
 
-  public Transaction tranTimestamp(String tranTimestamp) {
-    this.tranTimestamp = tranTimestamp;
-    return this;
-  }
+	/**
+	 * Get tranStatus
+	 * 
+	 * @return tranStatus
+	 **/
+	@Schema(description = "")
 
-  /**
-   * Get tranTimestamp
-   * @return tranTimestamp
-   **/
-  @Schema(description = "")
-  
-    public String getTranTimestamp() {
-    return tranTimestamp;
-  }
+	public String getTranStatus() {
+		return tranStatus;
+	}
 
-  public void setTranTimestamp(String tranTimestamp) {
-    this.tranTimestamp = tranTimestamp;
-  }
+	public void setTranStatus(String tranStatus) {
+		this.tranStatus = tranStatus;
+	}
 
-  public Transaction tranStatus(TranStatusEnum tranStatus) {
-    this.tranStatus = tranStatus;
-    return this;
-  }
+	public Transaction paymentMode(String paymentMode) {
+		this.paymentMode = paymentMode;
+		return this;
+	}
 
-  /**
-   * Get tranStatus
-   * @return tranStatus
-   **/
-  @Schema(description = "")
-  
-    public TranStatusEnum getTranStatus() {
-    return tranStatus;
-  }
+	/**
+	 * Get paymentMode
+	 * 
+	 * @return paymentMode
+	 **/
+	@Schema(description = "")
 
-  public void setTranStatus(TranStatusEnum tranStatus) {
-    this.tranStatus = tranStatus;
-  }
+	public String getPaymentMode() {
+		return paymentMode;
+	}
 
-  public Transaction entityName(String entityName) {
-    this.entityName = entityName;
-    return this;
-  }
+	public void setPaymentMode(String paymentMode) {
+		this.paymentMode = paymentMode;
+	}
 
-  /**
-   * Get entityName
-   * @return entityName
-   **/
-  @Schema(description = "")
-  
-    public String getEntityName() {
-    return entityName;
-  }
+	public Transaction amount(Long amount) {
+		this.amount = amount;
+		return this;
+	}
 
-  public void setEntityName(String entityName) {
-    this.entityName = entityName;
-  }
+	/**
+	 * Get amount
+	 * 
+	 * @return amount
+	 **/
+	@Schema(description = "")
 
-  public Transaction paymentMode(String paymentMode) {
-    this.paymentMode = paymentMode;
-    return this;
-  }
+	public Long getAmount() {
+		return amount;
+	}
 
-  /**
-   * Get paymentMode
-   * @return paymentMode
-   **/
-  @Schema(description = "")
-  
-    public String getPaymentMode() {
-    return paymentMode;
-  }
+	public void setAmount(Long amount) {
+		this.amount = amount;
+	}
 
-  public void setPaymentMode(String paymentMode) {
-    this.paymentMode = paymentMode;
-  }
+	public Transaction remarks(String remarks) {
+		this.remarks = remarks;
+		return this;
+	}
 
-  public Transaction amount(Long amount) {
-    this.amount = amount;
-    return this;
-  }
+	/**
+	 * Get remarks
+	 * 
+	 * @return remarks
+	 **/
+	@Schema(description = "")
 
-  /**
-   * Get amount
-   * @return amount
-   **/
-  @Schema(description = "")
-  
-    public Long getAmount() {
-    return amount;
-  }
+	public String getRemarks() {
+		return remarks;
+	}
 
-  public void setAmount(Long amount) {
-    this.amount = amount;
-  }
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	
+	/**
+	 * Get entity id
+	 * 
+	 * @return entityId
+	 **/
 
-  public Transaction remarks(String remarks) {
-    this.remarks = remarks;
-    return this;
-  }
+	public Transaction entityId(BigInteger entityId){
+		this.entityId = entityId;
+		return this;
+	}
+	
+	public BigInteger getEntityId() {
+		return entityId;
+	}
 
-  /**
-   * Get remarks
-   * @return remarks
-   **/
-  @Schema(description = "")
-  
-    public String getRemarks() {
-    return remarks;
-  }
+	public void setEntityId(BigInteger entityId) {
+		this.entityId = entityId;
+	}
+	
+	/**
+	 * Get user id
+	 * 
+	 * @return userId
+	 **/
+	
+	public Transaction userId(BigInteger userId){
+		this.userId = userId;
+		return this;
+	}
 
-  public void setRemarks(String remarks) {
-    this.remarks = remarks;
-  }
+	public BigInteger getUserId() {
+		return userId;
+	}
 
+	public void setUserId(BigInteger userId) {
+		this.userId = userId;
+	}
 
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Transaction transaction = (Transaction) o;
-    return Objects.equals(this.tranId, transaction.tranId) &&
-        Objects.equals(this.tranType, transaction.tranType) &&
-        Objects.equals(this.tranTimestamp, transaction.tranTimestamp) &&
-        Objects.equals(this.tranStatus, transaction.tranStatus) &&
-        Objects.equals(this.entityName, transaction.entityName) &&
-        Objects.equals(this.paymentMode, transaction.paymentMode) &&
-        Objects.equals(this.amount, transaction.amount) &&
-        Objects.equals(this.remarks, transaction.remarks);
-  }
+	@Override
+	public boolean equals(java.lang.Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Transaction transaction = (Transaction) o;
+		return Objects.equals(this.tranId, transaction.tranId) && Objects.equals(this.tranType, transaction.tranType)
+				&& Objects.equals(this.lstUpdtTs, transaction.lstUpdtTs)
+				&& Objects.equals(this.tranStatus, transaction.tranStatus)
+				&& Objects.equals(this.paymentMode, transaction.paymentMode)
+				&& Objects.equals(this.amount, transaction.amount) && Objects.equals(this.remarks, transaction.remarks);
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(tranId, tranType, tranTimestamp, tranStatus, entityName, paymentMode, amount, remarks);
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash(tranId, tranType, lstUpdtTs, tranStatus, paymentMode, amount, remarks);
+	}
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Transaction {\n");
-    
-    sb.append("    tranId: ").append(toIndentedString(tranId)).append("\n");
-    sb.append("    tranType: ").append(toIndentedString(tranType)).append("\n");
-    sb.append("    tranTimestamp: ").append(toIndentedString(tranTimestamp)).append("\n");
-    sb.append("    tranStatus: ").append(toIndentedString(tranStatus)).append("\n");
-    sb.append("    entityName: ").append(toIndentedString(entityName)).append("\n");
-    sb.append("    paymentMode: ").append(toIndentedString(paymentMode)).append("\n");
-    sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
-    sb.append("    remarks: ").append(toIndentedString(remarks)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class Transaction {\n");
 
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+		sb.append("    tranId: ").append(toIndentedString(tranId)).append("\n");
+		sb.append("    tranType: ").append(toIndentedString(tranType)).append("\n");
+		sb.append("    tranTimestamp: ").append(toIndentedString(lstUpdtTs)).append("\n");
+		sb.append("    tranStatus: ").append(toIndentedString(tranStatus)).append("\n");
+		sb.append("    paymentMode: ").append(toIndentedString(paymentMode)).append("\n");
+		sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
+		sb.append("    remarks: ").append(toIndentedString(remarks)).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
+
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
 }
