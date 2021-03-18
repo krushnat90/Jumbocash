@@ -69,7 +69,7 @@ public class AppUser {
 		this.name = name;
 	}
 
-	public BigInteger getProviderId() {
+	public BigInteger getProvider() {
 		return providerId;
 	}
 

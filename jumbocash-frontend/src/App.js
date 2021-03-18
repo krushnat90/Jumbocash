@@ -1,10 +1,10 @@
 import './App.css';
-import NavbarComponent from './components/Navbar/NavbarComponent';
+import DrawerComponent from './components/Navbar/DrawerComponent';
 
 function App() {
   return (
     <div className="App">
-      <NavbarComponent/>
+      <DrawerComponent />
     </div>
   );
 }

@@ -21,9 +21,9 @@ public class TranValidationServiceImpl implements TranValidationService {
 
 	@Override
 	public boolean validateAddTransactionRequest(Transaction transaction) {
-		return transaction.getUserId() != null && transaction.getEntityId() != null
-				&& userService.existsUser(transaction.getUserId())
-				&& entityService.existsEntity(transaction.getEntityId());
+		return transaction.getUserId() != null && transaction.getEntityId() != null;
+//				&& userService.existsUser(transaction.getUserId())
+//				&& entityService.existsEntity(transaction.getEntityId());
 	}
 
 }

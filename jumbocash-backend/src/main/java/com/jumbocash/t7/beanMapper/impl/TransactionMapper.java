@@ -27,6 +27,7 @@ public class TransactionMapper implements BeanMapperFunction<Transaction, TranMa
 
 	@Override
 	public Transaction convertFromDtoToJson(TranMaster d) {
+
 		return modelMapper.map(d, Transaction.class);
 	}
 
