@@ -26,6 +26,7 @@ import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import PeopleAltTwoTone from '@material-ui/icons/PeopleAltTwoTone';
 import AssessmentTwoTone from '@material-ui/icons/AssessmentTwoTone';
 import PermIdentityTwoTone from '@material-ui/icons/PermIdentityTwoTone';
+import AddTransactionComponent from "../TransactionComponents/AddTransactionComponent";
 
 
 const drawerWidth = 240;
@@ -161,6 +162,7 @@ function ResponsiveDrawer(props) {
           <Switch>
             <Route exact path="/" render={() => <div>Home Page</div>} />
             <Route path="/transactions" component={ViewTransactionComponent} />
+            <Route path="/add-transaction" component={AddTransactionComponent} />
           </Switch>
         </main>
       </BrowserRouter>

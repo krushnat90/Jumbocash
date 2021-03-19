@@ -9,6 +9,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TransactionService from "../../services/TransactionService";
+import AddTransactionComponent from "./AddTransactionComponent";
+import Button from 'react-bootstrap/Button';
 
 class ViewTransactionComponent extends Component {
 
@@ -16,10 +18,13 @@ class ViewTransactionComponent extends Component {
         super(props);
         this.state = {
             transactions: [],
-            message: null
+            message: null,
+            openAddFlag: false
         }
         this.getHeader = this.getHeader.bind(this);
         this.getTransactions = this.getTransactions.bind(this);
+        this.addButtonOnclick = this.addButtonOnclick.bind(this);
+        this.addButtonClose = this.addButtonClose.bind(this);
         // this.loadLatestMemes = this.loadLatestMemes.bind(this);
         // this.editButtonClick = this.editButtonClick.bind(this);
         // this.editButtonClose = this.editButtonClose.bind(this);
@@ -45,6 +50,18 @@ class ViewTransactionComponent extends Component {
                 this.setState({message : "Error occurred"})
             }
         )
+    }
+
+    addButtonOnclick(){
+      this.setState({
+        openAddFlag : true
+      })
+    }
+
+    addButtonClose(){
+      this.setState({
+        openAddFlag : false
+      })
     }
 
     getHeader() {
@@ -86,8 +103,12 @@ class ViewTransactionComponent extends Component {
         return (
             
         <div>
+        <Button variant="primary" onClick={this.addButtonOnclick}>Add Transaction</Button>
+        {this.state.openAddFlag && <AddTransactionComponent addButtonClose={this.addButtonClose}/>}
         <TableContainer component={Paper}>
+          
       <Table  size="small" aria-label="a dense table">
+      
       <TableHead>
             <TableRow>
               {this.getHeader().map((column) => (
