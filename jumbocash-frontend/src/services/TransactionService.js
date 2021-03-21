@@ -8,11 +8,15 @@ const ENDPT_ENTITY = "entity"
 const ENDPT_user = "user"
 
 
-class TransactionService{
+class TransactionService {
 
     //retrieve transactions based on user id
-    getTransactionsByUserId(usesrId){
+    getTransactionsByUserId(usesrId) {
         return axios.get(`${BACKEND_API_URL}/${ENDPT_TRANSACTION}/${ENDPT_user}/${usesrId}`)
+    }
+
+    addTransaction(transaction){
+        return axios.post(`${BACKEND_API_URL}/${ENDPT_TRANSACTION}`,transaction)
     }
 
 }

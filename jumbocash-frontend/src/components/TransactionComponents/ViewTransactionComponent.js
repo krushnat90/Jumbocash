@@ -14,137 +14,135 @@ import Button from 'react-bootstrap/Button';
 
 class ViewTransactionComponent extends Component {
 
-    constructor(props){
-        super(props);
-        this.state = {
-            transactions: [],
-            message: null,
-            openAddFlag: false
-        }
-        this.getHeader = this.getHeader.bind(this);
-        this.getTransactions = this.getTransactions.bind(this);
-        this.addButtonOnclick = this.addButtonOnclick.bind(this);
-        this.addButtonClose = this.addButtonClose.bind(this);
-        // this.loadLatestMemes = this.loadLatestMemes.bind(this);
-        // this.editButtonClick = this.editButtonClick.bind(this);
-        // this.editButtonClose = this.editButtonClose.bind(this);
-        // this.loadLatestMemesByName = this.loadLatestMemesByName.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {
+      transactions: [],
+      message: null,
+      openAddFlag: false,
+      userId:2
     }
+    this.getHeader = this.getHeader.bind(this);
+    this.getTransactions = this.getTransactions.bind(this);
+    this.addButtonOnclick = this.addButtonOnclick.bind(this);
+    this.addButtonClose = this.addButtonClose.bind(this);
+  }
 
-    componentDidMount() {
-        this.getTransactions();
-    }
+  componentDidMount() {
+    this.getTransactions();
+  }
 
-    getTransactions(){
-        TransactionService.getTransactionsByUserId(2).then(
-            response => {
-                this.setState({
-                    transactions : response.data
-                })
+  getTransactions() {
+    TransactionService.getTransactionsByUserId(this.state.userId).then(
+      response => {
+        this.setState({
+          transactions: response.data
+        })
 
-                console.log(response.data);
-            }
-            
-        ).catch(
-            error => {
-                this.setState({message : "Error occurred"})
-            }
-        )
-    }
+        console.log(response.data);
+      }
 
-    addButtonOnclick(){
-      this.setState({
-        openAddFlag : true
-      })
-    }
+    ).catch(
+      error => {
+        this.setState({ message: "Error occurred" })
+      }
+    )
+  }
 
-    addButtonClose(){
-      this.setState({
-        openAddFlag : false
-      })
-    }
+  addButtonOnclick() {
+    this.setState({
+      openAddFlag: true
+    })
+  }
 
-    getHeader() {
-        return [
-            { id: 'Date', label: 'Date', minWidth: 170 },
-            { id: 'Amount', label: 'Amount', minWidth: 100 },
-            {
-              id: 'Transaction Type',
-              label: 'Transaction Type',
-              minWidth: 170,
-              align: 'right',
-              format: (value) => value.toLocaleString('en-US'),
-            },
-            {
-              id: 'Payment Mode',
-              label: 'Payment Mode',
-              minWidth: 170,
-              align: 'right',
-              format: (value) => value.toLocaleString('en-US'),
-            },
-            {
-              id: 'Entity',
-              label: 'Entity',
-              minWidth: 170,
-              align: 'center',
-              format: (value) => value.toFixed(2),
-            },
-            {
-                id: 'Remarks',
-                label: 'Remarks',
-                minWidth: 170,
-                align: 'center',
-                format: (value) => value.toFixed(2),
-              },
-        ]
-    }
+  addButtonClose() {
+    this.setState({
+      openAddFlag: false
+    })
+  }
 
-    render() {
-        return (
-            
-        <div>
+  getHeader() {
+    return [
+      { id: 'Date', label: 'Date', minWidth: 170 },
+      { id: 'Amount', label: 'Amount', minWidth: 100 },
+      {
+        id: 'Transaction Type',
+        label: 'Transaction Type',
+        minWidth: 170,
+        align: 'right',
+        format: (value) => value.toLocaleString('en-US'),
+      },
+      {
+        id: 'Payment Mode',
+        label: 'Payment Mode',
+        minWidth: 170,
+        align: 'right',
+        format: (value) => value.toLocaleString('en-US'),
+      },
+      {
+        id: 'Entity',
+        label: 'Entity',
+        minWidth: 170,
+        align: 'center',
+        format: (value) => value.toFixed(2),
+      },
+      {
+        id: 'Remarks',
+        label: 'Remarks',
+        minWidth: 170,
+        align: 'center',
+        format: (value) => value.toFixed(2),
+      },
+    ]
+  }
+
+  render() {
+    return (
+
+      <div>
         <Button variant="primary" onClick={this.addButtonOnclick}>Add Transaction</Button>
-        {this.state.openAddFlag && <AddTransactionComponent addButtonClose={this.addButtonClose}/>}
+        {this.state.openAddFlag && <AddTransactionComponent addButtonCloseFunc={this.addButtonClose} getTransactionsFunc={this.getTransactions} userId={this.state.userId}/>}
+        <hr/>
         <TableContainer component={Paper}>
-          
-      <Table  size="small" aria-label="a dense table">
-      
-      <TableHead>
-            <TableRow>
-              {this.getHeader().map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                    <b>
-                  {column.label}
-                  </b>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-              {
-                  this.state.transactions.map(
-                      transaction =>
-                      <TableRow key={transaction.tranId}>
-                          <TableCell align="left">{transaction.tranTimestamp}</TableCell> 
-                          <TableCell align="center">{transaction.amount}</TableCell> 
-                          <TableCell align="center">{transaction.tranType}</TableCell> 
-                          <TableCell align="center">{transaction.paymentMode}</TableCell> 
-                          <TableCell align="center">{transaction.entityName}</TableCell> 
-                          <TableCell align="left">{transaction.remarks}</TableCell> 
-                      </TableRow>
 
-                  )
+          <Table size="small" aria-label="a dense table">
+
+            <TableHead>
+              <TableRow>
+                {this.getHeader().map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    <b>
+                      {column.label}
+                    </b>
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {
+                this.state.transactions.map(
+                  transaction =>
+                    <TableRow key={transaction.tranId}>
+                      <TableCell align="left">{transaction.tranTimestamp}</TableCell>
+                      <TableCell align="center">{transaction.amount}</TableCell>
+                      <TableCell align="center">{transaction.tranType}</TableCell>
+                      <TableCell align="center">{transaction.paymentMode}</TableCell>
+                      <TableCell align="center">{transaction.entityName}</TableCell>
+                      <TableCell align="left">{transaction.remarks}</TableCell>
+                    </TableRow>
+
+                )
               }
-          </TableBody>
-        </Table>
+            </TableBody>
+          </Table>
         </TableContainer>
-        </div> 
-        )
-    }
+      </div>
+    )
+  }
 }
 
 export default ViewTransactionComponent

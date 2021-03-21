@@ -73,19 +73,19 @@ function ResponsiveDrawer(props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const iconSwitch = (element) =>{
-      switch(element) {
-        case "dashboard" :
-            return <Dashboard />;
-        case "transactions" :
-            return <CompareArrowsIcon />;
-        case "entity":
-            return <PeopleAltTwoTone />;
-        case "reports":
-            return <AssessmentTwoTone />;
-        case "profile":
-            return <PermIdentityTwoTone />;
-      }
+  const iconSwitch = (element) => {
+    switch (element) {
+      case "dashboard":
+        return <Dashboard />;
+      case "transactions":
+        return <CompareArrowsIcon />;
+      case "entity":
+        return <PeopleAltTwoTone />;
+      case "reports":
+        return <AssessmentTwoTone />;
+      case "profile":
+        return <PermIdentityTwoTone />;
+    }
   }
 
   const drawer = (
@@ -93,7 +93,7 @@ function ResponsiveDrawer(props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {["Dashboard", "Transactions","Entity","Reports","Profile"].map((text, index) => (
+        {["Dashboard", "Transactions", "Entity", "Reports", "Profile"].map((text, index) => (
           <ListItem key={text} component={Link} to={"/" + text.toLowerCase()}>
             <ListItemIcon>
               {iconSwitch(text.toLowerCase())}
@@ -137,7 +137,7 @@ function ResponsiveDrawer(props) {
                 paper: classes.drawerPaper
               }}
               ModalProps={{
-                keepMounted: true 
+                keepMounted: true
               }}
             >
               {drawer}
