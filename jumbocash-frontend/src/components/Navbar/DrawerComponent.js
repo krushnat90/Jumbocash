@@ -20,6 +20,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
 import ViewTransactionComponent from "../TransactionComponents/ViewTransactionComponent";
 
+
 //icons
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -109,15 +110,15 @@ function ResponsiveDrawer(props) {
   const iconSwitch = (element) => {
     switch (element) {
       case "dashboard":
-        return <Dashboard />;
+        return <Dashboard className = "blue-color"/>;
       case "transactions":
-        return <CompareArrowsIcon />;
+        return <CompareArrowsIcon className = "purple-color"/>;
       case "entity":
-        return <PeopleAltTwoTone />;
+        return <PeopleAltTwoTone className = "magenta-color" />;
       case "reports":
-        return <AssessmentTwoTone />;
+        return <AssessmentTwoTone className = "pink-color"/>;
       case "profile":
-        return <PermIdentityTwoTone />;
+        return <PermIdentityTwoTone className = "coral-color"/>;
     }
   }
 
@@ -151,7 +152,7 @@ function ResponsiveDrawer(props) {
           [classes.appBarShift]: !open,
         })}
       >
-        <Toolbar>
+        <Toolbar className = "toolbar">
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -163,7 +164,7 @@ function ResponsiveDrawer(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            <b>CASHFLOW</b>
+            <b>JUMBOTAIL CASHFLOW</b>
           </Typography>
         </Toolbar>
       </AppBar>

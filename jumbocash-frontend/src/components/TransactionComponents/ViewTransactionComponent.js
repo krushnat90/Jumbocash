@@ -15,6 +15,9 @@ import QueueTwoToneIcon from '@material-ui/icons/QueueTwoTone';
 import IconButton from '@material-ui/core/IconButton';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
+import { Card, CardContent } from "@material-ui/core";
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 // import Table from 'react-bootstrap/Table';
 
@@ -70,13 +73,12 @@ class ViewTransactionComponent extends Component {
   getHeader() {
     return [
       { id: 'Date', label: 'Date', minWidth: 170 },
-      { id: 'Amount', label: 'Amount', minWidth: 100 },
       {
-        id: 'Transaction Type',
-        label: 'Transaction Type',
+        id: 'Entity',
+        label: 'Entity',
         minWidth: 170,
-        align: 'right',
-        format: (value) => value.toLocaleString('en-US'),
+        align: 'center',
+        format: (value) => value.toFixed(2),
       },
       {
         id: 'Payment Mode',
@@ -86,12 +88,14 @@ class ViewTransactionComponent extends Component {
         format: (value) => value.toLocaleString('en-US'),
       },
       {
-        id: 'Entity',
-        label: 'Entity',
+        id: 'Transaction Type',
+        label: 'Transaction Type',
         minWidth: 170,
-        align: 'center',
-        format: (value) => value.toFixed(2),
+        align: 'right',
+        format: (value) => value.toLocaleString('en-US'),
       },
+      { id: 'Amount', label: 'Amount', minWidth: 100 },
+
       {
         id: 'Remarks',
         label: 'Remarks',
@@ -106,16 +110,19 @@ class ViewTransactionComponent extends Component {
     return (
 
       <div className="container">
+        <div>
         <IconButton className="queueTwoToneIcon" aria-label="edit" color="primary"
           onClick={() =>
             this.addButtonOnclick()}>
           <QueueTwoToneIcon />
         </IconButton>
         {this.state.openAddFlag && <AddTransactionComponent addButtonCloseFunc={this.addButtonClose} getTransactionsFunc={this.getTransactions} userId={this.state.userId} />}
-        <hr />
+      </div>  
 
+      <div>
+        <Card >
+        <CardContent>
         <Table>
-
           <Thead>
             <Tr>
               {this.getHeader().map((column) => (
@@ -136,18 +143,23 @@ class ViewTransactionComponent extends Component {
               this.state.transactions.map(
                 transaction =>
                   <Tr key={transaction.tranId}>
-                    <Td align="left">{transaction.tranTimestamp}</Td>
-                    <Td align="center">{transaction.amount}</Td>
-                    <Td align="center">{transaction.tranType}</Td>
-                    <Td align="center">{transaction.paymentMode}</Td>
+                    <Td align="center">{transaction.tranTimestamp}</Td>
                     <Td align="center">{transaction.entityName}</Td>
-                    <Td align="left">{transaction.remarks}</Td>
+                    <Td align="center">{transaction.paymentMode}</Td>
+                    <Td align="center">{transaction.tranType}</Td>
+                    <Td align="center">
+                      {transaction.amount}
+                      {transaction.tranType.toLowerCase() == 'credit' && <ArrowDropUpIcon className = "green-color"/>}
+                    {transaction.tranType.toLowerCase() == 'debit' && <ArrowDropDownIcon className = "red-color"/>}</Td>
+                    <Td align="center">{transaction.remarks}</Td>
                   </Tr>
-
               )
             }
           </Tbody>
         </Table>
+        </CardContent>
+        </Card>
+        </div>
       </div>
     )
   }
