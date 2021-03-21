@@ -37,6 +37,9 @@ public class Transaction {
 	@JsonProperty("entityId")
 	private BigInteger entityId = null;
 	
+	@JsonProperty("entityName")
+	private String entityName = null;
+	
 	@JsonProperty("userId")
 	private BigInteger userId = null;
 
@@ -73,6 +76,16 @@ public class Transaction {
 		this.tranType = tranType;
 		return this;
 	}
+	
+	
+
+	public String getEntityName() {
+		return entityName;
+	}
+
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
+	}
 
 	/**
 	 * Get tranType
@@ -101,11 +114,11 @@ public class Transaction {
 	 **/
 	@Schema(description = "")
 
-	public String getlstUpdtTs() {
+	public String getLstUpdtTs() {
 		return lstUpdtTs;
 	}
 
-	public void setlstUpdtTs(String tranTimestamp) {
+	public void setLstUpdtTs(String tranTimestamp) {
 		this.lstUpdtTs = tranTimestamp;
 	}
 
