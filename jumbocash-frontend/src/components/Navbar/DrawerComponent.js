@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from 'clsx';
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -27,6 +28,7 @@ import PeopleAltTwoTone from '@material-ui/icons/PeopleAltTwoTone';
 import AssessmentTwoTone from '@material-ui/icons/AssessmentTwoTone';
 import PermIdentityTwoTone from '@material-ui/icons/PermIdentityTwoTone';
 import AddTransactionComponent from "../TransactionComponents/AddTransactionComponent";
+import ViewEntityComponent from "../EntityComponents/ViewEntityComponent";
 
 
 const drawerWidth = 240;
@@ -35,46 +37,73 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: "flex"
   },
-  drawer: {
-    [theme.breakpoints.up("sm")]: {
-      width: drawerWidth,
-      flexShrink: 0
-    }
-  },
   appBar: {
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    [theme.breakpoints.up("sm")]: {
-      width: `calc(100% - ${drawerWidth}px)`
-    }
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up("sm")]: {
-      display: "none"
-    }
-  },
-  toolbar: theme.mixins.toolbar,
-  drawerPaper: {
-    width: drawerWidth
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+  },
+  hide: {
+    display: 'none',
   },
   link: {
     textDecoration: 'none',
     color: theme.palette.text.primary
-  }
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  toolbar: theme.mixins.toolbar,
+  
 }));
 
 function ResponsiveDrawer(props) {
   const { container } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    setOpen(!open);
   };
 
   const iconSwitch = (element) => {
@@ -94,7 +123,12 @@ function ResponsiveDrawer(props) {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
+      {/* <div className={classes.toolbar} /> */}
+      <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerToggle}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+        </div>
       <Divider />
       <List>
         {["Dashboard", "Transactions", "Entity", "Reports", "Profile"].map((text, index) => (
@@ -112,14 +146,19 @@ function ResponsiveDrawer(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar  position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: !open,
+        })}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
+            open={open}
             onClick={handleDrawerToggle}
-            className={classes.menuButton}
+            className={clsx(classes.menuButton, !open )}
           >
             <MenuIcon />
           </IconButton>
@@ -135,38 +174,28 @@ function ResponsiveDrawer(props) {
               container={container}
               variant="temporary"
               anchor={theme.direction === "rtl" ? "right" : "left"}
-              open={mobileOpen}
+              open={!open}
               onClose={handleDrawerToggle}
               classes={{
                 paper: classes.drawerPaper
               }}
-              ModalProps={{
-                keepMounted: true
-              }}
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-          <Hidden xsDown implementation="css">
-            <Drawer
-              classes={{
-                paper: classes.drawerPaper
-              }}
-              variant="permanent"
-              open
+              
             >
               {drawer}
             </Drawer>
           </Hidden>
         </nav>
 
-        <main className={classes.content}>
+        <main className={clsx(classes.content, {
+          [classes.contentShift]: !open,
+        })}>
           <div className={classes.toolbar} />
 
           <Switch>
             <Route exact path="/" render={() => <div>Home Page</div>} />
             <Route path="/transactions" component={ViewTransactionComponent} />
             <Route path="/add-transaction" component={AddTransactionComponent} />
+            <Route path="/entity" component={ViewEntityComponent} />
           </Switch>
         </main>
       </BrowserRouter>

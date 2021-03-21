@@ -11,8 +11,8 @@ const ENDPT_user = "user"
 class TransactionService {
 
     //retrieve transactions based on user id
-    getTransactionsByUserId(usesrId) {
-        return axios.get(`${BACKEND_API_URL}/${ENDPT_TRANSACTION}/${ENDPT_user}/${usesrId}`)
+    getTransactionsByUserId(userId) {
+        return axios.get(`${BACKEND_API_URL}/${ENDPT_TRANSACTION}/${ENDPT_user}/${userId}`)
     }
 
     addTransaction(transaction){
