@@ -7,6 +7,9 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import EntityService from "../../services/EntityService";
 import TransactionService from "../../services/TransactionService";
 
+// import 'react-responsive-modal/styles.css';
+// import { Modal } from 'react-responsive-modal';
+
 
 class AddTransactionComponent extends Component {
 
@@ -90,6 +93,12 @@ class AddTransactionComponent extends Component {
       return this.state.errorMessage;
     }
 
+    else if (!transaction.tranStatus) {
+      this.state.errorMessage = 'Transaction status is mandatory'
+      this.state.message = ''
+      return this.state.errorMessage;
+    }
+
     return this.state.errorMessage;
   }
 
@@ -114,12 +123,13 @@ class AddTransactionComponent extends Component {
       paymentMode: transactionFormData.paymentMode,
       entityId: transactionFormData.entityId,
       userId: this.props.userId,
-      remarks: transactionFormData.remarks
+      remarks: transactionFormData.remarks,
+      tranStatus: transactionFormData.tranStatus
     }
     TransactionService.addTransaction(transaction)
       .then(
         response => {
-          this.setState({ message: response.data.message })
+          this.setState({ message: "Transaction Added Successfully" })
         }
       ).catch(err => {
         this.state.errorMessage = 'Transaction could not be added'
@@ -131,7 +141,7 @@ class AddTransactionComponent extends Component {
   }
 
   render() {
-    let { amount, tranType, paymentMode, entityName, remarks } = this.state;
+    let { amount, tranType, paymentMode, entityName, remarks, tranStatus } = this.state;
     return (
       <Modal
         show={this.state.show}
@@ -145,7 +155,7 @@ class AddTransactionComponent extends Component {
         </Modal.Header>
         <Modal.Body>
           <Formik
-            initialValues={{ amount, tranType, paymentMode, entityName, remarks }}
+            initialValues={{ amount, tranType, paymentMode, entityName, remarks, tranStatus }}
             validate={this.validate}
             onSubmit={this.addTransaction}
             enableReinitialize={true}
@@ -197,6 +207,13 @@ class AddTransactionComponent extends Component {
                       {this.state.entities.map(
                         entity => <option value={entity.entityId}>{entity.entityName}</option>
                       )}
+                    </Field>
+                  </fieldset>
+                  <fieldset className="form-group">
+                    <label>Transaction Status :</label>
+                    <Field className="form-control" component="select" name="tranStatus">
+                      <option value="DN">done</option>
+                      <option value="PN">pending</option>
                     </Field>
                   </fieldset>
                   <fieldset className="form-group">

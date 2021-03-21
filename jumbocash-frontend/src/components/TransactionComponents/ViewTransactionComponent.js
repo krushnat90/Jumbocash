@@ -1,16 +1,22 @@
 import React, { Component } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
+// import Table from '@material-ui/core/Table';
+// import TableBody from '@material-ui/core/TableBody';
+// import TableCell from '@material-ui/core/TableCell';
+// import TableContainer from '@material-ui/core/TableContainer';
+// import TableHead from '@material-ui/core/TableHead';
+// import TablePagination from '@material-ui/core/TablePagination';
+// import TableRow from '@material-ui/core/TableRow';
 import TransactionService from "../../services/TransactionService";
 import AddTransactionComponent from "./AddTransactionComponent";
 import Button from 'react-bootstrap/Button';
+import QueueTwoToneIcon from '@material-ui/icons/QueueTwoTone';
+import IconButton from '@material-ui/core/IconButton';
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
+
+// import Table from 'react-bootstrap/Table';
 
 class ViewTransactionComponent extends Component {
 
@@ -20,7 +26,7 @@ class ViewTransactionComponent extends Component {
       transactions: [],
       message: null,
       openAddFlag: false,
-      userId:2
+      userId: 2
     }
     this.getHeader = this.getHeader.bind(this);
     this.getTransactions = this.getTransactions.bind(this);
@@ -99,47 +105,49 @@ class ViewTransactionComponent extends Component {
   render() {
     return (
 
-      <div>
-        <Button variant="primary" onClick={this.addButtonOnclick}>Add Transaction</Button>
-        {this.state.openAddFlag && <AddTransactionComponent addButtonCloseFunc={this.addButtonClose} getTransactionsFunc={this.getTransactions} userId={this.state.userId}/>}
-        <hr/>
-        <TableContainer component={Paper}>
+      <div className="container">
+        <IconButton className="queueTwoToneIcon" aria-label="edit" color="primary"
+          onClick={() =>
+            this.addButtonOnclick()}>
+          <QueueTwoToneIcon />
+        </IconButton>
+        {this.state.openAddFlag && <AddTransactionComponent addButtonCloseFunc={this.addButtonClose} getTransactionsFunc={this.getTransactions} userId={this.state.userId} />}
+        <hr />
 
-          <Table size="small" aria-label="a dense table">
+        <Table>
 
-            <TableHead>
-              <TableRow>
-                {this.getHeader().map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    <b>
-                      {column.label}
-                    </b>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {
-                this.state.transactions.map(
-                  transaction =>
-                    <TableRow key={transaction.tranId}>
-                      <TableCell align="left">{transaction.tranTimestamp}</TableCell>
-                      <TableCell align="center">{transaction.amount}</TableCell>
-                      <TableCell align="center">{transaction.tranType}</TableCell>
-                      <TableCell align="center">{transaction.paymentMode}</TableCell>
-                      <TableCell align="center">{transaction.entityName}</TableCell>
-                      <TableCell align="left">{transaction.remarks}</TableCell>
-                    </TableRow>
+          <Thead>
+            <Tr>
+              {this.getHeader().map((column) => (
+                <Th
+                  key={column.id}
+                  align={column.align}
+                  style={{ minWidth: column.minWidth }}
+                >
+                  <b>
+                    {column.label}
+                  </b>
+                </Th>
+              ))}
+            </Tr>
+          </Thead>
+          <Tbody>
+            {
+              this.state.transactions.map(
+                transaction =>
+                  <Tr key={transaction.tranId}>
+                    <Td align="left">{transaction.tranTimestamp}</Td>
+                    <Td align="center">{transaction.amount}</Td>
+                    <Td align="center">{transaction.tranType}</Td>
+                    <Td align="center">{transaction.paymentMode}</Td>
+                    <Td align="center">{transaction.entityName}</Td>
+                    <Td align="left">{transaction.remarks}</Td>
+                  </Tr>
 
-                )
-              }
-            </TableBody>
-          </Table>
-        </TableContainer>
+              )
+            }
+          </Tbody>
+        </Table>
       </div>
     )
   }
