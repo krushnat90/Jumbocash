@@ -144,14 +144,15 @@ class AddTransactionComponent extends Component {
     let { amount, tranType, paymentMode, entityName, remarks, tranStatus } = this.state;
     return (
       <Modal
+        className = "modal"
         show={this.state.show}
         onHide={this.closeModal}
         backdrop="static"
         keyboard={false}
         centered
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Add Transaction</Modal.Title>
+        <Modal.Header className = "modal-header" closeButton>
+          <Modal.Title>New Transaction</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Formik
@@ -182,8 +183,12 @@ class AddTransactionComponent extends Component {
                     </button>
                   </div>}
                   <fieldset className="form-group">
-                    <label>Amount</label>
-                    <Field className="form-control" type="number" name="amount" min="0" />
+                    <label>Entity :</label>
+                    <Field className="form-control" component="select" name="entityId">
+                      {this.state.entities.map(
+                        entity => <option value={entity.entityId}>{entity.entityName}</option>
+                      )}
+                    </Field>
                   </fieldset>
                   <fieldset className="form-group">
                     <label>Transaction Type :</label>
@@ -202,12 +207,8 @@ class AddTransactionComponent extends Component {
                     </Field>
                   </fieldset>
                   <fieldset className="form-group">
-                    <label>Entity :</label>
-                    <Field className="form-control" component="select" name="entityId">
-                      {this.state.entities.map(
-                        entity => <option value={entity.entityId}>{entity.entityName}</option>
-                      )}
-                    </Field>
+                    <label>Amount</label>
+                    <Field className="form-control" type="number" name="amount" min="0" />
                   </fieldset>
                   <fieldset className="form-group">
                     <label>Transaction Status :</label>
