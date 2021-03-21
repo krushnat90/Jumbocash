@@ -60,6 +60,10 @@ const useStyles = makeStyles(theme => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3)
+  },
+  link: {
+    textDecoration: 'none',
+    color: theme.palette.text.primary
   }
 }));
 
@@ -94,7 +98,7 @@ function ResponsiveDrawer(props) {
       <Divider />
       <List>
         {["Dashboard", "Transactions", "Entity", "Reports", "Profile"].map((text, index) => (
-          <ListItem key={text} component={Link} to={"/" + text.toLowerCase()}>
+          <ListItem button key={text} component={Link} to={"/" + text.toLowerCase()} className={classes.link}>
             <ListItemIcon>
               {iconSwitch(text.toLowerCase())}
             </ListItemIcon>
