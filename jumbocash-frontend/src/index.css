@@ -16,11 +16,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#root{
-  /* background-color: rgb(243, 245, 252); */
-  
-}
-
 .toolbar{
   /* background-image: linear-gradient(to right, rgb(17,115,239),  rgb(17,202,239)); */
   background-image: linear-gradient(to right, rgba(255,0,0,0), rgb(245,54,92));

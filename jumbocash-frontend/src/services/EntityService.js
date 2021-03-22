@@ -14,6 +14,10 @@ class EntityService{
         return axios.get(`${BACKEND_API_URL}/${ENDPT_ENTITY}/${ENDPT_user}/${usesrId}`)
     }
 
+    addEntity(entity){
+        return axios.post(`${BACKEND_API_URL}/${ENDPT_ENTITY}`,entity);
+    }
+
 }
 
 export default new EntityService();

@@ -10,13 +10,19 @@ import IconButton from "@material-ui/core/IconButton";
 import Dashboard from '@material-ui/icons/Dashboard';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+
 import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
 import ViewTransactionComponent from "../TransactionComponents/ViewTransactionComponent";
 
@@ -30,6 +36,8 @@ import AssessmentTwoTone from '@material-ui/icons/AssessmentTwoTone';
 import PermIdentityTwoTone from '@material-ui/icons/PermIdentityTwoTone';
 import AddTransactionComponent from "../TransactionComponents/AddTransactionComponent";
 import ViewEntityComponent from "../EntityComponents/ViewEntityComponent";
+import AddToQueueTwoToneIcon from '@material-ui/icons/AddToQueueTwoTone';
+import AddEntityComponent from "../EntityComponents/AddEntityComponent";
 
 
 const drawerWidth = 240;
@@ -102,9 +110,15 @@ function ResponsiveDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [openCollapse, setOpenCollapse] = React.useState(true);
+  const userId = 2;
 
   const handleDrawerToggle = () => {
     setOpen(!open);
+  };
+
+  const handleClick = () => {
+    setOpenCollapse(!openCollapse);
   };
 
   const iconSwitch = (element) => {
@@ -132,7 +146,7 @@ function ResponsiveDrawer(props) {
         </div>
       <Divider />
       <List>
-        {["Dashboard", "Transactions", "Entity", "Reports", "Profile"].map((text, index) => (
+        {["Dashboard", "Transactions", "Reports", "Profile"].map((text, index) => (
           <ListItem button key={text} component={Link} to={"/" + text.toLowerCase()} className={classes.link}>
             <ListItemIcon>
               {iconSwitch(text.toLowerCase())}
@@ -140,6 +154,23 @@ function ResponsiveDrawer(props) {
             <ListItemText primary={text} />
           </ListItem>
         ))}
+        <ListItem button onClick={handleClick} component={Link} to={"/" + "Entity".toLowerCase()}>
+        <ListItemIcon>
+        {iconSwitch("Entity".toLowerCase())}
+        </ListItemIcon>
+        <ListItemText primary="Entity" />
+        {openCollapse ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+        <Collapse in={openCollapse} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested} component={Link} to={"/" + "add-entity".toLowerCase()}>
+            <ListItemIcon>
+            <AddToQueueTwoToneIcon className = "magenta-color"/>
+            </ListItemIcon>
+            <ListItemText primary="Add Entity" />
+          </ListItem>
+        </List>
+      </Collapse>
       </List>
     </div>
   );
@@ -197,6 +228,7 @@ function ResponsiveDrawer(props) {
             <Route path="/transactions" component={ViewTransactionComponent} />
             <Route path="/add-transaction" component={AddTransactionComponent} />
             <Route path="/entity" component={ViewEntityComponent} />
+            <Route path="/add-entity" render={(props) => <AddEntityComponent userId={userId} {...props} />} />
           </Switch>
         </main>
       </BrowserRouter>

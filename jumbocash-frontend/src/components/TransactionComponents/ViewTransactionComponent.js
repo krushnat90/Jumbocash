@@ -19,6 +19,9 @@ import { Card, CardContent } from "@material-ui/core";
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
+import TableFilter from 'react-table-filter';
+import 'react-table-filter/lib/styles.css';
+
 // import Table from 'react-bootstrap/Table';
 
 class ViewTransactionComponent extends Component {
