@@ -22,8 +22,6 @@ class AddTransactionComponent extends Component {
       errorMessage: ''
     }
 
-    this.showModal = this.showModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
     this.hideErrorAlert = this.hideErrorAlert.bind(this);
     this.hideMessageAlert = this.hideMessageAlert.bind(this);
     this.getEntities = this.getEntities.bind(this);
@@ -35,18 +33,6 @@ class AddTransactionComponent extends Component {
     this.getEntities();
   }
 
-  showModal() {
-    this.setState({
-      show: true
-    })
-  }
-
-  closeModal() {
-    this.setState({
-      show: false
-    })
-    this.props.addButtonCloseFunc();
-  }
 
   //close button functionality for error
   hideErrorAlert() {
@@ -117,6 +103,7 @@ class AddTransactionComponent extends Component {
   }
 
   addTransaction(transactionFormData) {
+    console.log(transactionFormData.entityId);
     let transaction = {
       amount: transactionFormData.amount,
       tranType: transactionFormData.tranType,
@@ -132,29 +119,14 @@ class AddTransactionComponent extends Component {
           this.setState({ message: "Transaction Added Successfully" })
         }
       ).catch(err => {
-        this.state.errorMessage = 'Transaction could not be added'
-      }).then(
-        () => {
-          this.props.getTransactionsFunc();
-        }
-      )
+        this.setState({errorMessage : 'Transaction could not be added'})
+      })
   }
 
   render() {
     let { amount, tranType, paymentMode, entityName, remarks, tranStatus } = this.state;
     return (
-      <Modal
-        className = "modal"
-        show={this.state.show}
-        onHide={this.closeModal}
-        backdrop="static"
-        keyboard={false}
-        centered
-      >
-        <Modal.Header className = "modal-header" closeButton>
-          <Modal.Title>New Transaction</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <div class="container">
           <Formik
             initialValues={{ amount, tranType, paymentMode, entityName, remarks, tranStatus }}
             validate={this.validate}
@@ -186,7 +158,7 @@ class AddTransactionComponent extends Component {
                     <label>Entity :</label>
                     <Field className="form-control" component="select" name="entityId">
                       {this.state.entities.map(
-                        entity => <option value={entity.entityId}>{entity.entityName}</option>
+                        entity => <option value={entity.id}>{entity.entityName}</option>
                       )}
                     </Field>
                   </fieldset>
@@ -226,8 +198,7 @@ class AddTransactionComponent extends Component {
               )
             }
           </Formik>
-        </Modal.Body>
-      </Modal>
+          </div> 
     )
   }
 }

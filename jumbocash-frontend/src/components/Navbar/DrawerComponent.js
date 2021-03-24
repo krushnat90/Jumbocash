@@ -345,7 +345,7 @@ function ResponsiveDrawer(props) {
           <Switch>
             <Route exact path="/dashboard" render={(props) => <DashboardComponent userId={userId} userName={userName} {...props} />} />
             <Route path="/transactions" render={(props) => <ViewTransactionComponent userId={userId} {...props} />} />
-            <Route path="/add-transaction" component={AddTransactionComponent} />
+            <Route path="/add-transaction" render={(props) => <AddTransactionComponent userId={userId} {...props} />} />
             <Route path="/entities" render={(props) => <ViewEntityComponent userId={userId} {...props} />} />
 
             <Route path="/add-entity" render={(props) => <AddEntityComponent userId={userId} {...props} />} />

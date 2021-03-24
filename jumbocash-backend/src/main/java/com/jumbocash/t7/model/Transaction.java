@@ -261,20 +261,13 @@ public class Transaction {
 		return Objects.hash(tranId, tranType, lstUpdtTs, tranStatus, paymentMode, amount, remarks);
 	}
 
+	
+
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("class Transaction {\n");
-
-		sb.append("    tranId: ").append(toIndentedString(tranId)).append("\n");
-		sb.append("    tranType: ").append(toIndentedString(tranType)).append("\n");
-		sb.append("    tranTimestamp: ").append(toIndentedString(lstUpdtTs)).append("\n");
-		sb.append("    tranStatus: ").append(toIndentedString(tranStatus)).append("\n");
-		sb.append("    paymentMode: ").append(toIndentedString(paymentMode)).append("\n");
-		sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
-		sb.append("    remarks: ").append(toIndentedString(remarks)).append("\n");
-		sb.append("}");
-		return sb.toString();
+		return "Transaction [tranId=" + tranId + ", tranType=" + tranType + ", lstUpdtTs=" + lstUpdtTs + ", tranStatus="
+				+ tranStatus + ", entityId=" + entityId + ", entityName=" + entityName + ", userId=" + userId
+				+ ", paymentMode=" + paymentMode + ", amount=" + amount + ", remarks=" + remarks + "]";
 	}
 
 	/**
