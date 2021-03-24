@@ -32,6 +32,10 @@ import DashboardComponent from "../DashboardComponents/DashboardComponent";
 
 //icons
 import Avatar from '@material-ui/core/Avatar';
+import PostAddTwoToneIcon from '@material-ui/icons/PostAddTwoTone';
+import CalendarViewDayTwoToneIcon from '@material-ui/icons/CalendarViewDayTwoTone';
+import SupervisedUserCircleTwoToneIcon from '@material-ui/icons/SupervisedUserCircleTwoTone';
+import GroupAddTwoToneIcon from '@material-ui/icons/GroupAddTwoTone';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -43,6 +47,7 @@ import AddTransactionComponent from "../TransactionComponents/AddTransactionComp
 import ViewEntityComponent from "../EntityComponents/ViewEntityComponent";
 import AddToQueueTwoToneIcon from '@material-ui/icons/AddToQueueTwoTone';
 import AddEntityComponent from "../EntityComponents/AddEntityComponent";
+import { CalendarViewDayTwoTone, PostAddTwoTone } from "@material-ui/icons";
 
 
 const drawerWidth = 240;
@@ -111,7 +116,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   toolbar: theme.mixins.toolbar,
-  
+
 }));
 
 function ResponsiveDrawer(props) {
@@ -119,20 +124,25 @@ function ResponsiveDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  
+
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [openCollapse, setOpenCollapse] = React.useState(true);
+  const [openTransactionCollapse, setOpenTransactionCollapse] = React.useState(false);
+  const [openEntityCollapse, setOpenEntityCollapse] = React.useState(false);
   const openMenu = Boolean(anchorEl);
 
   const userId = 2;
-  
+
 
   const handleDrawerToggle = () => {
     setOpen(!open);
   };
 
-  const handleClick = () => {
-    setOpenCollapse(!openCollapse);
+  const handleTransactionCollapse = () => {
+    setOpenTransactionCollapse(!openTransactionCollapse);
+  };
+
+  const handleEntitiesCollapse = () => {
+    setOpenEntityCollapse(!openEntityCollapse);
   };
 
   const handleMenu = (event) => {
@@ -146,15 +156,15 @@ function ResponsiveDrawer(props) {
   const iconSwitch = (element) => {
     switch (element) {
       case "dashboard":
-        return <Dashboard className = "blue-color"/>;
-      case "transactions":
-        return <CompareArrowsIcon className = "purple-color"/>;
+        return <Dashboard className="blue-color" />;
+      case "transaction":
+        return <CompareArrowsIcon className="purple-color" />;
       case "entity":
-        return <PeopleAltTwoTone className = "magenta-color" />;
+        return <PeopleAltTwoTone className="magenta-color" />;
       case "reports":
-        return <AssessmentTwoTone className = "pink-color"/>;
+        return <AssessmentTwoTone className="pink-color" />;
       case "profile":
-        return <PermIdentityTwoTone className = "coral-color"/>;
+        return <PermIdentityTwoTone className="coral-color" />;
     }
   }
 
@@ -162,59 +172,110 @@ function ResponsiveDrawer(props) {
     <div>
       {/* <div className={classes.toolbar} /> */}
       <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerToggle}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </div>
+        <IconButton onClick={handleDrawerToggle}>
+          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+        </IconButton>
+      </div>
       <Divider />
+
+
       <List>
-        {["Dashboard", "Transactions", "Reports", "Profile"].map((text, index) => (
-          <ListItem button key={text} component={Link} to={"/" + text.toLowerCase()} className={classes.link}>
-            <ListItemIcon>
-              {iconSwitch(text.toLowerCase())}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-        <ListItem button onClick={handleClick} component={Link} to={"/" + "Entity".toLowerCase()}>
-        <ListItemIcon>
-        {iconSwitch("Entity".toLowerCase())}
-        </ListItemIcon>
-        <ListItemText primary="Entity" />
-        {openCollapse ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-        <Collapse in={openCollapse} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested} component={Link} to={"/" + "add-entity".toLowerCase()}>
-            <ListItemIcon>
-            <AddToQueueTwoToneIcon className = "magenta-color"/>
-            </ListItemIcon>
-            <ListItemText primary="Add Entity" />
-          </ListItem>
-        </List>
-      </Collapse>
+        <ListItem button key="Dashboard" component={Link} to={"/" + "dashboard".toLowerCase()} className={classes.link}>
+          <ListItemIcon>
+            {iconSwitch("Dashboard".toLowerCase())}
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+
+        <ListItem button onClick={handleTransactionCollapse}>
+          <ListItemIcon>
+            {iconSwitch("Transaction".toLowerCase())}
+          </ListItemIcon>
+          <ListItemText primary="Transaction" />
+          {openTransactionCollapse ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={openTransactionCollapse} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem button className={classes.nested} component={Link} to={"/" + "add-transaction".toLowerCase()}>
+              <ListItemIcon>
+                <PostAddTwoTone className="purple-color" />
+              </ListItemIcon>
+              <ListItemText primary="Add Transaction" />
+            </ListItem>
+          </List>
+          <List component="div" disablePadding>
+            <ListItem button className={classes.nested} component={Link} to={"/" + "transactions".toLowerCase()}>
+              <ListItemIcon>
+                <CalendarViewDayTwoTone className="purple-color" />
+              </ListItemIcon>
+              <ListItemText primary="View Transactions" />
+            </ListItem>
+          </List>
+        </Collapse>
+
+        <ListItem button onClick={handleEntitiesCollapse}>
+          <ListItemIcon>
+            {iconSwitch("Entity".toLowerCase())}
+          </ListItemIcon>
+          <ListItemText primary="Entity" />
+          {openEntityCollapse ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={openEntityCollapse} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem button className={classes.nested} component={Link} to={"/" + "add-entity".toLowerCase()}>
+              <ListItemIcon>
+                <GroupAddTwoToneIcon className="magenta-color" />
+              </ListItemIcon>
+              <ListItemText primary="Add Entity" />
+            </ListItem>
+          </List>
+          <List component="div" disablePadding>
+            <ListItem button className={classes.nested} component={Link} to={"/" + "entities".toLowerCase()}>
+              <ListItemIcon>
+                <SupervisedUserCircleTwoToneIcon className="magenta-color" />
+              </ListItemIcon>
+              <ListItemText primary="View Entities" />
+            </ListItem>
+          </List>
+        </Collapse>
+
+        <ListItem button key="Reports" component={Link} to={"/" + "reports".toLowerCase()} className={classes.link}>
+          <ListItemIcon>
+            {iconSwitch("Reports".toLowerCase())}
+          </ListItemIcon>
+          <ListItemText primary="Reports" />
+        </ListItem>
+
+        <ListItem button key="Profile" component={Link} to={"/" + "profile".toLowerCase()} className={classes.link}>
+          <ListItemIcon>
+            {iconSwitch("Profile".toLowerCase())}
+          </ListItemIcon>
+          <ListItemText primary="Profile" />
+        </ListItem>
+
       </List>
-      <Divider/>
-      
+
+      <Divider />
+
     </div>
   );
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar  position="fixed"
+      <AppBar position="fixed"
         className={clsx(classes.appBar, {
           [classes.appBarShift]: !open,
         })}
       >
-        <Toolbar className = "toolbar">
+        <Toolbar className="toolbar">
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             open={open}
             onClick={handleDrawerToggle}
-            className={clsx(classes.menuButton, !open )}
+            className={clsx(classes.menuButton, !open)}
           >
             <MenuIcon />
           </IconButton>
@@ -222,33 +283,33 @@ function ResponsiveDrawer(props) {
             <b>JUMBOTAIL CASHFLOW</b>
           </Typography>
           <div>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={openMenu}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
-              </Menu>
-            </div>
+            <IconButton
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={openMenu}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>Logout</MenuItem>
+            </Menu>
+          </div>
         </Toolbar>
       </AppBar>
       <BrowserRouter>
@@ -263,12 +324,12 @@ function ResponsiveDrawer(props) {
               classes={{
                 paper: classes.drawerPaper
               }}
-              
+
             >
               {drawer}
             </Drawer>
           </Hidden>
-          
+
         </nav>
 
         <main className={clsx(classes.content, {
@@ -280,7 +341,7 @@ function ResponsiveDrawer(props) {
             <Route exact path="/dashboard" component={DashboardComponent} />
             <Route path="/transactions" component={ViewTransactionComponent} />
             <Route path="/add-transaction" component={AddTransactionComponent} />
-            <Route path="/entity" component={ViewEntityComponent} />
+            <Route path="/entities" component={ViewEntityComponent} />
             <Route path="/add-entity" render={(props) => <AddEntityComponent userId={userId} {...props} />} />
           </Switch>
         </main>

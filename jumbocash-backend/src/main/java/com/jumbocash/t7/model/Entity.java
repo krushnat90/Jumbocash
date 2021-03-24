@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
  */
 @Validated
 public class Entity {
-	@JsonProperty("entityId")
+	@JsonProperty("id")
 	private BigInteger entityId = null;
 
 	@JsonProperty("entityType")
