@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.jumbocash.t7.beanMapper.BeanMapperFunction;
 import com.jumbocash.t7.dto.AppUser;
 import com.jumbocash.t7.model.User;
+import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper implements BeanMapperFunction<User, AppUser> {

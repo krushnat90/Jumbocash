@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.1.2",
-    "@material-ui/data-grid": "^4.0.0-alpha.6",
+    "@material-ui/data-grid": "^4.0.0-alpha.23",
     "@material-ui/docs": "^4.0.0-beta.0",
     "@material-ui/icons": "^4.2.1",
     "@material-ui/lab": "^4.0.0-alpha.18",
@@ -25,6 +25,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-super-responsive-table": "^5.2.0",
+    "react-table": "^7.6.3",
     "react-table-filter": "^2.0.2",
     "web-vitals": "^1.1.0"
   },

@@ -42,18 +42,9 @@ body {
   color :rgb(245,54,92) ;
 }
 
-Thead{
-  background-color: rgba(72, 81, 176, 0.877);
-  color : white;
-}
-
-Td, Th{
-  padding: 1%;
-}
-
-Tr{
-  border-bottom-style  :  solid;
-  border-color : rgb(224, 194, 201);  
+.table-head{
+  /* background-color: linear-gradient(to right, rgb(193, 192, 209), rgb(142, 137, 211)); */
+  background-color: rgb(219,192,212);
 }
 
 .modal{
@@ -66,4 +57,18 @@ Tr{
   color : white;
 }
 
+/* 
+Thead{
+  background-color: rgba(72, 81, 176, 0.877);
+  color : white;
+}
+
+Td, Th{
+  padding: 1%;
+}
+
+Tr{
+  border-bottom-style  :  solid;
+  border-color : rgb(224, 194, 201);  
+} */
 

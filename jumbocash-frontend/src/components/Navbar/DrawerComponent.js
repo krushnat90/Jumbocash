@@ -33,6 +33,10 @@ import { Redirect } from 'react-router-dom'
 
 //icons
 import Avatar from '@material-ui/core/Avatar';
+import PostAddTwoToneIcon from '@material-ui/icons/PostAddTwoTone';
+import CalendarViewDayTwoToneIcon from '@material-ui/icons/CalendarViewDayTwoTone';
+import SupervisedUserCircleTwoToneIcon from '@material-ui/icons/SupervisedUserCircleTwoTone';
+import GroupAddTwoToneIcon from '@material-ui/icons/GroupAddTwoTone';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -45,6 +49,7 @@ import ViewEntityComponent from "../EntityComponents/ViewEntityComponent";
 import AddToQueueTwoToneIcon from '@material-ui/icons/AddToQueueTwoTone';
 import AddEntityComponent from "../EntityComponents/AddEntityComponent";
 import ProtectedRoute from "../LoginLogoutComponents/ProtectedRoute";
+import { CalendarViewDayTwoTone, PostAddTwoTone } from "@material-ui/icons";
 
 
 const drawerWidth = 240;
@@ -123,9 +128,9 @@ function ResponsiveDrawer(props) {
   const [open, setOpen] = React.useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [openCollapse, setOpenCollapse] = React.useState(true);
+  const [openTransactionCollapse, setOpenTransactionCollapse] = React.useState(false);
+  const [openEntityCollapse, setOpenEntityCollapse] = React.useState(false);
   const openMenu = Boolean(anchorEl);
-
   const userId = props.userId;
   const userName = props.userName;
   console.log("DRAWER USER ID " + userId);
@@ -133,12 +138,17 @@ function ResponsiveDrawer(props) {
 
   let isLoggendIn = true;
 
+
   const handleDrawerToggle = () => {
     setOpen(!open);
   };
 
-  const handleClick = () => {
-    setOpenCollapse(!openCollapse);
+  const handleTransactionCollapse = () => {
+    setOpenTransactionCollapse(!openTransactionCollapse);
+  };
+
+  const handleEntitiesCollapse = () => {
+    setOpenEntityCollapse(!openEntityCollapse);
   };
 
   const handleMenu = (event) => {
@@ -153,7 +163,7 @@ function ResponsiveDrawer(props) {
     switch (element) {
       case "dashboard":
         return <Dashboard className="blue-color" />;
-      case "transactions":
+      case "transaction":
         return <CompareArrowsIcon className="purple-color" />;
       case "entity":
         return <PeopleAltTwoTone className="magenta-color" />;
@@ -173,32 +183,82 @@ function ResponsiveDrawer(props) {
         </IconButton>
       </div>
       <Divider />
+
+
       <List>
-        {["Dashboard", "Transactions", "Reports", "Profile"].map((text, index) => (
-          <ListItem button key={text} component={Link} to={"/" + text.toLowerCase()} className={classes.link}>
-            <ListItemIcon>
-              {iconSwitch(text.toLowerCase())}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-        <ListItem button onClick={handleClick} component={Link} to={"/" + "Entity".toLowerCase()}>
+        <ListItem button key="Dashboard" component={Link} to={"/" + "dashboard".toLowerCase()} className={classes.link}>
+          <ListItemIcon>
+            {iconSwitch("Dashboard".toLowerCase())}
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+
+        <ListItem button onClick={handleTransactionCollapse}>
+          <ListItemIcon>
+            {iconSwitch("Transaction".toLowerCase())}
+          </ListItemIcon>
+          <ListItemText primary="Transaction" />
+          {openTransactionCollapse ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={openTransactionCollapse} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem button className={classes.nested} component={Link} to={"/" + "add-transaction".toLowerCase()}>
+              <ListItemIcon>
+                <PostAddTwoTone className="purple-color" />
+              </ListItemIcon>
+              <ListItemText primary="Add Transaction" />
+            </ListItem>
+          </List>
+          <List component="div" disablePadding>
+            <ListItem button className={classes.nested} component={Link} to={"/" + "transactions".toLowerCase()}>
+              <ListItemIcon>
+                <CalendarViewDayTwoTone className="purple-color" />
+              </ListItemIcon>
+              <ListItemText primary="View Transactions" />
+            </ListItem>
+          </List>
+        </Collapse>
+
+        <ListItem button onClick={handleEntitiesCollapse}>
           <ListItemIcon>
             {iconSwitch("Entity".toLowerCase())}
           </ListItemIcon>
           <ListItemText primary="Entity" />
-          {openCollapse ? <ExpandLess /> : <ExpandMore />}
+          {openEntityCollapse ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={openCollapse} timeout="auto" unmountOnExit>
+        <Collapse in={openEntityCollapse} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItem button className={classes.nested} component={Link} to={"/" + "add-entity".toLowerCase()}>
               <ListItemIcon>
-                <AddToQueueTwoToneIcon className="magenta-color" />
+                <GroupAddTwoToneIcon className="magenta-color" />
               </ListItemIcon>
               <ListItemText primary="Add Entity" />
             </ListItem>
           </List>
+		  <List component="div" disablePadding>
+            <ListItem button className={classes.nested} component={Link} to={"/" + "entities".toLowerCase()}>
+              <ListItemIcon>
+                <SupervisedUserCircleTwoToneIcon className="magenta-color" />
+              </ListItemIcon>
+              <ListItemText primary="View Entities" />
+            </ListItem>
+          </List>
         </Collapse>
+
+        <ListItem button key="Reports" component={Link} to={"/" + "reports".toLowerCase()} className={classes.link}>
+          <ListItemIcon>
+            {iconSwitch("Reports".toLowerCase())}
+          </ListItemIcon>
+          <ListItemText primary="Reports" />
+        </ListItem>
+
+        <ListItem button key="Profile" component={Link} to={"/" + "profile".toLowerCase()} className={classes.link}>
+          <ListItemIcon>
+            {iconSwitch("Profile".toLowerCase())}
+          </ListItemIcon>
+          <ListItemText primary="Profile" />
+        </ListItem>
+
       </List>
       <Divider />
 
@@ -286,7 +346,8 @@ function ResponsiveDrawer(props) {
             <Route exact path="/dashboard" render={(props) => <DashboardComponent userId={userId} userName={userName} {...props} />} />
             <Route path="/transactions" render={(props) => <ViewTransactionComponent userId={userId} {...props} />} />
             <Route path="/add-transaction" component={AddTransactionComponent} />
-            <Route path="/entity" render={(props) => <ViewEntityComponent userId={userId} {...props} />} />
+            <Route path="/entities" render={(props) => <ViewEntityComponent userId={userId} {...props} />} />
+
             <Route path="/add-entity" render={(props) => <AddEntityComponent userId={userId} {...props} />} />
           </Switch>
         </main>
