@@ -5,6 +5,7 @@
  */
 package com.jumbocash.t7.api;
 
+import com.jumbocash.t7.model.User;
 import com.jumbocash.t7.model.UserEntityLink;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,10 +39,18 @@ public interface UserApi {
     @Operation(summary = "Link new entity", description = "", tags={ "user" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Successful Operation") })
-    @RequestMapping(value = "/user",
+    @RequestMapping(value = "/user/link",
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
     ResponseEntity<Void> linkEntity(@Parameter(in = ParameterIn.DEFAULT, description = "User Entity Link Object.", required=true, schema=@Schema()) @Valid @RequestBody UserEntityLink body);
+    
+    @Operation(summary = "Add or update user", description = "", tags={ "user" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successful Operation") })
+    @RequestMapping(value = "/user",
+    consumes = { "application/json" }, 
+    method = RequestMethod.POST)
+    ResponseEntity<User> addOrUpdateUser(@Parameter(in = ParameterIn.DEFAULT, description = "User Object.", required=true, schema=@Schema()) @Valid @RequestBody User user);
 
 }
 

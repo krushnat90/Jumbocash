@@ -1,5 +1,6 @@
 package com.jumbocash.t7.api;
 
+import com.jumbocash.t7.model.User;
 import com.jumbocash.t7.model.UserEntityLink;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,5 +53,10 @@ public class UserApiController implements UserApi {
         String accept = request.getHeader("Accept");
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
+
+	@Override
+	public ResponseEntity<User> addOrUpdateUser(@Valid User user) {
+		return null;
+	}
 
 }
