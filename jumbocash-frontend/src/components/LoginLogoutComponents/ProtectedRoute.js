@@ -5,18 +5,23 @@ import LoginButton from './LoginButton';
 
 class ProtectedRoute extends React.Component {
 
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         const Component = this.props.component;
-        
-        const isAuthenticated = true;
-        
-        console.log(Component.isAuthenticated)
-        if(Component.state){
-            isAuthenticated = true;
+
+        let userId = '';
+
+        if (this.props.location.state) {
+            userId = this.props.location.state.userId;
         }
-       
-        return isAuthenticated ? (
-            <Component />
+
+        console.log("PROTECTED user ID:: " + userId);
+
+        return userId > 0 ? (
+            <Component userId={userId} userName={this.props.location.state.name} />
         ) : (
             <Redirect to={{ pathname: '/' }} />
         );

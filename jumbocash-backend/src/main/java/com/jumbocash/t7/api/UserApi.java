@@ -27,12 +27,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-03-07T11:46:35.995Z[GMT]")
 public interface UserApi {
 
@@ -49,7 +51,7 @@ public interface UserApi {
         @ApiResponse(responseCode = "200", description = "Successful Operation") })
     @RequestMapping(value = "/user",
     consumes = { "application/json" }, 
-    method = RequestMethod.POST)
+    method = RequestMethod.PUT)
     ResponseEntity<User> addOrUpdateUser(@Parameter(in = ParameterIn.DEFAULT, description = "User Object.", required=true, schema=@Schema()) @Valid @RequestBody User user);
 
 }

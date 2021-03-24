@@ -25,7 +25,7 @@ class ViewEntityComponent extends Component {
       entities: [],
       message: null,
       openAddFlag: false,
-      userId: 2,
+      userId: props.userId,
       sortBy: defaultSortBy, // default sort column
       sortOrder: defaultSortOrder // default sort oder
     }

@@ -18,6 +18,7 @@ import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import { Card, CardContent } from "@material-ui/core";
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import { Redirect } from 'react-router-dom'
 
 import TableFilter from 'react-table-filter';
 import 'react-table-filter/lib/styles.css';
@@ -32,7 +33,7 @@ class ViewTransactionComponent extends Component {
       transactions: [],
       message: null,
       openAddFlag: false,
-      userId: 2
+      userId: props.userId
     }
     this.getHeader = this.getHeader.bind(this);
     this.getTransactions = this.getTransactions.bind(this);
@@ -110,8 +111,11 @@ class ViewTransactionComponent extends Component {
   }
 
   render() {
+    if(this.state.userId === ''){
+      <Redirect to={{ pathname: '/' }} />
+    }
     return (
-
+      
       <div className="container">
         <div>
         <IconButton className="queueTwoToneIcon" aria-label="edit" color="primary"

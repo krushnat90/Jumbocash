@@ -1,11 +1,13 @@
 package com.jumbocash.t7.beanMapper.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
 import com.jumbocash.t7.beanMapper.BeanMapperFunction;
 import com.jumbocash.t7.dto.AppUser;
 import com.jumbocash.t7.model.User;
 
+@Component
 public class UserMapper implements BeanMapperFunction<User, AppUser> {
 
 	private ModelMapper modelMapper;

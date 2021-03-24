@@ -2,6 +2,7 @@ package com.jumbocash.t7.api;
 
 import com.jumbocash.t7.model.User;
 import com.jumbocash.t7.model.UserEntityLink;
+import com.jumbocash.t7.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,31 +33,39 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-03-07T11:46:35.995Z[GMT]")
 @RestController
 public class UserApiController implements UserApi {
 
-    private static final Logger log = LoggerFactory.getLogger(UserApiController.class);
+	private static final Logger log = LoggerFactory.getLogger(UserApiController.class);
 
-    private final ObjectMapper objectMapper;
+	private final HttpServletRequest request;
 
-    private final HttpServletRequest request;
+	UserService userService;
 
-    @org.springframework.beans.factory.annotation.Autowired
-    public UserApiController(ObjectMapper objectMapper, HttpServletRequest request) {
-        this.objectMapper = objectMapper;
-        this.request = request;
-    }
+	public UserApiController(HttpServletRequest request, UserService userService) {
+		super();
+		this.request = request;
+		this.userService = userService;
+	}
 
-    public ResponseEntity<Void> linkEntity(@Parameter(in = ParameterIn.DEFAULT, description = "User Entity Link Object.", required=true, schema=@Schema()) @Valid @RequestBody UserEntityLink body) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
-    }
+	public ResponseEntity<Void> linkEntity(
+			@Parameter(in = ParameterIn.DEFAULT, description = "User Entity Link Object.", required = true, schema = @Schema()) @Valid @RequestBody UserEntityLink body) {
+		String accept = request.getHeader("Accept");
+		return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+	}
 
 	@Override
 	public ResponseEntity<User> addOrUpdateUser(@Valid User user) {
-		return null;
+		
+		Optional<User> operatedUser = userService.addOrUpdateUser(user);
+		
+		if(!operatedUser.isPresent())
+			return ResponseEntity.badRequest().build();
+		
+		return ResponseEntity.ok(operatedUser.get());
 	}
 
 }

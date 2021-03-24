@@ -39,12 +39,25 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Optional<User> addOrUpdateUser(User user) {
 
-		// email should be present
-		if (StringUtils.isBlank(user.getEmail()))
+		// mandatory fields should be present
+		if (StringUtils.isBlank(user.getEmail()) || StringUtils.isBlank(user.getName())
+				|| StringUtils.isBlank(user.getToken()))
 			return Optional.empty();
 
-		return Optional.of(userMapper.convertFromDtoToJson(userRepository.save(userMapper.convertFromJsonToDto(user))));
+		List<AppUser> existingUser = existsUser(user.getEmail());
 
+		// check if add or update
+		if (existingUser.isEmpty()) {
+			// add
+			return Optional
+					.of(userMapper.convertFromDtoToJson(userRepository.save(userMapper.convertFromJsonToDto(user))));
+
+		} else {
+			//update
+			AppUser userToUpdate = userMapper.convertFromJsonToDto(user);
+			userToUpdate.setUserId(existingUser.get(0).getUserId());
+			return Optional.of(userMapper.convertFromDtoToJson(userRepository.save(userToUpdate)));
+		}
 	}
 
 }

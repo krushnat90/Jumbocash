@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { GoogleLogin } from 'react-google-login';
+import UserService from '../../services/UserService';
 import DrawerComponent from '../Navbar/DrawerComponent';
 
 const clientId = '193599941937-401iftc6u6hb3b92l27fvc80fomasg22.apps.googleusercontent.com';
@@ -14,18 +15,31 @@ class LoginButton extends Component {
         this.onFailure = this.onFailure.bind(this);
     }
 
-    onSuccess(profileObj){
-        this.props.history.push({
-            pathname: '/dashboard',
-            state: {
-                name : profileObj.name,
-                email : profileObj.email,
-                isAuthenticated : true
+    onSuccess(profileObj) {
+        console.log("name :: "+profileObj.name+" email :: "+profileObj.email+" token ::"+profileObj.token)
+
+        let user = {
+            name: profileObj.name,
+            email: profileObj.email,
+            token: profileObj.email
+        }
+
+        UserService.addOrUpdateUser(user).then(
+            response => {
+                this.props.history.push({
+                    pathname: '/dashboard',
+                    state: {
+                        name: profileObj.name,
+                        email: profileObj.email,
+                        userId: response.data.userId,
+                        isAuthenticated: true
+                    }
+                })
             }
-        })
+        ).catch(this.onFailure())
     }
 
-    onFailure(){
+    onFailure() {
         this.props.history.push({
             pathname: '/'
         })
@@ -40,19 +54,19 @@ class LoginButton extends Component {
 
         return (
             <div>
-            <GoogleLogin
-                clientId={clientId}
-                buttonText="Login"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                cookiePolicy={'single_host_origin'}
-                style={{ marginTop: '100px' }}
-                isSignedIn={false}
-            />
+                <GoogleLogin
+                    clientId={clientId}
+                    buttonText="Login"
+                    onSuccess={responseGoogle}
+                    onFailure={this.onFailure}
+                    cookiePolicy={'single_host_origin'}
+                    style={{ marginTop: '100px' }}
+                    isSignedIn={false}
+                />
             </div>
         )
     }
-    
+
 }
 
 export default LoginButton;
