@@ -58,7 +58,7 @@ class ViewEntityComponent extends Component {
       );
     }else{
       return (
-        <div style={{ height: 500, width: '100%' }}>
+        <div style={{ height: 500, width: '100%' }} class="container">
           <DataGrid rows={this.state.entities} columns={columns} />
         </div>
       );
