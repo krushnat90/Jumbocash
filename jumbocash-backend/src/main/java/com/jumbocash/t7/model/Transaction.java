@@ -14,7 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 
 public class Transaction {
-	@JsonProperty("tranId")
+	@JsonProperty("id ")
 	private Long tranId = null;
 
 	/**
