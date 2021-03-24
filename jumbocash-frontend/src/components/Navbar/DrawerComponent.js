@@ -21,13 +21,18 @@ import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu'
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
 import ViewTransactionComponent from "../TransactionComponents/ViewTransactionComponent";
+import DashboardComponent from "../DashboardComponents/DashboardComponent";
 
 
 //icons
+import Avatar from '@material-ui/core/Avatar';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
@@ -44,7 +49,8 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: "flex"
+    display: "flex",
+    flexGrow: 1
   },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
@@ -101,6 +107,9 @@ const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2),
   },
+  title: {
+    flexGrow: 1,
+  },
   toolbar: theme.mixins.toolbar,
   
 }));
@@ -110,8 +119,13 @@ function ResponsiveDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [openCollapse, setOpenCollapse] = React.useState(true);
+  const openMenu = Boolean(anchorEl);
+
   const userId = 2;
+  
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -119,6 +133,14 @@ function ResponsiveDrawer(props) {
 
   const handleClick = () => {
     setOpenCollapse(!openCollapse);
+  };
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const iconSwitch = (element) => {
@@ -172,6 +194,8 @@ function ResponsiveDrawer(props) {
         </List>
       </Collapse>
       </List>
+      <Divider/>
+      
     </div>
   );
 
@@ -194,9 +218,37 @@ function ResponsiveDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h7" className={classes.title} noWrap>
             <b>JUMBOTAIL CASHFLOW</b>
           </Typography>
+          <div>
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={openMenu}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Logout</MenuItem>
+              </Menu>
+            </div>
         </Toolbar>
       </AppBar>
       <BrowserRouter>
@@ -216,6 +268,7 @@ function ResponsiveDrawer(props) {
               {drawer}
             </Drawer>
           </Hidden>
+          
         </nav>
 
         <main className={clsx(classes.content, {
@@ -224,7 +277,7 @@ function ResponsiveDrawer(props) {
           <div className={classes.toolbar} />
 
           <Switch>
-            <Route exact path="/" render={() => <div>Home Page</div>} />
+            <Route exact path="/dashboard" component={DashboardComponent} />
             <Route path="/transactions" component={ViewTransactionComponent} />
             <Route path="/add-transaction" component={AddTransactionComponent} />
             <Route path="/entity" component={ViewEntityComponent} />
