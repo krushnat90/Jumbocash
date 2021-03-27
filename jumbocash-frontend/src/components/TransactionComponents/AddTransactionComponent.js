@@ -11,6 +11,7 @@ import MuiSelect from "@material-ui/core/Select";
 import MuiMenuItem from "@material-ui/core/MenuItem";
 import EntityService from "../../services/EntityService";
 import TransactionService from "../../services/TransactionService";
+import moment from "moment";
 
 // import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -26,12 +27,31 @@ class AddTransactionComponent extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    // this.state = {
+    //   entities: [],
+    //   show: true,
+    //   message: '',
+    //   errorMessage: ''
+    // }
+
+    var today = new Date(),
+    date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    this.initialState = {
       entities: [],
       show: true,
       message: '',
-      errorMessage: ''
-    }
+      errorMessage: '',
+      amount: '',
+      tranType: '',
+      paymentMode: '',
+      entityId: '',
+      userId: '',
+      remarks: '',
+      tranStatus: '',
+      tranDate: '',
+      today: moment().format("YYYY-MM-DD")
+    };
+    this.state = this.initialState;
 
     this.hideErrorAlert = this.hideErrorAlert.bind(this);
     this.hideMessageAlert = this.hideMessageAlert.bind(this);
@@ -41,7 +61,12 @@ class AddTransactionComponent extends Component {
   }
 
   componentDidMount() {
+    console.log(" date "+ this.state.today)
     this.getEntities();
+  }
+
+  getTodayDate(){
+    return new Date();
   }
 
 
@@ -140,6 +165,9 @@ class AddTransactionComponent extends Component {
           this.setState({ errorMessage: 'Transaction could not be added' })
         }).then(this.setState(this.initialState))
     }
+
+    this.setState(this.initialState);
+    this.getEntities();
   }
 
   render() {
@@ -201,7 +229,9 @@ class AddTransactionComponent extends Component {
                         // label="Transaction Date"
                         type="date"
                         name="tranDate"
-                        style = {{paddingTop : 16}}
+                        style={{ paddingTop: 16 }}
+                        value={this.state.tranDate}
+                        InputProps={{inputProps: { max: this.state.today} }}
                         onChange={event => {
                           this.setState({ tranDate: event.target.value })
                         }}
@@ -255,6 +285,7 @@ class AddTransactionComponent extends Component {
                         id="amount"
                         name="amount"
                         type="number"
+                        value={this.state.amount}
                         InputProps={{ inputProps: { min: 0 } }}
                         label="Amount"
                         onChange={event => {
@@ -288,6 +319,7 @@ class AddTransactionComponent extends Component {
                         id="remarks"
                         name="remaks"
                         label="Remarks"
+                        value={this.state.remarks}
                         onChange={event => {
                           this.setState({ remarks: event.target.value })
                         }}
@@ -296,8 +328,8 @@ class AddTransactionComponent extends Component {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                    <Button variant="contained" color="secondary" className="submit-button" type="submit" onClick={this.addTransaction}>
-                          SUBMIT
+                      <Button variant="contained" color="secondary" className="submit-button" type="submit" onClick={this.addTransaction}>
+                        SUBMIT
                     </Button>
                     </Grid>
                   </Grid>

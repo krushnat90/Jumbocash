@@ -15,10 +15,10 @@ function App() {
           <Switch>
             <Route exact path="/" component={LoginButton} />
             <ProtectedRoute path="/dashboard" component={DrawerComponent} />
-            <ProtectedRoute path="/transactions" component={ViewTransactionComponent} />
-            <ProtectedRoute path="/add-transaction" component={AddTransactionComponent} />
-            <ProtectedRoute path="/entity" component={ViewEntityComponent} />
-            <ProtectedRoute path="/add-entity" component={AddEntityComponent} />
+            <ProtectedRoute path="/transactions" component={DrawerComponent} />
+            <ProtectedRoute path="/add-transaction" component={DrawerComponent} />
+            <ProtectedRoute path="/entity" component={DrawerComponent} />
+            <ProtectedRoute path="/add-entity" component={DrawerComponent} />
           </Switch>
       </BrowserRouter>
     </div>

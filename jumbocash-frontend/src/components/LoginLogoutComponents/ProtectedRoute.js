@@ -28,8 +28,8 @@ class ProtectedRoute extends React.Component {
         return userId > 0 ? (
             <Component userId={userId} userName={userName} />
         ) : (
-            // <Redirect to={{ pathname: '/' }} />
-            <LoginButton />
+            <Redirect to={{ pathname: '/' }} />
+            // <LoginButton />
         );
     }
 }
