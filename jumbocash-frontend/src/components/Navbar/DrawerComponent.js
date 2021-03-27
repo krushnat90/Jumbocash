@@ -360,7 +360,7 @@ function ResponsiveDrawer(props) {
           </Switch> */}
 
           <Switch>
-            <Route exact path="/dashboard" component={DashboardComponent} />
+            <ProtectedRoute exact path="/dashboard" component={ViewTransactionComponent} />
             <ProtectedRoute path="/transactions" component={ViewTransactionComponent} />
             <ProtectedRoute path="/add-transaction" component={AddTransactionComponent} />
             <ProtectedRoute path="/entities" component={ViewEntityComponent} />

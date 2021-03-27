@@ -48,7 +48,7 @@ public class TransactionCustomRepositoryImpl implements TransactionCustomReposit
 		List<Order> orderList = new ArrayList<>();
 
 		Predicate hasUserId = builder.equal(joinUser.get(AppUser_.USER_ID), userId);
-		orderList.add(builder.desc(root.get(TranMaster_.LST_UPDT_TS)));
+		orderList.add(builder.desc(root.get(TranMaster_.TRAN_DATE)));
 
 		query.where(hasUserId).orderBy(orderList);
 

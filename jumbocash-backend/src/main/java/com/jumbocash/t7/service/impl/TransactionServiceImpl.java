@@ -57,6 +57,9 @@ public class TransactionServiceImpl implements TransactionService {
 		transactionDetails.setEntity(entityDetails.get());
 		transactionDetails.setUser(userDetails.get());
 		
+		if(transactionDetails.getTranType().equalsIgnoreCase("debit"))
+			transactionDetails.setAmount(0 - transactionDetails.getAmount());
+		
 		return Optional.of(tranRepository.save(transactionDetails));
 	}
 

@@ -1,6 +1,7 @@
 package com.jumbocash.t7.model;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -51,6 +52,17 @@ public class Transaction {
 
 	@JsonProperty("remarks")
 	private String remarks = null;
+	
+	@JsonProperty("tranDate")
+	private String tranDate = null;
+	
+	public String getTranDate() {
+		return tranDate;
+	}
+
+	public void setTranDate(String tranDate) {
+		this.tranDate = tranDate;
+	}
 
 	public Transaction tranId(Long tranId) {
 		this.tranId = tranId;

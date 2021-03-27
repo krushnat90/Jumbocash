@@ -6,7 +6,7 @@ import TransactionService from "../../services/TransactionService";
 
 const columns = [
   //{ field: 'tranId', headerName: 'Id', width: 150 },
-  { field: 'tranTimestamp', headerName: 'Date', width: 200 },
+  { field: 'tranDate', headerName: 'Date', width: 200 },
   { field: 'entityName', headerName: 'Entity Name', width: 150 },
   { field: 'paymentMode', headerName: 'Payment Mode', width: 150 },
   { field: 'tranType', headerName: 'Transaction Type', width: 200 },
@@ -60,7 +60,7 @@ class ViewTransactionComponent extends Component {
         <div style={{ height: 500, width: '100%' }} class ="container">
           <DataGrid rows={this.state.transactions} columns={columns} sortModel={[
             {
-              field: 'tranTimestamp',
+              field: 'tranDate',
               sort: 'desc',
             },
           ]} />

@@ -1,6 +1,7 @@
 package com.jumbocash.t7.dto;
 
 import java.math.BigInteger;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -50,6 +51,9 @@ public class TranMaster {
 
 	@Column(name = "tran_status")
 	private String tranStatus;
+	
+	@Column(name="tran_date")
+	private Date tranDate;
 
 	@ManyToOne
 	@JoinColumn(name = "entity_id", nullable = false)
@@ -146,6 +150,16 @@ public class TranMaster {
 	public void setTranStatus(String tranStatus) {
 		this.tranStatus = tranStatus;
 	}
+
+	public Date getTranDate() {
+		return tranDate;
+	}
+
+	public void setTranDate(Date tranDate) {
+		this.tranDate = tranDate;
+	}
+	
+	
 
 	/*
 	 * public BigInteger getUserId() { return userId; }

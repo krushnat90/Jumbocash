@@ -2,6 +2,8 @@ package com.jumbocash.t7.service.impl;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,14 +78,14 @@ public class EntityServiceImpl implements EntityService {
 	}
 
 	@Override
-	public Entity getEntityByEntityId(BigInteger entityId) {
+	public Optional<Entity> getEntityByEntityId(BigInteger entityId) {
 		Optional<EntityMaster> entityMaster = entityMasterRepository.findById(entityId);
 		if (entityMaster.isPresent()) {
 			logger.info("getEntityByEntityId :: Data fetched successfully for ID : " + entityId);
-			return entityMapper.convertFromDtoToJson(entityMaster.get());
+			return Optional.of(entityMapper.convertFromDtoToJson(entityMaster.get()));
 		}
 		logger.info("getEntityByEntityId :: Returning NULL from getEntityByEntityId method");
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
@@ -98,7 +100,7 @@ public class EntityServiceImpl implements EntityService {
 			return entityListResponse;
 		}
 		logger.info("getEntitiesByUserId :: Returning NULL from getEntitiesByUserId method");
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override

@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-03-07T11:46:35.995Z[GMT]")
 @RestController
@@ -69,7 +70,11 @@ public class EntityApiController implements EntityApi {
 
     public ResponseEntity<Entity> getEntityByEntityId(@Parameter(in = ParameterIn.PATH, description = "Entity ID", required = true, schema = @Schema()) @PathVariable("entityId") BigInteger entityId) {
         try {
-            return new ResponseEntity<Entity>(entityService.getEntityByEntityId(entityId), HttpStatus.OK);
+        	Optional<Entity> entity = entityService.getEntityByEntityId(entityId);
+        	if(!entity.isPresent())
+        		return ResponseEntity.notFound().build();
+        	
+            return ResponseEntity.ok(entity.get());
         } catch (Exception e) {
             log.error("Exception occurred in getEntityByEntityId method for entity ID: " + entityId + " --> " + e.getMessage());
             return new ResponseEntity<Entity>(HttpStatus.INTERNAL_SERVER_ERROR);
