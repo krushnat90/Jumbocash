@@ -65,10 +65,10 @@ class AddTransactionComponent extends Component {
     console.log("logging txn ")
     console.log(transaction)
     if (!transaction.amount) {
-      this.setState({ errorMessage: 'amount is mandatory' })
+      this.setState({ errorMessage: 'Amount is mandatory' })
       return false;
     } else if (transaction.amount < 0) {
-      this.setState({ errorMessage: 'amount must be positive' })
+      this.setState({ errorMessage: 'Amount must be positive' })
       this.state.message = ''
       return false;
     }
@@ -148,164 +148,165 @@ class AddTransactionComponent extends Component {
         {/* <div>
           <ResponsiveDrawer />
         </div> */}
-      <div className="container">
-        {this.state.message && <div className="alert alert-success" id="site-message">{this.state.message}
-          <button type="button"
-            className="close"
-            data-dismiss="alert"
-            aria-label="Close"
-            onClick={() => this.hideMessageAlert()}>
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>}
-        {this.state.errorMessage && <div className="alert alert-warning" role="alert">{this.state.errorMessage}
-          <button type="button"
-            className="close"
-            data-dismiss="alert"
-            aria-label="Close"
-            onClick={() => this.hideErrorAlert()}>
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>}<Card>
-          <CardContent>
-            <React.Fragment>
-              <Typography variant="h6" gutterBottom>
-                New Transaction Form
+        <div className="container">
+          {this.state.message && <div className="alert alert-success" id="site-message">{this.state.message}
+            <button type="button"
+              className="close"
+              data-dismiss="alert"
+              aria-label="Close"
+              onClick={() => this.hideMessageAlert()}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>}
+          {this.state.errorMessage && <div className="alert alert-warning" role="alert">{this.state.errorMessage}
+            <button type="button"
+              className="close"
+              data-dismiss="alert"
+              aria-label="Close"
+              onClick={() => this.hideErrorAlert()}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>}<Card>
+            <CardContent>
+              <React.Fragment>
+                <Typography variant="h6" gutterBottom>
+                  New Transaction Form
                         </Typography>
-              <FormControl className="form-control">
-                <Grid container spacing={3}>
-                  <Grid item xs={12} sm={6}>
-                  <FormControl className="form-control">
-                      <MuiInputLabel id="entityName">Entity Name</MuiInputLabel>
-                      <MuiSelect
-                        //onChange={this.handleChange}
-                        labelId="entityName"
-                        value={this.state.entityName}
+                <FormControl className="form-control">
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <FormControl className="form-control">
+                        <MuiInputLabel id="entityName">Entity Name</MuiInputLabel>
+                        <MuiSelect
+                          //onChange={this.handleChange}
+                          labelId="entityName"
+                          value={this.state.entityName}
+                          onChange={event => {
+                            this.setState({ entityId: event.target.value })
+                          }}
+
+                        >
+                          {this.state.entities.map(
+                            entity => <MuiMenuItem value={entity.id}>{entity.entityName}</MuiMenuItem>
+                            // entity => <option value={entity.id}>{entity.entityName}</option>
+                          )}
+
+                        </MuiSelect>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="tranDate"
+                        // label="Transaction Date"
+                        type="date"
+                        name="tranDate"
+                        style = {{paddingTop : 16}}
                         onChange={event => {
-                          this.setState({ entityId: event.target.value })
+                          this.setState({ tranDate: event.target.value })
                         }}
+                        fullWidth
+                        autoComplete="tranDate"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <FormControl className="form-control">
+                        <MuiInputLabel id="tranType">Transaction Type</MuiInputLabel>
+                        <MuiSelect
+                          //onChange={this.handleChange}
+                          labelId="tranType"
+                          value={this.state.tranType}
+                          onChange={event => {
+                            this.setState({ tranType: event.target.value })
+                          }}
 
-                      >
-                        {this.state.entities.map(
-                         entity => <MuiMenuItem value={entity.id}>{entity.entityName}</MuiMenuItem>
-                        // entity => <option value={entity.id}>{entity.entityName}</option>
-                      )}
-                        
-                      </MuiSelect>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      id="tranDate"
-                      // label="Transaction Date"
-                      type="date"
-                      name="tranDate"
-                      onChange={event => {
-                        this.setState({ tranDate: event.target.value })
-                      }}
-                      fullWidth
-                      autoComplete="tranDate"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <FormControl className="form-control">
-                      <MuiInputLabel id="tranType">Transaction Type</MuiInputLabel>
-                      <MuiSelect
-                        //onChange={this.handleChange}
-                        labelId="tranType"
-                        value={this.state.tranType}
+                        >
+                          <MuiMenuItem value="Credit">Credit</MuiMenuItem>
+                          <MuiMenuItem value="Debit">Debit</MuiMenuItem>
+
+                        </MuiSelect>
+                      </FormControl>
+
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <FormControl className="form-control">
+                        <MuiInputLabel id="paymentMode">Payment Mode</MuiInputLabel>
+                        <MuiSelect
+                          //onChange={this.handleChange}
+                          labelId="paymentMode"
+                          value={this.state.paymentMode}
+                          onChange={event => {
+                            this.setState({ paymentMode: event.target.value })
+                          }}
+
+                        >
+                          <MuiMenuItem value="Cash">Cash</MuiMenuItem>
+                          <MuiMenuItem value="Debit Card">Debit Card</MuiMenuItem>
+                          <MuiMenuItem value="Credit Card">Credit Card</MuiMenuItem>
+                          <MuiMenuItem value="UPI">UPI</MuiMenuItem>
+                        </MuiSelect>
+                      </FormControl>
+
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="amount"
+                        name="amount"
+                        type="number"
+                        InputProps={{ inputProps: { min: 0 } }}
+                        label="Amount"
                         onChange={event => {
-                          this.setState({ tranType: event.target.value })
+                          this.setState({ amount: event.target.value })
                         }}
+                        fullWidth
+                        autoComplete="amount"
+                      />
 
-                      >
-                        <MuiMenuItem value="Credit">Credit</MuiMenuItem>
-                        <MuiMenuItem value="Debit">Debit</MuiMenuItem>
-                        
-                      </MuiSelect>
-                    </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <FormControl className="form-control">
+                        <MuiInputLabel id="paymentMode">Transaction Status</MuiInputLabel>
+                        <MuiSelect
+                          //onChange={this.handleChange}
+                          labelId="tranStatus"
+                          value={this.state.tranStatus}
+                          onChange={event => {
+                            this.setState({ tranStatus: event.target.value })
+                          }}
 
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <FormControl className="form-control">
-                      <MuiInputLabel id="paymentMode">Payment Mode</MuiInputLabel>
-                      <MuiSelect
-                        //onChange={this.handleChange}
-                        labelId="paymentMode"
-                        value={this.state.paymentMode}
+                        >
+                          <MuiMenuItem value="DN">Done</MuiMenuItem>
+                          <MuiMenuItem value="PN">Pending</MuiMenuItem>
+                        </MuiSelect>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        id="remarks"
+                        name="remaks"
+                        label="Remarks"
                         onChange={event => {
-                          this.setState({ paymentMode: event.target.value })
+                          this.setState({ remarks: event.target.value })
                         }}
-
-                      >
-                        <MuiMenuItem value="Cash">Cash</MuiMenuItem>
-                        <MuiMenuItem value="Debit Card">Debit Card</MuiMenuItem>
-                        <MuiMenuItem value="Credit Card">Credit Card</MuiMenuItem>
-                        <MuiMenuItem value="UPI">UPI</MuiMenuItem>
-                      </MuiSelect>
-                    </FormControl>
-
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      id="amount"
-                      name="amount"
-                      type="number"
-                      InputProps={{ inputProps: { min: 0 } }}
-                      label="Amount"
-                      onChange={event => {
-                        this.setState({ amount: event.target.value })
-                      }}
-                      fullWidth
-                      autoComplete="amount"
-                    />
-
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                  <FormControl className="form-control">
-                      <MuiInputLabel id="paymentMode">Transaction Status</MuiInputLabel>
-                      <MuiSelect
-                        //onChange={this.handleChange}
-                        labelId="tranStatus"
-                        value={this.state.tranStatus}
-                        onChange={event => {
-                          this.setState({ tranStatus: event.target.value })
-                        }}
-
-                      >
-                        <MuiMenuItem value="DN">Done</MuiMenuItem>
-                        <MuiMenuItem value="PN">Pending</MuiMenuItem>
-                      </MuiSelect>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      id="remarks"
-                      name="remaks"
-                      label="Remarks"
-                      onChange={event => {
-                        this.setState({ remarks: event.target.value })
-                      }}
-                      fullWidth
-                      autoComplete="remarks"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
+                        fullWidth
+                        autoComplete="remarks"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
                     <Button variant="contained" color="secondary" className="submit-button" type="submit" onClick={this.addTransaction}>
-                      SUBMIT
-                                    </Button>
+                          SUBMIT
+                    </Button>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </FormControl>
-            </React.Fragment>
-          </CardContent>
-        </Card>
+                </FormControl>
+              </React.Fragment>
+            </CardContent>
+          </Card>
 
-      </div>
+        </div>
       </div>
     );
   }
