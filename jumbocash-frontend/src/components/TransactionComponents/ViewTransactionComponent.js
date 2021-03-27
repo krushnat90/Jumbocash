@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import clsx from 'clsx';
+import { withStyles } from '@material-ui/core/styles';
 import { Spinner } from 'react-bootstrap';
 import { DataGrid } from '@material-ui/data-grid';
+import CustomNoRowsOverlay from './CustomNoRowsOverlay'
 import TransactionService from "../../services/TransactionService";
 
 
@@ -9,10 +12,35 @@ const columns = [
   { field: 'tranDate', headerName: 'Date', width: 200 },
   { field: 'entityName', headerName: 'Entity Name', width: 150 },
   { field: 'paymentMode', headerName: 'Payment Mode', width: 150 },
-  { field: 'tranType', headerName: 'Transaction Type', width: 200 },
-  { field: 'amount', headerName: 'Amount', width: 150 },
+  {
+    field: 'tranType', headerName: 'Transaction Type', width: 200,
+    cellClassName: (params) =>
+      clsx('tranType', {
+        credit: params.value === 'credit',
+        debit: params.value === 'debit',
+      }),
+  },
+  {
+    field: 'amount', headerName: 'Amount', width: 150, cellClassName: (params) =>
+      clsx('amount', {
+        positive: params.value > 0,
+        negative: params.value < 0
+      }),
+  },
   { field: 'remarks', headerName: 'Remarks', width: 250 }
 ];
+
+const useStyles = theme => ({
+  root: {
+    '& .amount.negative': {
+      color: 'red'
+    },
+    '& .amount.positive': {
+      color : 'green'
+    },
+  },
+});
+
 
 class ViewTransactionComponent extends Component {
 
@@ -39,15 +67,22 @@ class ViewTransactionComponent extends Component {
           transactions: response.data,
           isLoading: false
         })
+
       }
     ).catch(
       error => {
-        this.setState({ message: "Error occurred" })
+        this.setState({
+          message: "Error occurred",
+          isLoading: false
+        })
+
       }
     )
+
   }
 
   render() {
+    const { classes } = this.props;
     console.log("isLoading" + this.state.isLoading);
     if (this.state.isLoading) {
       return (
@@ -57,19 +92,26 @@ class ViewTransactionComponent extends Component {
       );
     } else {
       return (
-        <div style={{ height: 500, width: '100%' }} class ="container">
-          <DataGrid rows={this.state.transactions} columns={columns} sortModel={[
-            {
-              field: 'tranDate',
-              sort: 'desc',
-            },
-          ]} />
+
+        <div style={{ height: 500, width: '100%' }} className="container">
+          <DataGrid className={classes.root}
+            components={{
+              NoRowsOverlay: CustomNoRowsOverlay,
+            }}
+            rows={this.state.transactions} columns={columns} sortModel={[
+              {
+                field: 'tranTimestamp',
+                sort: 'desc',
+              },
+            ]}
+          />
         </div>
       );
     }
   }
 }
 
-export default ViewTransactionComponent;
+export default withStyles(useStyles)(ViewTransactionComponent);
+//export default ViewTransactionComponent;
 
 

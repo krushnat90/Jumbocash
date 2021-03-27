@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { Spinner } from 'react-bootstrap';
 import { DataGrid } from '@material-ui/data-grid';
+import CustomNoRowsOverlay from './CustomNoRowsOverlay'
 import EntityService from "../../services/EntityService";
+
+
 
 const columns  = [
   { field: 'entityName', headerName: 'Entity Name', width: 150 },
@@ -43,9 +46,13 @@ class ViewEntityComponent extends Component {
       }
     ).catch(
         error => {
-          this.setState({ message: "Error occurred" })
+          this.setState({ message: "Error occurred", isLoading : false})
         }
       )
+
+      if(this.state.entities === null){
+        this.setState({entities : []});
+      }
   }
 
   render() {
@@ -59,7 +66,11 @@ class ViewEntityComponent extends Component {
     }else{
       return (
         <div style={{ height: 500, width: '100%' }} class="container">
-          <DataGrid rows={this.state.entities} columns={columns} />
+          <DataGrid components={{
+              NoRowsOverlay: CustomNoRowsOverlay,
+            }}
+            rows={this.state.entities} columns={columns} 
+          />
         </div>
       );
     }

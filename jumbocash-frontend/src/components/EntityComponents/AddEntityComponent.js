@@ -11,7 +11,6 @@ import MuiMenuItem from "@material-ui/core/MenuItem";
 import Button from '@material-ui/core/Button';
 
 
-
 class AddEntityComponent extends Component {
 
     constructor(props) {
@@ -52,10 +51,10 @@ class AddEntityComponent extends Component {
     }
 
     addEntity() {
+
         console.log(this.state);
 
         // TODO : Form Validation
-
         let entity = {
             entityType: this.state.entityType,
             entityName: this.state.entityName,
@@ -74,7 +73,7 @@ class AddEntityComponent extends Component {
             }
         ).catch(err => {
             console.log(err.response.status);
-            this.state.errorMessage = 'Entity could not be added'
+            this.setState({ errorMessage: 'Entity could not be added'})
             console.log(this.state.errorMessage);
 
         })
@@ -83,14 +82,12 @@ class AddEntityComponent extends Component {
         
     }
 
-
-
     validate() {
-        this.state.errorMessage = '';
+        this.setState({ errorMessage: ''});
 
         if (!this.props.userId) {
-            this.state.errorMessage = 'User id is not net. Cannot proceed for ADD.'
-            this.state.message = ''
+            this.setState({ errorMessage:  'User id is not net. Cannot proceed for ADD.'});
+            this.setState({ message: ''});
             return this.state.errorMessage;
         }
 
