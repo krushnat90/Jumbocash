@@ -25,7 +25,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu'
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
+import { Switch, Route, Link, BrowserRouter, useHistory } from "react-router-dom";
 import ViewTransactionComponent from "../TransactionComponents/ViewTransactionComponent";
 import DashboardComponent from "../DashboardComponents/DashboardComponent";
 import { Redirect } from 'react-router-dom'
@@ -51,6 +51,10 @@ import AddEntityComponent from "../EntityComponents/AddEntityComponent";
 import ProtectedRoute from "../LoginLogoutComponents/ProtectedRoute";
 import { CalendarViewDayTwoTone, PostAddTwoTone } from "@material-ui/icons";
 import LoginButton from "../LoginLogoutComponents/LoginButton";
+import LogoutButton from "../LoginLogoutComponents/LogoutButton";
+import ExitToAppTwoToneIcon from '@material-ui/icons/ExitToAppTwoTone';
+
+import { useGoogleLogout } from 'react-google-login';
 
 
 const drawerWidth = 240;
@@ -158,10 +162,30 @@ function ResponsiveDrawer(props) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  //logout
+  const history = useHistory();
+
+  const onLogoutSuccess = (res) => {
+    console.log('Logged out Success');
     sessionStorage.removeItem('JUMBO_USER_ID');
     sessionStorage.removeItem('JUMBO_USER_NAME');
     sessionStorage.removeItem('JUMBO_LOGIN_STATUS');
+    history.push("/");
   };
+
+  const onFailure = () => {
+    console.log('Handle failure cases');
+  };
+
+  const clientId = '193599941937-401iftc6u6hb3b92l27fvc80fomasg22.apps.googleusercontent.com';
+
+  const { signOut } = useGoogleLogout({
+    clientId,
+    onLogoutSuccess,
+    onFailure,
+  });
 
   const iconSwitch = (element) => {
     switch (element) {
@@ -175,6 +199,8 @@ function ResponsiveDrawer(props) {
         return <AssessmentTwoTone className="pink-color" />;
       case "profile":
         return <PermIdentityTwoTone className="coral-color" />;
+      case "logout":
+        return <ExitToAppTwoToneIcon className="purple-color" />;
     }
   }
 
@@ -262,16 +288,23 @@ function ResponsiveDrawer(props) {
           </ListItemIcon>
           <ListItemText primary="Profile" />
         </ListItem>
-
+        <Divider />
+        <ListItem button key="Logout" onClick={signOut} className={classes.link}>
+          <ListItemIcon>
+            {iconSwitch("Logout".toLowerCase())}
+          </ListItemIcon>
+          <ListItemText primary="Logout" />
+          {/* <LogoutButton /> */}
+        </ListItem>
+        <Divider />
       </List>
-      <Divider />
 
     </div>
   );
 
   if (!sessionStorage.getItem('JUMBO_LOGIN_STATUS')) {
     console.log("dashboard redirect")
-    return (<Redirect to={'/'}/>)
+    return (<Redirect to={'/'} />)
   }
 
   return (
@@ -306,7 +339,7 @@ function ResponsiveDrawer(props) {
             >
               <AccountCircle />
             </IconButton>
-            <Menu
+            {/* <Menu
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
@@ -322,7 +355,7 @@ function ResponsiveDrawer(props) {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>Logout</MenuItem>
-            </Menu>
+            </Menu> */}
           </div>
         </Toolbar>
       </AppBar>
@@ -365,11 +398,12 @@ function ResponsiveDrawer(props) {
             <ProtectedRoute path="/add-transaction" component={AddTransactionComponent} />
             <ProtectedRoute path="/entities" component={ViewEntityComponent} />
             <ProtectedRoute path="/add-entity" component={AddEntityComponent} />
+            <ProtectedRoute path="/logout" component={LogoutButton} />
           </Switch>
         </main>
       </BrowserRouter>
     </div>
-  ) 
+  )
 }
 
 ResponsiveDrawer.propTypes = {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import UserService from '../../services/UserService';
+import { refreshTokenSetup } from '../../utility/RefreshToken';
 import DrawerComponent from '../Navbar/DrawerComponent';
 
 const clientId = '193599941937-401iftc6u6hb3b92l27fvc80fomasg22.apps.googleusercontent.com';
@@ -15,17 +16,19 @@ class LoginButton extends Component {
         this.onFailure = this.onFailure.bind(this);
     }
 
-    onSuccess(profileObj) {
-        console.log("name :: "+profileObj.name+" email :: "+profileObj.email+" token ::"+profileObj.token)
+    onSuccess(authResponse) {
+        var profileObj = authResponse.profileObj;
 
+        console.log("name :: "+profileObj.name+" email :: "+profileObj.email+" token ::"+profileObj.token)
         let user = {
             name: profileObj.name,
             email: profileObj.email,
-            token: profileObj.email
+            token: profileObj.googleId
         }
 
         UserService.addOrUpdateUser(user).then(
             response => {
+                refreshTokenSetup(authResponse);
                 sessionStorage.setItem("JUMBO_USER_ID",response.data.userId);
                 sessionStorage.setItem("JUMBO_USER_NAME",profileObj.name);
                 sessionStorage.setItem("JUMBO_LOGIN_STATUS",true);
@@ -51,8 +54,8 @@ class LoginButton extends Component {
 
     render() {
         const responseGoogle = (response) => {
-            var profileObj = response.profileObj;
-            this.onSuccess(profileObj);
+            
+            this.onSuccess(response);
             console.log(response);
         }
 
@@ -66,7 +69,7 @@ class LoginButton extends Component {
                     onFailure={this.onFailure}
                     cookiePolicy={'single_host_origin'}
                     style={{ marginTop: '100px' }}
-                    isSignedIn={false}
+                    isSignedIn={true}
                 />
             </div>
         )
