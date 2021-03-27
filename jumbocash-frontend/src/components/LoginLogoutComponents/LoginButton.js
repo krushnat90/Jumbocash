@@ -61,7 +61,7 @@ class LoginButton extends Component {
                     onFailure={this.onFailure}
                     cookiePolicy={'single_host_origin'}
                     style={{ marginTop: '100px' }}
-                    isSignedIn={false}
+                    isSignedIn={true}
                 />
             </div>
         )
