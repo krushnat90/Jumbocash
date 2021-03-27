@@ -26,6 +26,10 @@ class LoginButton extends Component {
 
         UserService.addOrUpdateUser(user).then(
             response => {
+                sessionStorage.setItem("JUMBO_USER_ID",response.data.userId);
+                sessionStorage.setItem("JUMBO_USER_NAME",profileObj.name);
+                sessionStorage.setItem("JUMBO_LOGIN_STATUS",true);
+                console.log("session data :"+sessionStorage.getItem("JUMBO_USER_ID")+" "+sessionStorage.getItem("JUMBO_LOGIN_STATUS"));
                 this.props.history.push({
                     pathname: '/dashboard',
                     state: {
@@ -53,6 +57,7 @@ class LoginButton extends Component {
         }
 
         return (
+
             <div>
                 <GoogleLogin
                     clientId={clientId}

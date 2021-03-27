@@ -8,7 +8,7 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: props.userName,
+            name: '',
             email: '',
             isAuthenticated: false,
             isLoading: false,
@@ -17,7 +17,7 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-
+        console.log('here i am');
         if (this.props.history.location.state) {
             //console.log("DASHBOARD " + this.props.history.location.state.name);
             console.log("LOADING " + this.state.isLoading);
@@ -28,18 +28,27 @@ class Dashboard extends Component {
                 isAuthenticated: this.props.history.location.state.isAuthenticated,
                 userId: this.props.history.location.state.userId
             });
+
+            
         }
+
+        
     }
 
     render() {
-
-        if (this.state.isLoading) {
-            return (<Spinner />);
+        if (!sessionStorage.getItem('JUMBO_LOGIN_STATUS')) {
+            console.log("dashboard redirect")
+            return (<Redirect to={'/'} />)
         }
         else {
-            return (<h1>Hello, {this.state.name}</h1>);
-        }
 
+            if (this.state.isLoading) {
+                return (<Spinner />);
+            }
+            else {
+                return (<h1>Hello, {this.state.name}</h1>);
+            }
+        }
     }
 
 }

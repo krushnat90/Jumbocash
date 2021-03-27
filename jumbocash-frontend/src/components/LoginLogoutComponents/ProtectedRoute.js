@@ -13,17 +13,20 @@ class ProtectedRoute extends React.Component {
         const Component = this.props.component;
 
         let userId = '';
+        let userName = '';
 
-        if (this.props.location.state) {
-            userId = this.props.location.state.userId;
+        if (sessionStorage.getItem('JUMBO_LOGIN_STATUS')) {
+            userId = sessionStorage.getItem('JUMBO_USER_ID');
+            userName = sessionStorage.getItem('JUMBO_USER_NAME');
         }
 
         console.log("PROTECTED user ID:: " + userId);
 
         return userId > 0 ? (
-            <Component userId={userId} userName={this.props.location.state.name} />
+            <Component userId={userId} userName={userName} />
         ) : (
-            <Redirect to={{ pathname: '/' }} />
+            // <Redirect to={{ pathname: '/' }} />
+            <LoginButton />
         );
     }
 }

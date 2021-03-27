@@ -50,6 +50,7 @@ import AddToQueueTwoToneIcon from '@material-ui/icons/AddToQueueTwoTone';
 import AddEntityComponent from "../EntityComponents/AddEntityComponent";
 import ProtectedRoute from "../LoginLogoutComponents/ProtectedRoute";
 import { CalendarViewDayTwoTone, PostAddTwoTone } from "@material-ui/icons";
+import LoginButton from "../LoginLogoutComponents/LoginButton";
 
 
 const drawerWidth = 240;
@@ -157,6 +158,9 @@ function ResponsiveDrawer(props) {
 
   const handleClose = () => {
     setAnchorEl(null);
+    sessionStorage.removeItem('JUMBO_USER_ID');
+    sessionStorage.removeItem('JUMBO_USER_NAME');
+    sessionStorage.removeItem('JUMBO_LOGIN_STATUS');
   };
 
   const iconSwitch = (element) => {
@@ -235,7 +239,7 @@ function ResponsiveDrawer(props) {
               <ListItemText primary="Add Entity" />
             </ListItem>
           </List>
-		  <List component="div" disablePadding>
+          <List component="div" disablePadding>
             <ListItem button className={classes.nested} component={Link} to={"/" + "entities".toLowerCase()}>
               <ListItemIcon>
                 <SupervisedUserCircleTwoToneIcon className="magenta-color" />
@@ -265,7 +269,12 @@ function ResponsiveDrawer(props) {
     </div>
   );
 
-  return isLoggendIn ? (
+  if (!sessionStorage.getItem('JUMBO_LOGIN_STATUS')) {
+    console.log("dashboard redirect")
+    return (<Redirect to={'/'}/>)
+  }
+
+  return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed"
@@ -342,20 +351,25 @@ function ResponsiveDrawer(props) {
         })}>
           <div className={classes.toolbar} />
 
-          <Switch>
+          {/* <Switch>
             <Route exact path="/dashboard" render={(props) => <DashboardComponent userId={userId} userName={userName} {...props} />} />
             <Route path="/transactions" render={(props) => <ViewTransactionComponent userId={userId} {...props} />} />
             <Route path="/add-transaction" render={(props) => <AddTransactionComponent userId={userId} {...props} />} />
             <Route path="/entities" render={(props) => <ViewEntityComponent userId={userId} {...props} />} />
-
             <Route path="/add-entity" render={(props) => <AddEntityComponent userId={userId} {...props} />} />
+          </Switch> */}
+
+          <Switch>
+            <Route exact path="/dashboard" component={DashboardComponent} />
+            <ProtectedRoute path="/transactions" component={ViewTransactionComponent} />
+            <ProtectedRoute path="/add-transaction" component={AddTransactionComponent} />
+            <ProtectedRoute path="/entities" component={ViewEntityComponent} />
+            <ProtectedRoute path="/add-entity" component={AddEntityComponent} />
           </Switch>
         </main>
       </BrowserRouter>
     </div>
-  ) : (
-    <Redirect to={{ pathname: '/' }} />
-  );
+  ) 
 }
 
 ResponsiveDrawer.propTypes = {
