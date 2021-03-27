@@ -100,7 +100,7 @@ class ViewTransactionComponent extends Component {
             }}
             rows={this.state.transactions} columns={columns} sortModel={[
               {
-                field: 'tranTimestamp',
+                field: 'tranDate',
                 sort: 'desc',
               },
             ]}

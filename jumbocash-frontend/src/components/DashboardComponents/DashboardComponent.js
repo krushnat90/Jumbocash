@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Spinner } from 'react-bootstrap';
-import { Redirect } from 'react-router-dom'
+
+import { Redirect } from "react-router";
+
 
 class Dashboard extends Component {
 

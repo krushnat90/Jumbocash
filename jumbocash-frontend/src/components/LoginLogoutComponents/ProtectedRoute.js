@@ -1,7 +1,9 @@
 
 import React from 'react'
 import { Redirect } from 'react-router-dom'
-import LoginButton from './LoginButton'
+
+import LoginButton from './LoginButton';
+
 
 
 class ProtectedRoute extends React.Component {
