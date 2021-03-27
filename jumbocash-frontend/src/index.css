@@ -20,6 +20,10 @@ body {
   background-image: linear-gradient(to right, rgba(255,0,0,0), rgb(245,54,92));
 }
 
+.form-control{
+  width : 100%;
+}
+
 .blue-color{
   color : rgb(70,80,177)
 }
@@ -56,6 +60,15 @@ body {
   background-color:  rgba(72, 81, 176, 0.877);
   color : white;
 }
+
+.text-field{
+    margin: 10%;
+}
+
+.submit-button{
+  width : 30%;
+}
+
 
 /* 
 Thead{
