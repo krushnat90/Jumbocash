@@ -20,7 +20,7 @@ const columns  = [
 const useStyles = theme => ({
   root: {
     '& .super-app-theme--header': {
-      backgroundColor: 'rgba(73,79,175, 0.7)',
+      backgroundColor: 'rgba(25,31,77, 0.7)',
       color: 'white',
       fontWeight : '600'
     },

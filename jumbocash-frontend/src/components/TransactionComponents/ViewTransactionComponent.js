@@ -10,11 +10,11 @@ import { fontWeight, textAlign } from "@material-ui/system";
 
 const columns = [
   //{ field: 'tranId', headerName: 'Id', width: 150 },
-  { field: 'tranDate', headerName: 'Date', width: 200, headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
+  { field: 'tranDate', headerName: 'Date', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
   { field: 'entityName', headerName: 'Entity Name', width: 150, headerClassName: 'super-app-theme--header' , headerAlign: 'center', align : 'center'},
   { field: 'paymentMode', headerName: 'Payment Mode', width: 150, headerClassName: 'super-app-theme--header' , headerAlign: 'center' , align : 'center'},
   {
-    field: 'tranType', headerName: 'Transaction Type', width: 200, headerClassName: 'super-app-theme--header', headerAlign: 'center' , align : 'center'
+    field: 'tranType', headerName: 'Transaction Type', width: 180, headerClassName: 'super-app-theme--header', headerAlign: 'center' , align : 'center'
     , cellClassName: (params) =>
       clsx('tranType', {
         credit: params.value === 'credit',
@@ -28,28 +28,34 @@ const columns = [
         negative: params.value < 0
       }),
   },
-  // {
-  //   field: 'tranStatus', headerName: 'Transaction Status', width: 150, cellClassName: (params) =>
-  //     clsx('tranStatus', {
-  //       pending: params.value === 'pending',
-  //       done: params.value === 'done'
-  //     }),
-  // },
+  {
+    field: 'tranStatus', headerName: 'Status', width: 100, headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center', cellClassName: (params) =>
+      clsx('tranStatus', {
+        pending: params.value === 'Pending',
+        done: params.value === 'Done'
+      }),
+  },
   { field: 'remarks', headerName: 'Remarks', width: 250, headerClassName: 'super-app-theme--header' , align : 'center', headerAlign : 'center' }
 ];
 
 const useStyles = theme => ({
   root: {
     '& .super-app-theme--header': {
-      backgroundColor: 'rgba(73,79,175, 0.7)',
+      backgroundColor: 'rgba(25,31,77, 0.7)',
       color: 'white',
       fontWeight : '600'
     },
     '& .amount.negative': {
-      color: 'red',
+      color: 'rgb(245,54,92)',
     },
     '& .amount.positive': {
-      color: 'green'
+      color: 'rgb(50,207,140)'
+    },
+    '& .tranStatus.done': {
+      color: 'rgb(17,205,239)',
+    },
+    '& .tranStatus.pending': {
+      color: 'rgb(252,146,10)'
     },
   },
 });
@@ -96,7 +102,7 @@ class ViewTransactionComponent extends Component {
 
   render() {
     const { classes } = this.props;
-    
+
     if (this.state.isLoading) {
       return (
         <Spinner animation="border" role="status">
