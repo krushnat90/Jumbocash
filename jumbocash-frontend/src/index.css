@@ -45,6 +45,9 @@ body {
 .red-color{
   color :rgb(245,54,92) ;
 }
+.white-color{
+  color : white;
+}
 
 .table-head{
   /* background-color: linear-gradient(to right, rgb(193, 192, 209), rgb(142, 137, 211)); */
@@ -69,7 +72,18 @@ body {
   width : 30%;
 }
 
+.login-card{
+  background-image: linear-gradient(to right, rgb(65,80,181), rgb(245,54,92));
+}
 
+.padding-btm{
+  padding-bottom: 200%;
+}
+
+.landing-image{
+  width: 60%;
+  height: 60%;
+}
 /* 
 Thead{
   background-color: rgba(72, 81, 176, 0.877);

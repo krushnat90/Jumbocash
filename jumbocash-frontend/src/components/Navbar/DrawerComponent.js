@@ -326,9 +326,10 @@ function ResponsiveDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h7" className={classes.title} noWrap>
+          <Typography variant="subtitle" className={classes.title} noWrap>
             <b>JUMBOTAIL CASHFLOW</b>
           </Typography>
+          
           <div>
             <IconButton
               aria-label="account of current user"
