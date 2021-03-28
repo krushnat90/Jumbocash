@@ -81,7 +81,7 @@ class LoginButton extends Component {
                     <Typography variant="h5" className="purple-color" noWrap>
                         <b>JUMBOTAIL CASHFLOW</b>
                     </Typography>
-                    <Typography variant="subtitle" className="coral-color" noWrap>
+                    <Typography variant="subtitle1" className="coral-color" noWrap>
                         One place to track all your transactions.
                     </Typography>
                     <Grid item xs={12} sm={6}>

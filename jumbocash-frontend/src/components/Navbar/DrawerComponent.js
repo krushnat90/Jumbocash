@@ -326,7 +326,7 @@ function ResponsiveDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="subtitle" className={classes.title} noWrap>
+          <Typography variant="subtitle1" className={classes.title} noWrap>
             <b>JUMBOTAIL CASHFLOW</b>
           </Typography>
           

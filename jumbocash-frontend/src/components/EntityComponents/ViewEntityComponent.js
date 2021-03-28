@@ -3,19 +3,31 @@ import { Spinner } from 'react-bootstrap';
 import { DataGrid } from '@material-ui/data-grid';
 import CustomNoRowsOverlay from './CustomNoRowsOverlay'
 import EntityService from "../../services/EntityService";
-
+import { withStyles } from '@material-ui/core/styles';
 
 
 const columns  = [
-  { field: 'entityName', headerName: 'Entity Name', width: 150 },
-  { field: 'entityType', headerName: 'Entity Type', width: 150 },
-  { field: 'address', headerName: 'Address', width: 150 },
-  { field: 'city', headerName: 'City', width: 100 },
-  { field: 'state', headerName: 'State', width: 150 },
-  { field: 'zip', headerName: 'Zip', width: 100 },
-  { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'phone', headerName: 'Phone', width: 150 },
+  { field: 'entityName', headerName: 'Entity Name', width: 150 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
+  { field: 'entityType', headerName: 'Entity Type', width: 150 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
+  { field: 'address', headerName: 'Address', width: 150 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
+  { field: 'city', headerName: 'City', width: 100 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
+  { field: 'state', headerName: 'State', width: 150 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
+  { field: 'zip', headerName: 'Zip', width: 100 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
+  { field: 'email', headerName: 'Email', width: 200 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
+  { field: 'phone', headerName: 'Phone', width: 150 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
 ];
+
+const useStyles = theme => ({
+  root: {
+    '& .super-app-theme--header': {
+      backgroundColor: 'rgba(73,79,175, 0.7)',
+      color: 'white',
+      fontWeight : '600'
+    },
+  },
+});
+
+
 
 class ViewEntityComponent extends Component {
 
@@ -56,6 +68,7 @@ class ViewEntityComponent extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     console.log("isLoading" + this.state.isLoading);
     if (this.state.isLoading) {
       return (
@@ -65,8 +78,8 @@ class ViewEntityComponent extends Component {
       );
     }else{
       return (
-        <div style={{ height: 500, width: '100%' }} class="container">
-          <DataGrid components={{
+        <div style={{ height: 500, width: '100%' }} className="container">
+          <DataGrid className={classes.root} components={{
               NoRowsOverlay: CustomNoRowsOverlay,
             }}
             rows={this.state.entities} columns={columns} 
@@ -77,5 +90,4 @@ class ViewEntityComponent extends Component {
   }
 }
 
-  export default ViewEntityComponent;
-  
+export default withStyles(useStyles)(ViewEntityComponent);
