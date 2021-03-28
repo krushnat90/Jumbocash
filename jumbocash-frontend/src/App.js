@@ -17,7 +17,7 @@ function App() {
             <ProtectedRoute path="/dashboard" component={DrawerComponent} />
             <ProtectedRoute path="/transactions" component={DrawerComponent} />
             <ProtectedRoute path="/add-transaction" component={DrawerComponent} />
-            <ProtectedRoute path="/entity" component={DrawerComponent} />
+            <ProtectedRoute path="/entities" component={DrawerComponent} />
             <ProtectedRoute path="/add-entity" component={DrawerComponent} />
           </Switch>
       </BrowserRouter>
