@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Spinner } from 'react-bootstrap';
+import Grid from '@material-ui/core/Grid';
 
 import { Redirect } from "react-router";
 
@@ -47,7 +48,8 @@ class Dashboard extends Component {
                 return (<Spinner />);
             }
             else {
-                return (<h1>Hello, {this.state.name}</h1>);
+                return (<div>
+                </div>);
             }
         }
     }

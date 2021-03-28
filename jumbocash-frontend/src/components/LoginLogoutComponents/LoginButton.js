@@ -48,10 +48,11 @@ class LoginButton extends Component {
                     }
                 })
             }
-        ).catch(this.onFailure())
+        ).catch((err) => {this.onFailure()})
     }
 
     onFailure() {
+        alert("Server is experiencing some issue. please try again later")
         this.props.history.push({
             pathname: '/'
         })

@@ -53,7 +53,7 @@ public class TransactionCustomRepositoryImpl implements TransactionCustomReposit
 		query.where(hasUserId).orderBy(orderList);
 
 		return Optional.of(entityManager.createQuery(query).getResultList().stream()
-				.map(objectMapper::convertFromDtoToJson).collect(Collectors.toList()));
+				.map(objectMapper::convertFromDtoToJson).peek(tran -> tran.setTranStatus(tran.getTranStatus().equals("DN")?"Done":"Pending")).collect(Collectors.toList()));
 	}
 
 }
