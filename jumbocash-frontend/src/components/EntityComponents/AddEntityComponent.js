@@ -16,7 +16,7 @@ class AddEntityComponent extends Component {
     constructor(props) {
         super(props);
         this.initialState = {
-            message: false,
+            message: '',
             errorMessage: '',
             entityName: '',
             entityType: '',
@@ -67,31 +67,76 @@ class AddEntityComponent extends Component {
             userId: this.props.userId
         }
 
-        EntityService.addEntity(entity).then(
-            response => {
-                this.setState({ message: "Entity Added Successfully" })
-            }
-        ).catch(err => {
-            console.log(err.response.status);
-            this.setState({ errorMessage: 'Entity could not be added'})
-            console.log(this.state.errorMessage);
+        if (this.validate(entity)) {
+            EntityService.addEntity(entity).then(
+                response => {
+                    this.setState(this.initialState);
+                    this.setState({ message: "Entity Added Successfully" })
+                }
+            ).catch(err => {
+                console.log(err.response.status);
+                if (err.response.status == 409) {
+                    this.setState({ errorMessage: "This entity already exists." })
+                }
+                else {
+                    this.setState({ errorMessage: 'Entity could not be added' })
+                }
+                console.log(this.state.errorMessage);
 
-        })
-
-        this.setState(this.initialState);
-        
-    }
-
-    validate() {
-        this.setState({ errorMessage: ''});
-
-        if (!this.props.userId) {
-            this.setState({ errorMessage:  'User id is not net. Cannot proceed for ADD.'});
-            this.setState({ message: ''});
-            return this.state.errorMessage;
+            })
         }
 
-        return this.state.errorMessage;
+    }
+
+    //Basic validation
+    validate(entity) {
+
+        if (!entity.entityName) {
+            this.setState({ errorMessage: 'Entity name is mandatory', message: '' })
+            return false;
+        }
+        else if (!entity.address) {
+            this.setState({ errorMessage: 'Address is mandatory', message: '' })
+            // this.state.message = ''
+            return false;
+        }
+        else if (!entity.state) {
+            this.setState({ errorMessage: 'State is mandatory', message: '' })
+            // this.state.message = ''
+            return false;
+        }
+
+        else if (!entity.city) {
+            this.setState({ errorMessage: 'city is mandatory', message: '' })
+            // this.state.message = ''
+            return false;
+        }
+
+        else if (!entity.zip) {
+            this.setState({ errorMessage: 'Zip code is mandatory', message: '' })
+            // this.state.message = ''
+            return false;
+        }
+
+        else if (!entity.email) {
+            this.setState({ errorMessage: 'Email is mandatory', message: '' })
+            // this.state.message = ''
+            return false;
+        }
+
+        else if (!entity.entityType) {
+            this.setState({ errorMessage: 'Entity type is mandatory', message: '' })
+            // this.state.message = ''
+            return false;
+        }
+
+        else if (!entity.phone) {
+            this.setState({ errorMessage: 'Phone is mandatory', message: '' })
+            // this.state.message = ''
+            return false;
+        }
+
+        return true;
     }
 
 
@@ -129,7 +174,7 @@ class AddEntityComponent extends Component {
                                             id="entityName"
                                             name="entityName"
                                             label="Entity Name"
-                                            value = {this.state.entityName}
+                                            value={this.state.entityName}
                                             onChange={event => {
                                                 this.setState({ entityName: event.target.value })
                                             }}
@@ -143,7 +188,7 @@ class AddEntityComponent extends Component {
                                             id="address"
                                             name="address"
                                             label="Address"
-                                            value = {this.state.address}
+                                            value={this.state.address}
                                             onChange={event => {
                                                 this.setState({ address: event.target.value })
                                             }}
@@ -157,7 +202,7 @@ class AddEntityComponent extends Component {
                                             id="city"
                                             name="city"
                                             label="City"
-                                            value = {this.state.city}
+                                            value={this.state.city}
                                             onChange={event => {
                                                 this.setState({ city: event.target.value })
                                             }}
@@ -171,7 +216,7 @@ class AddEntityComponent extends Component {
                                             id="state"
                                             name="state"
                                             label="State"
-                                            value = {this.state.state}
+                                            value={this.state.state}
                                             onChange={event => {
                                                 this.setState({ state: event.target.value })
                                             }}
@@ -187,13 +232,13 @@ class AddEntityComponent extends Component {
                                             id="zip"
                                             name="zip"
                                             label="Zip / Postal code"
-                                            value = {this.state.zip}
+                                            value={this.state.zip}
                                             onChange={event => {
                                                 this.setState({ zip: event.target.value })
                                             }}
                                             fullWidth
                                             autoComplete="zip"
-                                            type = "number"
+                                            type="number"
                                         />
 
                                     </Grid>
@@ -203,7 +248,7 @@ class AddEntityComponent extends Component {
                                             id="email"
                                             name="email"
                                             label="Email Address"
-                                            value = {this.state.email}
+                                            value={this.state.email}
                                             onChange={event => {
                                                 this.setState({ email: event.target.value })
                                             }}
@@ -218,7 +263,7 @@ class AddEntityComponent extends Component {
                                             <MuiSelect
                                                 //onChange={this.handleChange}
                                                 labelId="entityType"
-                                                value = {this.state.entityType}
+                                                value={this.state.entityType}
                                                 onChange={event => {
                                                     this.setState({ entityType: event.target.value })
                                                 }}
@@ -237,11 +282,11 @@ class AddEntityComponent extends Component {
                                             label="Contact No"
                                             fullWidth
                                             autoComplete="phone"
-                                            value = {this.state.phone}
+                                            value={this.state.phone}
                                             onChange={event => {
                                                 this.setState({ phone: event.target.value })
                                             }}
-                                            type = "number"
+                                            type="number"
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

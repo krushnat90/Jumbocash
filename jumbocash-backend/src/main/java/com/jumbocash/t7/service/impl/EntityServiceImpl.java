@@ -47,9 +47,9 @@ public class EntityServiceImpl implements EntityService {
 	@Override
 	@Transactional
 	public Void addNewEntity(Entity entity) throws Exception {
-		Optional<EntityMaster> entityMaster = entityMasterRepository.getEntityByEmail(entity.getEmail());
+		Optional<List<EntityMaster>> entityMaster = entityMasterRepository.getEntityByEmail(entity.getEmail(),entity.getUserId(),entity.getEntityType());
 		Optional<AppUser> userDetails = userRepository.findById(entity.getUserId());
-		if (entityMaster.isPresent()) {
+		if (entityMaster.isPresent() && !entityMaster.get().isEmpty()) {
 			throw new JumbocashException(ExceptionConstants.ENTITY_ALREADY_EXISTS);
 		}
 		

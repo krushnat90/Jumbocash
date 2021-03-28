@@ -35,7 +35,7 @@ class AddTransactionComponent extends Component {
     // }
 
     var today = new Date(),
-    date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+      date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     this.initialState = {
       entities: [],
       show: true,
@@ -61,11 +61,11 @@ class AddTransactionComponent extends Component {
   }
 
   componentDidMount() {
-    console.log(" date "+ this.state.today)
+    console.log(" date " + this.state.today)
     this.getEntities();
   }
 
-  getTodayDate(){
+  getTodayDate() {
     return new Date();
   }
 
@@ -86,43 +86,36 @@ class AddTransactionComponent extends Component {
 
   //Basic validation
   validate(transaction) {
-    this.state.errorMessage = '';
-    console.log("logging txn ")
-    console.log(transaction)
+
     if (!transaction.amount) {
-      this.setState({ errorMessage: 'Amount is mandatory' })
+      this.setState({ errorMessage: 'Amount is mandatory', message: ''  })
       return false;
     } else if (transaction.amount < 0) {
-      this.setState({ errorMessage: 'Amount must be positive' })
-      this.state.message = ''
+      this.setState({ errorMessage: 'Amount must be positive', message: ''  })
       return false;
     }
     else if (!transaction.tranDate) {
-      this.setState({ errorMessage: 'Transaction date is mandatory' })
-      this.state.message = ''
+      this.setState({ errorMessage: 'Transaction date is mandatory', message: ''  })
       return false;
     }
     else if (!transaction.tranType) {
-      this.setState({ errorMessage: 'Transaction type is mandatory' })
-      this.state.message = ''
+      this.setState({ errorMessage: 'Transaction type is mandatory', message: ''  })
       return false;
     }
 
     else if (!transaction.paymentMode) {
-      this.setState({ errorMessage: 'Payment mode is mandatory' })
-      this.state.message = ''
+      this.setState({ errorMessage: 'Payment mode is mandatory', message: ''  })
       return false;
     }
 
     else if (!transaction.entityId) {
-      this.setState({ errorMessage: 'No Entity is found' })
-      this.state.message = ''
+      this.setState({ errorMessage: 'No Entity is found', message: ''  })
       return false;
     }
 
     else if (!transaction.tranStatus) {
-      this.setState({ errorMessage: 'Transaction status is mandatory' })
-      this.state.message = ''
+      this.setState({ errorMessage: 'Transaction status is mandatory', message: ''  })
+      
       return false;
     }
 
@@ -159,15 +152,18 @@ class AddTransactionComponent extends Component {
       TransactionService.addTransaction(transaction)
         .then(
           response => {
+            this.setState(this.initialState);
             this.setState({ message: "Transaction Added Successfully" })
           }
         ).catch(err => {
           this.setState({ errorMessage: 'Transaction could not be added' })
-        }).then(this.setState(this.initialState))
+        }).then(() => {
+          
+          this.getEntities();
+        })
     }
 
-    this.setState(this.initialState);
-    this.getEntities();
+
   }
 
   render() {
@@ -231,7 +227,7 @@ class AddTransactionComponent extends Component {
                         name="tranDate"
                         style={{ paddingTop: 16 }}
                         value={this.state.tranDate}
-                        InputProps={{inputProps: { max: this.state.today} }}
+                        InputProps={{ inputProps: { max: this.state.today } }}
                         onChange={event => {
                           this.setState({ tranDate: event.target.value })
                         }}
