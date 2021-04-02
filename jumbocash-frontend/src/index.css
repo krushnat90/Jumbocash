@@ -40,10 +40,19 @@ body {
   color : rgb(242,54,92);
 }
 .green-color{
-  color : rgb(45,206,137);
+  color : rgb(165,223,223);
 }
 .red-color{
-  color :rgb(245,54,92) ;
+  color: rgb(255,177,193);
+}
+.lavender-color{
+  color:rgb(204,178,255);
+}
+.yellow-color{
+  color : rgb(250,210,171);
+}
+.skyblue-color{
+  color : rgb(154,208,245);
 }
 .white-color{
   color : white;
