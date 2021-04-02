@@ -3,11 +3,10 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { GoogleLogin } from 'react-google-login';
 import UserService from '../../services/UserService';
 import { refreshTokenSetup } from '../../utility/RefreshToken';
-import { Card, CardContent, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid'
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import LandingImage from '../../images/landing-page.jpg';
+import LandingImage from '../../images/landing-page6.jpg';
+import JumbotailLogo from '../../images/jumbotail-logo.png';
 
 const clientId = '193599941937-401iftc6u6hb3b92l27fvc80fomasg22.apps.googleusercontent.com';
 
@@ -48,7 +47,7 @@ class LoginButton extends Component {
                     }
                 })
             }
-        ).catch((err) => {this.onFailure()})
+        ).catch((err) => { this.onFailure() })
     }
 
     onFailure() {
@@ -66,42 +65,56 @@ class LoginButton extends Component {
         }
 
         return (
-
-            <div>
+            <div className="row">
                 <CssBaseline />
+                <div className="column column-bg-color">
+                    <Grid
+                        container
+                        spacing={3}
+                        //direction="column"
+                        alignItems="center"
+                        justify="center"
+                        style={{ minHeight: '100vh' }}
+                    >
+                        <Grid item xs={12} sm={12}>
+                            <img src={JumbotailLogo} />
+                            <br />
+                            <br />
+                            <div className = "container">
+                            <Typography variant="h6" className="white-color">
+                                Cash Flow Management Application to track all expenses!
+                            </Typography>
+                            </div>
+                            <br />
+                            <GoogleLogin
+                                clientId={clientId}
+                                buttonText="Sign in with Google"
+                                onSuccess={responseGoogle}
+                                onFailure={this.onFailure}
+                                cookiePolicy={'single_host_origin'}
+                                style={{ marginTop: '100px', borderRadius :'25px'}}
+                                isSignedIn={true}
+                                className="login-button"
+                            />
 
-                <Grid
-                    container
-                    spacing={0}
-                    direction="column"
-                    alignItems="center"
-                    justify="center"
-                    style={{ minHeight: '100vh' }}
-                >
-
-                    <Typography variant="h5" className="purple-color" noWrap>
-                        <b>JUMBOTAIL CASHFLOW</b>
-                    </Typography>
-                    <Typography variant="subtitle1" className="coral-color" noWrap>
-                        One place to track all your transactions.
-                    </Typography>
-                    <Grid item xs={12} sm={6}>
-                        <img className="landing-image" src={LandingImage} />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <GoogleLogin
-                            clientId={clientId}
-                            buttonText="Sign in with Google"
-                            onSuccess={responseGoogle}
-                            onFailure={this.onFailure}
-                            cookiePolicy={'single_host_origin'}
-                            style={{ marginTop: '100px' }}
-                            isSignedIn={true}
-                            className="login-button"
-                        />
+                </div>
+                <div className="column">
+                    <Grid
+                        container
+                        spacing={3}
+                        //direction="column"
+                        alignItems="center"
+                        justify="center"
+                        style={{ minHeight: '100vh' }}
+                    >
 
+                        <Grid item xs={12} sm={12}>
+                            <img className="landing-image" src={LandingImage} />
+                        </Grid>
                     </Grid>
-                </Grid>
+                </div>
             </div>
         )
     }

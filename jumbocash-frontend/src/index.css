@@ -81,8 +81,20 @@ body {
 }
 
 .landing-image{
-  width: 60%;
-  height: 60%;
+  width: 100%;
+}
+
+.column-bg-color{
+  /* background-image: linear-gradient(to right, rgb(108,70,242), rgb(243,215,232)); */
+  background-image: linear-gradient(to right, rgb(40,48,121), rgb(115,76,136));
+}
+
+.column{
+  width : 50%;
+}
+
+.font-impact{
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 /* 
 Thead{
