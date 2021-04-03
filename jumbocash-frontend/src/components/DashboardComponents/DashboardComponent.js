@@ -139,7 +139,7 @@ class DashboardComponent extends Component {
                         <Paper className={classes.paper}>
                             <LocalShippingTwoToneIcon className="pink-color" fontSize='large' />
                             <Typography variant="subtitle1">Total Vendors</Typography>
-                            <Typography variant="h6" className="lavender -color"><b>34</b></Typography>
+                            <Typography variant="h6" className="lavender-color"><b>34</b></Typography>
                         </Paper>
                     </Grid>
 
