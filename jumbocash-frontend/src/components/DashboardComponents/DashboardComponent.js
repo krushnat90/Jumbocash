@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,6 +13,12 @@ import {
     Legend,
 } from '@devexpress/dx-react-chart-material-ui';
 import { Animation } from '@devexpress/dx-react-chart';
+import {
+    DataGrid, GridToolbarContainer,
+    GridToolbarExport
+} from '@material-ui/data-grid';
+import TransactionService from "../../services/TransactionService";
+import CustomNoRowsOverlay from '../TransactionComponents/CustomNoRowsOverlay'
 import LocalShippingTwoToneIcon from '@material-ui/icons/LocalShippingTwoTone';
 import SwapHorizontalCircleTwoToneIcon from '@material-ui/icons/SwapHorizontalCircleTwoTone';
 import ShoppingCartTwoToneIcon from '@material-ui/icons/ShoppingCartTwoTone';
@@ -86,6 +93,23 @@ const TitleText = withStyles(titleStyles)(({ classes, ...props }) => (
 const useStyles = theme => ({
     root: {
         flexGrow: 1,
+        '& .super-app-theme--header': {
+            //backgroundColor: 'rgba(114,74,157,0.8)',
+            color: theme.palette.text.secondary,
+            fontWeight: '600'
+        },
+        '& .amount.negative': {
+            color: 'rgb(245,54,92)',
+        },
+        '& .amount.positive': {
+            color: 'rgb(50,207,140)'
+        },
+        '& .tranStatus.done': {
+            color: 'rgb(17,205,239)',
+        },
+        '& .tranStatus.pending': {
+            color: 'rgb(252,146,10)'
+        },
     },
     paper: {
         padding: theme.spacing(2),
@@ -93,6 +117,37 @@ const useStyles = theme => ({
         color: theme.palette.text.secondary
     }
 });
+
+const columns = [
+    //{ field: 'tranId', headerName: 'Id', width: 150 },
+    { field: 'tranDate', headerName: 'Date', width: 120, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+    { field: 'entityName', headerName: 'Entity Name', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+    // { field: 'paymentMode', headerName: 'Payment Mode', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+    {
+        field: 'tranType', headerName: 'Type', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+        , cellClassName: (params) =>
+            clsx('tranType', {
+                credit: params.value === 'credit',
+                debit: params.value === 'debit',
+            }),
+    },
+    {
+        field: 'amount', headerName: 'Amount', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', cellClassName: (params) =>
+            clsx('amount', {
+                positive: params.value > 0,
+                negative: params.value < 0
+            }),
+    },
+    // {
+    //     field: 'tranStatus', headerName: 'Status', width: 100, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', cellClassName: (params) =>
+    //         clsx('tranStatus', {
+    //             pending: params.value === 'Pending',
+    //             done: params.value === 'Done'
+    //         }),
+    // },
+    // { field: 'remarks', headerName: 'Remarks', width: 250, headerClassName: 'super-app-theme--header', align: 'center', headerAlign: 'center' }
+];
+
 
 
 class DashboardComponent extends Component {
@@ -108,11 +163,14 @@ class DashboardComponent extends Component {
                 "totalVendors": 0,
                 "totalCashOut": 0
             },
-            errorMessage: ''
+            errorMessage: '',
+			transactions: [],
+            userId : props.userId
         };
 
         this.fetchUserSummaryInformation = this.fetchUserSummaryInformation.bind(this);
         this.hideErrorAlert = this.hideErrorAlert.bind(this);
+		this.getTransactions = this.getTransactions.bind(this);
     }
 
     fetchUserSummaryInformation() {
@@ -131,6 +189,30 @@ class DashboardComponent extends Component {
         })
     }
 
+
+    componentDidMount() {
+        this.getTransactions();
+    }
+
+    getTransactions() {
+        TransactionService.getTransactionsByUserId(this.state.userId).then(
+            response => {
+                this.setState({
+                    transactions: response.data,
+                    isLoading: false
+                })
+
+            }
+        ).catch(
+            error => {
+                this.setState({
+                    message: "Error occurred",
+                    isLoading: false
+                })
+
+            }
+        )
+
     //close button functionality for error
     hideErrorAlert() {
         this.setState({
@@ -141,6 +223,7 @@ class DashboardComponent extends Component {
     componentDidMount() {
         this.fetchUserSummaryInformation();
     }
+
 
     render() {
         const { data: chartData } = this.state;
@@ -183,6 +266,7 @@ class DashboardComponent extends Component {
                             <LocalShippingTwoToneIcon className="pink-color" fontSize='large' />
                             <Typography variant="subtitle1">Total Vendors</Typography>
                             <Typography variant="h6" className="lavender -color"><b>{this.state.userSummaryInformation.totalVendors}</b></Typography>
+
                         </Paper>
                     </Grid>
 
@@ -215,6 +299,23 @@ class DashboardComponent extends Component {
                                 />
                                 <Animation />
                             </Chart>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Paper>
+                            <div style={{ height: 500, width: '100%' }} className="container">
+                                <DataGrid className={classes.root}
+                                    components={{
+                                        NoRowsOverlay: CustomNoRowsOverlay,
+                                    }}
+                                    rows={this.state.transactions} columns={columns} sortModel={[
+                                        {
+                                            field: 'tranDate',
+                                            sort: 'desc',
+                                        },
+                                    ]}
+                                />
+                            </div>
                         </Paper>
                     </Grid>
                 </Grid>

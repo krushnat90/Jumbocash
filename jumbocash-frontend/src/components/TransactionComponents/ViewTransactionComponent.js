@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import { Spinner } from 'react-bootstrap';
-import { DataGrid } from '@material-ui/data-grid';
+import {
+  DataGrid, GridToolbarContainer,
+  GridToolbarExport
+} from '@material-ui/data-grid';
 import CustomNoRowsOverlay from './CustomNoRowsOverlay'
 import TransactionService from "../../services/TransactionService";
 import { fontWeight, textAlign } from "@material-ui/system";
@@ -10,11 +13,11 @@ import { fontWeight, textAlign } from "@material-ui/system";
 
 const columns = [
   //{ field: 'tranId', headerName: 'Id', width: 150 },
-  { field: 'tranDate', headerName: 'Date', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
-  { field: 'entityName', headerName: 'Entity Name', width: 150, headerClassName: 'super-app-theme--header' , headerAlign: 'center', align : 'center'},
-  { field: 'paymentMode', headerName: 'Payment Mode', width: 150, headerClassName: 'super-app-theme--header' , headerAlign: 'center' , align : 'center'},
+  { field: 'tranDate', headerName: 'Date', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+  { field: 'entityName', headerName: 'Entity Name', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+  { field: 'paymentMode', headerName: 'Payment Mode', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
   {
-    field: 'tranType', headerName: 'Transaction Type', width: 180, headerClassName: 'super-app-theme--header', headerAlign: 'center' , align : 'center'
+    field: 'tranType', headerName: 'Transaction Type', width: 180, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
     , cellClassName: (params) =>
       clsx('tranType', {
         credit: params.value === 'credit',
@@ -22,20 +25,20 @@ const columns = [
       }),
   },
   {
-    field: 'amount', headerName: 'Amount', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center',cellClassName: (params) =>
+    field: 'amount', headerName: 'Amount', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', cellClassName: (params) =>
       clsx('amount', {
         positive: params.value > 0,
         negative: params.value < 0
       }),
   },
   {
-    field: 'tranStatus', headerName: 'Status', width: 100, headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center', cellClassName: (params) =>
+    field: 'tranStatus', headerName: 'Status', width: 100, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', cellClassName: (params) =>
       clsx('tranStatus', {
         pending: params.value === 'Pending',
         done: params.value === 'Done'
       }),
   },
-  { field: 'remarks', headerName: 'Remarks', width: 250, headerClassName: 'super-app-theme--header' , align : 'center', headerAlign : 'center' }
+  { field: 'remarks', headerName: 'Remarks', width: 250, headerClassName: 'super-app-theme--header', align: 'center', headerAlign: 'center' }
 ];
 
 const useStyles = theme => ({
@@ -43,7 +46,7 @@ const useStyles = theme => ({
     '& .super-app-theme--header': {
       backgroundColor: 'rgba(25,31,77, 0.7)',
       color: 'white',
-      fontWeight : '600'
+      fontWeight: '600'
     },
     '& .amount.negative': {
       color: 'rgb(245,54,92)',
@@ -60,6 +63,13 @@ const useStyles = theme => ({
   },
 });
 
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport/>
+    </GridToolbarContainer>
+  );
+}
 
 class ViewTransactionComponent extends Component {
 
@@ -116,6 +126,7 @@ class ViewTransactionComponent extends Component {
           <DataGrid className={classes.root}
             components={{
               NoRowsOverlay: CustomNoRowsOverlay,
+              Toolbar: CustomToolbar,
             }}
             rows={this.state.transactions} columns={columns} sortModel={[
               {

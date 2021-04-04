@@ -1,20 +1,23 @@
 import React, { Component } from "react";
 import { Spinner } from 'react-bootstrap';
-import { DataGrid } from '@material-ui/data-grid';
+import {
+  DataGrid, GridToolbarContainer,
+  GridToolbarExport
+} from '@material-ui/data-grid';
 import CustomNoRowsOverlay from './CustomNoRowsOverlay'
 import EntityService from "../../services/EntityService";
 import { withStyles } from '@material-ui/core/styles';
 
 
-const columns  = [
-  { field: 'entityName', headerName: 'Entity Name', width: 150 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
-  { field: 'entityType', headerName: 'Entity Type', width: 150 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
-  { field: 'address', headerName: 'Address', width: 150 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
-  { field: 'city', headerName: 'City', width: 100 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
-  { field: 'state', headerName: 'State', width: 150 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
-  { field: 'zip', headerName: 'Zip', width: 100 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
-  { field: 'email', headerName: 'Email', width: 200 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
-  { field: 'phone', headerName: 'Phone', width: 150 , headerClassName: 'super-app-theme--header', headerAlign: 'center', align : 'center'},
+const columns = [
+  { field: 'entityName', headerName: 'Entity Name', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+  { field: 'entityType', headerName: 'Entity Type', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+  { field: 'address', headerName: 'Address', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+  { field: 'city', headerName: 'City', width: 100, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+  { field: 'state', headerName: 'State', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+  { field: 'zip', headerName: 'Zip', width: 100, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+  { field: 'email', headerName: 'Email', width: 200, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+  { field: 'phone', headerName: 'Phone', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
 ];
 
 const useStyles = theme => ({
@@ -22,12 +25,18 @@ const useStyles = theme => ({
     '& .super-app-theme--header': {
       backgroundColor: 'rgba(25,31,77, 0.7)',
       color: 'white',
-      fontWeight : '600'
+      fontWeight: '600'
     },
   },
 });
 
-
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+}
 
 class ViewEntityComponent extends Component {
 
@@ -52,19 +61,19 @@ class ViewEntityComponent extends Component {
       response => {
         this.setState({
           entities: response.data,
-          isLoading : false
+          isLoading: false
         })
         console.log(response.data);
       }
     ).catch(
-        error => {
-          this.setState({ message: "Error occurred", isLoading : false})
-        }
-      )
-
-      if(this.state.entities === null){
-        this.setState({entities : []});
+      error => {
+        this.setState({ message: "Error occurred", isLoading: false })
       }
+    )
+
+    if (this.state.entities === null) {
+      this.setState({ entities: [] });
+    }
   }
 
   render() {
@@ -76,13 +85,14 @@ class ViewEntityComponent extends Component {
           <span className="sr-only">Loading...</span>
         </Spinner>
       );
-    }else{
+    } else {
       return (
         <div style={{ height: 500, width: '100%' }} className="container">
           <DataGrid className={classes.root} components={{
-              NoRowsOverlay: CustomNoRowsOverlay,
-            }}
-            rows={this.state.entities} columns={columns} 
+            NoRowsOverlay: CustomNoRowsOverlay,
+            Toolbar: CustomToolbar,
+          }}
+            rows={this.state.entities} columns={columns}
           />
         </div>
       );
