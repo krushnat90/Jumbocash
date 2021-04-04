@@ -18,6 +18,7 @@ import ShoppingCartTwoToneIcon from '@material-ui/icons/ShoppingCartTwoTone';
 import AccountBalanceWalletTwoToneIcon from '@material-ui/icons/AccountBalanceWalletTwoTone';
 
 import { cashflow as data } from '../../demo-data/data';
+import UserService from "../../services/UserService";
 
 const format = () => tick => tick;
 const legendStyles = () => ({
@@ -73,7 +74,7 @@ const ValueLabel = (props) => {
 const titleStyles = theme => ({
     title: {
         whiteSpace: 'pre',
-        fontSize : '120%',
+        fontSize: '120%',
         color: theme.palette.text.secondary
     },
 });
@@ -101,11 +102,44 @@ class DashboardComponent extends Component {
 
         this.state = {
             data,
+            userSummaryInformation: {
+                "totalCashIn": 0,
+                "totalCustomers": 0,
+                "totalVendors": 0,
+                "totalCashOut": 0
+            },
+            errorMessage: ''
         };
+
+        this.fetchUserSummaryInformation = this.fetchUserSummaryInformation.bind(this);
+        this.hideErrorAlert = this.hideErrorAlert.bind(this);
+    }
+
+    fetchUserSummaryInformation() {
+        UserService.getUserSummaryInfo(this.props.userId).then(
+            response => {
+                this.setState({
+                    userSummaryInformation: response.data
+                })
+            }
+        ).catch((error) => {
+            this.setState(
+                {
+                    errorMessage: 'Something went wrong! Please re-login and try again'
+                }
+            )
+        })
+    }
+
+    //close button functionality for error
+    hideErrorAlert() {
+        this.setState({
+            errorMessage: false,
+        });
     }
 
     componentDidMount() {
-
+        this.fetchUserSummaryInformation();
     }
 
     render() {
@@ -113,33 +147,42 @@ class DashboardComponent extends Component {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
+                {this.state.errorMessage && <div className="alert alert-warning" role="alert">{this.state.errorMessage}
+                    <button type="button"
+                        className="close"
+                        data-dismiss="alert"
+                        aria-label="Close"
+                        onClick={() => this.hideErrorAlert()}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
                 <Grid container spacing={3}>
                     <Grid item xs={3}>
                         <Paper className={classes.paper}>
                             <AccountBalanceWalletTwoToneIcon className="blue-color" fontSize='large' />
                             <Typography variant="subtitle1">Total Cash In</Typography>
-                            <Typography variant="h6" className="green-color"><b>₹10000</b></Typography>
+                            <Typography variant="h6" className="green-color"><b>₹{this.state.userSummaryInformation.totalCashIn}</b></Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={3}>
                         <Paper className={classes.paper}>
                             <SwapHorizontalCircleTwoToneIcon className="purple-color" fontSize='large' />
                             <Typography variant="subtitle1">Total Cash Out</Typography>
-                            <Typography variant="h6" className="red-color"><b>₹5000</b></Typography>
+                            <Typography variant="h6" className="red-color"><b>₹{this.state.userSummaryInformation.totalCashOut}</b></Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={3}>
                         <Paper className={classes.paper}>
                             <ShoppingCartTwoToneIcon className="magenta-color" fontSize='large' />
                             <Typography variant="subtitle1">Total Customers</Typography>
-                            <Typography variant="h6" className="skyblue-color"><b>57</b></Typography>
+                            <Typography variant="h6" className="skyblue-color"><b>{this.state.userSummaryInformation.totalCustomers}</b></Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={3}>
                         <Paper className={classes.paper}>
                             <LocalShippingTwoToneIcon className="pink-color" fontSize='large' />
                             <Typography variant="subtitle1">Total Vendors</Typography>
-                            <Typography variant="h6" className="lavender -color"><b>34</b></Typography>
+                            <Typography variant="h6" className="lavender -color"><b>{this.state.userSummaryInformation.totalVendors}</b></Typography>
                         </Paper>
                     </Grid>
 

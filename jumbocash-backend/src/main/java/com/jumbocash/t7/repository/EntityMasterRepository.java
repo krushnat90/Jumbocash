@@ -18,6 +18,8 @@ public interface EntityMasterRepository extends JpaRepository<EntityMaster, BigI
 
     @Query("SELECT e FROM EntityMaster e JOIN UserEntityLnk u on u.entityId = e.entityId WHERE u.userId = :userId")
     Optional<List<EntityMaster>> getEntitiesByUserId(@Param("userId") BigInteger userId);
-
+    
+    @Query("SELECT count(e.entityId) FROM EntityMaster e JOIN UserEntityLnk u on u.entityId = e.entityId WHERE u.userId = :userId AND e.entityType=:entityType")
+    BigInteger getCountOfEntitiesByEntityType(@Param("userId") BigInteger userId, @Param("entityType")  String entityType);
 
 }

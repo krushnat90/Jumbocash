@@ -7,12 +7,14 @@ package com.jumbocash.t7.api;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.jumbocash.t7.model.MonthWiseTransactionSummary;
 import com.jumbocash.t7.model.Transaction;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,7 +54,15 @@ public interface TransactionApi {
     @RequestMapping(value = "/transaction/user/{userId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Transaction>> getTransactionsByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") BigInteger userId);
+    ResponseEntity<List<Transaction>> getTransactionsByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") BigInteger userId, @Parameter(in = ParameterIn.QUERY, description = "Limit rows", required=false) @RequestParam("limit") Optional<Integer> limit);
+    
+    @Operation(summary = "Display all transaction.", description = "Display all transctions for an user.", tags={ "transaction" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Transaction.class)))) })
+    @RequestMapping(value = "/transaction/summary/user/{userId}",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    ResponseEntity<List<MonthWiseTransactionSummary>> getLastSixMonthsSummary(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") BigInteger userId);
 
 
     @Operation(summary = "Update transaction details", description = "", tags={ "transaction" })

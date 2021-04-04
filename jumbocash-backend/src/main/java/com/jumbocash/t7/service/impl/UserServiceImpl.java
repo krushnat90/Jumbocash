@@ -1,7 +1,9 @@
 package com.jumbocash.t7.service.impl;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.jumbocash.t7.beanMapper.impl.UserMapper;
 import com.jumbocash.t7.dto.AppUser;
 import com.jumbocash.t7.model.User;
+import com.jumbocash.t7.repository.EntityMasterRepository;
+import com.jumbocash.t7.repository.TransactionRepository;
 import com.jumbocash.t7.repository.UserRepository;
 import com.jumbocash.t7.service.UserService;
 
@@ -18,11 +22,23 @@ public class UserServiceImpl implements UserService {
 
 	private UserRepository userRepository;
 
+	private TransactionRepository tranRepository;
+
+	private EntityMasterRepository entityRepository;
+
 	private UserMapper userMapper;
 
-	public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+	private static final String CASH_IN_KEY = "totalCashIn";
+	private static final String CASH_OUT_KEY = "totalCashOut";
+	private static final String CUSTOMERS_KEY = "totalCustomers";
+	private static final String VENDORS_KEY = "totalVendors";
+
+	public UserServiceImpl(UserRepository userRepository, TransactionRepository tranRepository,
+			EntityMasterRepository entityRepository, UserMapper userMapper) {
 		super();
 		this.userRepository = userRepository;
+		this.tranRepository = tranRepository;
+		this.entityRepository = entityRepository;
 		this.userMapper = userMapper;
 	}
 
@@ -53,11 +69,36 @@ public class UserServiceImpl implements UserService {
 					.of(userMapper.convertFromDtoToJson(userRepository.save(userMapper.convertFromJsonToDto(user))));
 
 		} else {
-			//update
+			// update
 			AppUser userToUpdate = userMapper.convertFromJsonToDto(user);
 			userToUpdate.setUserId(existingUser.get(0).getUserId());
 			return Optional.of(userMapper.convertFromDtoToJson(userRepository.save(userToUpdate)));
 		}
+	}
+
+	@Override
+	public Map<String, BigInteger> getSummaryInfoByUserId(BigInteger userId) {
+
+		// get total cash in
+		BigInteger totalCashIn = tranRepository.getTotalCashIn(userId);
+
+		// get total cash out
+		BigInteger totalCashOut = tranRepository.getTotalCashOut(userId);
+		
+		//get number of customers
+		BigInteger totalCustomers = entityRepository.getCountOfEntitiesByEntityType(userId, "customer");
+		
+		//get number of vendors
+		BigInteger totalVendors = entityRepository.getCountOfEntitiesByEntityType(userId, "vendor");
+
+		Map<String, BigInteger> summaryInfo = new HashMap<>();
+
+		summaryInfo.put(CASH_IN_KEY, totalCashIn);
+		summaryInfo.put(CASH_OUT_KEY, totalCashOut);
+		summaryInfo.put(CUSTOMERS_KEY, totalCustomers);
+		summaryInfo.put(VENDORS_KEY, totalVendors);
+
+		return summaryInfo;
 	}
 
 }

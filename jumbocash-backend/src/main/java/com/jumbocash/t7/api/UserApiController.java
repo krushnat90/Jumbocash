@@ -31,6 +31,7 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -59,13 +60,23 @@ public class UserApiController implements UserApi {
 
 	@Override
 	public ResponseEntity<User> addOrUpdateUser(@Valid User user) {
-		
+
 		Optional<User> operatedUser = userService.addOrUpdateUser(user);
-		
-		if(!operatedUser.isPresent())
+
+		if (!operatedUser.isPresent())
 			return ResponseEntity.badRequest().build();
-		
+
 		return ResponseEntity.ok(operatedUser.get());
+	}
+
+	@Override
+	public ResponseEntity<Map<String, BigInteger>> getSummaryInfoByUserId(BigInteger userId) {
+
+		try {
+			return ResponseEntity.ok(userService.getSummaryInfoByUserId(userId));
+		} catch (Exception ex) {
+			return new ResponseEntity<Map<String, BigInteger>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

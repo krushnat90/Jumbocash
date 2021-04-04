@@ -3,6 +3,7 @@ package com.jumbocash.t7.dto;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,11 +12,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-@Entity(name = "TRAN_MASTER")
+@Entity
+@Table(name="TRAN_MASTER")
 public class TranMaster {
 
 	@Id
@@ -53,7 +56,7 @@ public class TranMaster {
 	private String tranStatus;
 	
 	@Column(name="tran_date")
-	private Date tranDate;
+	private LocalDate tranDate;
 
 	@ManyToOne
 	@JoinColumn(name = "entity_id", nullable = false)
@@ -151,25 +154,13 @@ public class TranMaster {
 		this.tranStatus = tranStatus;
 	}
 
-	public Date getTranDate() {
+	public LocalDate getTranDate() {
 		return tranDate;
 	}
 
-	public void setTranDate(Date tranDate) {
+	public void setTranDate(LocalDate tranDate) {
 		this.tranDate = tranDate;
 	}
 	
-	
-
-	/*
-	 * public BigInteger getUserId() { return userId; }
-	 * 
-	 * public void setUserId(BigInteger userId) { this.userId = userId; }
-	 * 
-	 * public BigInteger getEntityId() { return entityId; }
-	 * 
-	 * public void setEntityId(BigInteger entityId) { this.entityId = entityId;
-	 * }
-	 */
 
 }

@@ -1,6 +1,7 @@
 package com.jumbocash.t7.api;
 
 import com.jumbocash.t7.dto.TranMaster;
+import com.jumbocash.t7.model.MonthWiseTransactionSummary;
 import com.jumbocash.t7.model.Transaction;
 import com.jumbocash.t7.service.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,7 +83,7 @@ public class TransactionApiController implements TransactionApi {
 	}
 
 	public ResponseEntity<List<Transaction>> getTransactionsByUserId(
-			@Parameter(in = ParameterIn.PATH, description = "User ID", required = true, schema = @Schema()) @PathVariable("userId") BigInteger userId) {
+			@Parameter(in = ParameterIn.PATH, description = "User ID", required = true, schema = @Schema()) @PathVariable("userId") BigInteger userId,@RequestParam("limit") Optional<Integer> limit) {
 			try {
 				
 				Optional<List<Transaction>> transactionsByUserId = transactionService.getTransactionsByUserId(userId);
@@ -91,7 +92,7 @@ public class TransactionApiController implements TransactionApi {
 					return ResponseEntity.notFound().build();
 				}
 				
-				return ResponseEntity.ok(transactionsByUserId.get());
+				return ResponseEntity.ok(limit.isPresent() ? transactionsByUserId.get().subList(0, limit.get()) : transactionsByUserId.get());
 				
 			} catch (Exception e) {
 				log.error("Couldn't serialize response for content type application/json", e);
@@ -104,6 +105,12 @@ public class TransactionApiController implements TransactionApi {
 			@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be updated.", required = true, schema = @Schema()) @Valid @RequestBody Transaction body) {
 		String accept = request.getHeader("Accept");
 		return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+	}
+
+	@Override
+	public ResponseEntity<List<MonthWiseTransactionSummary>> getLastSixMonthsSummary(BigInteger userId) {
+		
+		return ResponseEntity.ok(transactionService.getLastSixMonthTransactions(userId).get());
 	}
 
 }
