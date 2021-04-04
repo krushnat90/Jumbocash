@@ -1,5 +1,6 @@
 package com.jumbocash.t7.api;
 
+import com.jumbocash.t7.auth.GoogleAuthenticator;
 import com.jumbocash.t7.dto.TranMaster;
 import com.jumbocash.t7.model.MonthWiseTransactionSummary;
 import com.jumbocash.t7.model.Transaction;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -47,17 +50,24 @@ public class TransactionApiController implements TransactionApi {
 	private final HttpServletRequest request;
 
 	private final TransactionService transactionService;
+	
+	private final GoogleAuthenticator googleAuthenticator;
 
 	public TransactionApiController(ObjectMapper objectMapper, HttpServletRequest request,
-			TransactionService transactionService) {
+			TransactionService transactionService, GoogleAuthenticator googleAuthenticator) {
 		super();
 		this.objectMapper = objectMapper;
 		this.request = request;
 		this.transactionService = transactionService;
+		this.googleAuthenticator = googleAuthenticator;
 	}
 
 	public ResponseEntity<Transaction> addTransaction(
 			@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be added.", required = true, schema = @Schema()) @Valid @RequestBody Transaction body) {
+		
+		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+			return new ResponseEntity(HttpStatus.FORBIDDEN);
 		
 		Optional<TranMaster> addedTransaction = transactionService.addTransaction(body);
 		
@@ -70,6 +80,10 @@ public class TransactionApiController implements TransactionApi {
 	public ResponseEntity<Transaction> getTransactionByTransactionId(
 			@Parameter(in = ParameterIn.PATH, description = "Transaction ID", required = true, schema = @Schema()) @PathVariable("transactionId") BigInteger transactionId) {
 			try {
+				
+				String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+				if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+					return new ResponseEntity(HttpStatus.FORBIDDEN);
 				
 				Optional<Transaction> transactionByTranId = transactionService.getTransactionByTranId(transactionId);
 				
@@ -85,6 +99,11 @@ public class TransactionApiController implements TransactionApi {
 	public ResponseEntity<List<Transaction>> getTransactionsByUserId(
 			@Parameter(in = ParameterIn.PATH, description = "User ID", required = true, schema = @Schema()) @PathVariable("userId") BigInteger userId,@RequestParam("limit") Optional<Integer> limit) {
 			try {
+				
+				String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+				if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+					return new ResponseEntity(HttpStatus.FORBIDDEN);
+				
 				
 				Optional<List<Transaction>> transactionsByUserId = transactionService.getTransactionsByUserId(userId);
 				
@@ -103,12 +122,19 @@ public class TransactionApiController implements TransactionApi {
 
 	public ResponseEntity<Void> updateTransaction(
 			@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be updated.", required = true, schema = @Schema()) @Valid @RequestBody Transaction body) {
-		String accept = request.getHeader("Accept");
+		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+			return new ResponseEntity(HttpStatus.FORBIDDEN);
+		
 		return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
 	}
 
 	@Override
 	public ResponseEntity<List<MonthWiseTransactionSummary>> getLastSixMonthsSummary(BigInteger userId) {
+		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+		
+		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+			return new ResponseEntity(HttpStatus.FORBIDDEN);
 		
 		return ResponseEntity.ok(transactionService.getLastSixMonthTransactions(userId).get());
 	}

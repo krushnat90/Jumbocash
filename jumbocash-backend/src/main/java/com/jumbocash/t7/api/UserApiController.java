@@ -1,5 +1,6 @@
 package com.jumbocash.t7.api;
 
+import com.jumbocash.t7.auth.GoogleAuthenticator;
 import com.jumbocash.t7.model.User;
 import com.jumbocash.t7.model.UserEntityLink;
 import com.jumbocash.t7.service.UserService;
@@ -45,22 +46,34 @@ public class UserApiController implements UserApi {
 	private final HttpServletRequest request;
 
 	UserService userService;
+	
+	GoogleAuthenticator googleAuthenticator; 
 
-	public UserApiController(HttpServletRequest request, UserService userService) {
+	
+
+	public UserApiController(HttpServletRequest request, UserService userService,
+			GoogleAuthenticator googleAuthenticator) {
 		super();
 		this.request = request;
 		this.userService = userService;
+		this.googleAuthenticator = googleAuthenticator;
 	}
 
 	public ResponseEntity<Void> linkEntity(
 			@Parameter(in = ParameterIn.DEFAULT, description = "User Entity Link Object.", required = true, schema = @Schema()) @Valid @RequestBody UserEntityLink body) {
-		String accept = request.getHeader("Accept");
+		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+			return new ResponseEntity(HttpStatus.FORBIDDEN);
 		return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
 	}
 
 	@Override
 	public ResponseEntity<User> addOrUpdateUser(@Valid User user) {
 
+		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+			return new ResponseEntity(HttpStatus.FORBIDDEN);
+		
 		Optional<User> operatedUser = userService.addOrUpdateUser(user);
 
 		if (!operatedUser.isPresent())
@@ -73,6 +86,11 @@ public class UserApiController implements UserApi {
 	public ResponseEntity<Map<String, BigInteger>> getSummaryInfoByUserId(BigInteger userId) {
 
 		try {
+			
+			String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+			if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+				return new ResponseEntity(HttpStatus.FORBIDDEN);
+			
 			return ResponseEntity.ok(userService.getSummaryInfoByUserId(userId));
 		} catch (Exception ex) {
 			return new ResponseEntity<Map<String, BigInteger>>(HttpStatus.INTERNAL_SERVER_ERROR);

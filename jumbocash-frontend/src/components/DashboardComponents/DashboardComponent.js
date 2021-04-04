@@ -156,7 +156,7 @@ class DashboardComponent extends Component {
         super(props);
 
         this.state = {
-            data,
+            analysisData:[],
             userSummaryInformation: {
                 "totalCashIn": 0,
                 "totalCustomers": 0,
@@ -165,12 +165,15 @@ class DashboardComponent extends Component {
             },
             errorMessage: '',
 			transactions: [],
-            userId : props.userId
+            userId : props.userId,
+            isLoading : true
         };
 
         this.fetchUserSummaryInformation = this.fetchUserSummaryInformation.bind(this);
         this.hideErrorAlert = this.hideErrorAlert.bind(this);
 		this.getTransactions = this.getTransactions.bind(this);
+        this.hideErrorAlert = this.hideErrorAlert.bind(this);
+        this.fetchAnalysisData = this.fetchAnalysisData.bind(this);
     }
 
     fetchUserSummaryInformation() {
@@ -189,13 +192,31 @@ class DashboardComponent extends Component {
         })
     }
 
+    fetchAnalysisData(){
+        TransactionService.getLastSixMonthsTransactionSummary(this.props.userId).then(
+            response => {
+                this.setState({
+                    analysisData : response.data
+                })
+            }
+        ).catch((error) => {
+            this.setState(
+                {
+                    errorMessage: 'Something went wrong! Please re-login and try again'
+                }
+            )
+        })
+    }
+
 
     componentDidMount() {
+        this.fetchAnalysisData();
         this.getTransactions();
+        this.fetchUserSummaryInformation();
     }
 
     getTransactions() {
-        TransactionService.getTransactionsByUserId(this.state.userId).then(
+        TransactionService.getTransactionsByUserIdWithLimit(this.props.userId,10).then(
             response => {
                 this.setState({
                     transactions: response.data,
@@ -206,12 +227,13 @@ class DashboardComponent extends Component {
         ).catch(
             error => {
                 this.setState({
-                    message: "Error occurred",
+                    errorMessage: 'Something went wrong! Please re-login and try again',
                     isLoading: false
                 })
 
             }
         )
+    }
 
     //close button functionality for error
     hideErrorAlert() {
@@ -221,12 +243,14 @@ class DashboardComponent extends Component {
     }
 
     componentDidMount() {
+        this.fetchAnalysisData();
         this.fetchUserSummaryInformation();
+        this.getTransactions();
     }
 
 
     render() {
-        const { data: chartData } = this.state;
+        const { analysisData: chartData } = this.state;
         const { classes } = this.props;
         return (
             <div className={classes.root}>

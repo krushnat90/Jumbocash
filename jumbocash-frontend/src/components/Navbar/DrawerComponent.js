@@ -172,6 +172,7 @@ function ResponsiveDrawer(props) {
     sessionStorage.removeItem('JUMBO_USER_ID');
     sessionStorage.removeItem('JUMBO_USER_NAME');
     sessionStorage.removeItem('JUMBO_LOGIN_STATUS');
+    sessionStorage.removeItem('JUMBO_TOKEN_ID');
     history.push("/");
   };
 

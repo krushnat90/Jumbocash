@@ -1,5 +1,6 @@
 package com.jumbocash.t7.api;
 
+import com.jumbocash.t7.auth.GoogleAuthenticator;
 import com.jumbocash.t7.exception.JumbocashException;
 import com.jumbocash.t7.model.Entity;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,18 +47,27 @@ public class EntityApiController implements EntityApi {
     private final ObjectMapper objectMapper;
 
     private final HttpServletRequest request;
+    
+    private GoogleAuthenticator googleAuthenticator;
 
     @Autowired
     private EntityService entityService;
 
-    @org.springframework.beans.factory.annotation.Autowired
-    public EntityApiController(ObjectMapper objectMapper, HttpServletRequest request) {
-        this.objectMapper = objectMapper;
-        this.request = request;
-    }
+    public EntityApiController(ObjectMapper objectMapper, HttpServletRequest request,
+			GoogleAuthenticator googleAuthenticator, EntityService entityService) {
+		super();
+		this.objectMapper = objectMapper;
+		this.request = request;
+		this.googleAuthenticator = googleAuthenticator;
+		this.entityService = entityService;
+	}
 
-    public ResponseEntity<Void> addEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be added.", required = true, schema = @Schema()) @Valid @RequestBody Entity entity) {
+	public ResponseEntity<Void> addEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be added.", required = true, schema = @Schema()) @Valid @RequestBody Entity entity) {
         try {
+        	String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+    		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+    			return new ResponseEntity(HttpStatus.FORBIDDEN);
+    		
             return new ResponseEntity<Void>(entityService.addNewEntity(entity), HttpStatus.OK);
         } catch (JumbocashException je) {
             log.error("Entry already present in database for Email ID : " + entity.getEmail());
@@ -70,6 +80,10 @@ public class EntityApiController implements EntityApi {
 
     public ResponseEntity<Entity> getEntityByEntityId(@Parameter(in = ParameterIn.PATH, description = "Entity ID", required = true, schema = @Schema()) @PathVariable("entityId") BigInteger entityId) {
         try {
+        	String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+    		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+    			return new ResponseEntity(HttpStatus.FORBIDDEN);
+    		
         	Optional<Entity> entity = entityService.getEntityByEntityId(entityId);
         	if(!entity.isPresent())
         		return ResponseEntity.notFound().build();
@@ -83,6 +97,10 @@ public class EntityApiController implements EntityApi {
 
     public ResponseEntity<List<Entity>> getEntitiesByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required = true, schema = @Schema()) @PathVariable("userId") BigInteger userId) {
         try {
+        	String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+    		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+    			return new ResponseEntity(HttpStatus.FORBIDDEN);
+    		
             return new ResponseEntity<List<Entity>>(entityService.getEntitiesByUserId(userId), HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception occurred in getEntitiesByUserId method for user ID: " + userId + " --> " + e.getMessage());
@@ -92,6 +110,10 @@ public class EntityApiController implements EntityApi {
 
     public ResponseEntity<Void> updateEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be updated.", required = true, schema = @Schema()) @Valid @RequestBody Entity entity) {
         try {
+        	String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+    		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+    			return new ResponseEntity(HttpStatus.FORBIDDEN);
+    		
             return new ResponseEntity<Void>(entityService.updateExistingEntity(entity), HttpStatus.OK);
         } catch (JumbocashException je) {
             log.error("No entry found in database for Entity ID " + entity.getEntityId());
