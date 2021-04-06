@@ -6,13 +6,12 @@ const BACKEND_API_URL = "http://localhost:8080/v1";
 const ENDPT_TRANSACTION = "transaction"
 const ENDPT_SUMMARY = "summary"
 const ENDPT_user = "user"
-const TOKEN_ID = sessionStorage.getItem("JUMBO_TOKEN_ID")
-
 
 class TransactionService {
 
     //retrieve transactions based on user id
     getTransactionsByUserId(userId) {
+      const TOKEN_ID = sessionStorage.getItem("JUMBO_TOKEN_ID")
         return axios.get(`${BACKEND_API_URL}/${ENDPT_TRANSACTION}/${ENDPT_user}/${userId}`, {
             headers: {
               'AUTH_GOOGLE_TOKEN': TOKEN_ID
@@ -21,6 +20,7 @@ class TransactionService {
     }
 
     getTransactionsByUserIdWithLimit(userId,limit) {
+      const TOKEN_ID = sessionStorage.getItem("JUMBO_TOKEN_ID")
         return axios.get(`${BACKEND_API_URL}/${ENDPT_TRANSACTION}/${ENDPT_user}/${userId}?limit=${limit}`, {
             headers: {
               'AUTH_GOOGLE_TOKEN': TOKEN_ID
@@ -29,6 +29,7 @@ class TransactionService {
     }
 
     addTransaction(transaction){
+      const TOKEN_ID = sessionStorage.getItem("JUMBO_TOKEN_ID")
         return axios.post(`${BACKEND_API_URL}/${ENDPT_TRANSACTION}`,transaction, {
             headers: {
               'AUTH_GOOGLE_TOKEN': TOKEN_ID
@@ -37,6 +38,7 @@ class TransactionService {
     }
     
     getLastSixMonthsTransactionSummary(userId){
+      const TOKEN_ID = sessionStorage.getItem("JUMBO_TOKEN_ID")
         return axios.get(`${BACKEND_API_URL}/${ENDPT_TRANSACTION}/${ENDPT_SUMMARY}/${ENDPT_user}/${userId}`, {
             headers: {
               'AUTH_GOOGLE_TOKEN': TOKEN_ID

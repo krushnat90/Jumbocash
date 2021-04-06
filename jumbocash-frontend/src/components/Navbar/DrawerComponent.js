@@ -199,9 +199,9 @@ function ResponsiveDrawer(props) {
       case "reports":
         return <AssessmentTwoTone className="pink-color" />;
       case "profile":
-        return <PermIdentityTwoTone className="coral-color" />;
+        return <PermIdentityTwoTone className="pink-color" />;
       case "logout":
-        return <ExitToAppTwoToneIcon className="purple-color" />;
+        return <ExitToAppTwoToneIcon className="coral-color" />;
     }
   }
 
@@ -275,13 +275,6 @@ function ResponsiveDrawer(props) {
             </ListItem>
           </List>
         </Collapse>
-
-        <ListItem button key="Reports" component={Link} to={"/" + "reports".toLowerCase()} className={classes.link}>
-          <ListItemIcon>
-            {iconSwitch("Reports".toLowerCase())}
-          </ListItemIcon>
-          <ListItemText primary="Reports" />
-        </ListItem>
 
         <ListItem button key="Profile" component={Link} to={"/" + "profile".toLowerCase()} className={classes.link}>
           <ListItemIcon>

@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -93,6 +95,7 @@ public class UserApiController implements UserApi {
 			
 			return ResponseEntity.ok(userService.getSummaryInfoByUserId(userId));
 		} catch (Exception ex) {
+			log.error("Exception in user api controller : "+ExceptionUtils.getStackTrace(ex));
 			return new ResponseEntity<Map<String, BigInteger>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

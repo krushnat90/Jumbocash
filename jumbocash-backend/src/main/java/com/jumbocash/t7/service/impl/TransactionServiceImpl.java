@@ -100,7 +100,7 @@ public class TransactionServiceImpl implements TransactionService {
 		List<MonthWiseTransactionSummary> lastSixMonthTransactionInfo = new ArrayList<>();
 		LocalDate today = LocalDate.now();
 
-		for (int monthCounter = 0; monthCounter <= 6; monthCounter++) {
+		for (int monthCounter = 6; monthCounter >= 0; monthCounter--) {
 			logger.debug("Start month :"+monthCounter);
 			LocalDate currentMonth = today.minusMonths(monthCounter);
 

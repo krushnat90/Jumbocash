@@ -80,23 +80,23 @@ public class UserServiceImpl implements UserService {
 	public Map<String, BigInteger> getSummaryInfoByUserId(BigInteger userId) {
 
 		// get total cash in
-		BigInteger totalCashIn = tranRepository.getTotalCashIn(userId);
+		Optional<BigInteger> totalCashIn = Optional.ofNullable(tranRepository.getTotalCashIn(userId));
 
 		// get total cash out
-		BigInteger totalCashOut = tranRepository.getTotalCashOut(userId);
+		Optional<BigInteger> totalCashOut = Optional.ofNullable(tranRepository.getTotalCashOut(userId));
 		
 		//get number of customers
-		BigInteger totalCustomers = entityRepository.getCountOfEntitiesByEntityType(userId, "customer");
+		Optional<BigInteger> totalCustomers = Optional.ofNullable(entityRepository.getCountOfEntitiesByEntityType(userId, "customer"));
 		
 		//get number of vendors
-		BigInteger totalVendors = entityRepository.getCountOfEntitiesByEntityType(userId, "vendor");
+		Optional<BigInteger> totalVendors = Optional.ofNullable(entityRepository.getCountOfEntitiesByEntityType(userId, "vendor"));
 
 		Map<String, BigInteger> summaryInfo = new HashMap<>();
 
-		summaryInfo.put(CASH_IN_KEY, totalCashIn);
-		summaryInfo.put(CASH_OUT_KEY, totalCashOut);
-		summaryInfo.put(CUSTOMERS_KEY, totalCustomers);
-		summaryInfo.put(VENDORS_KEY, totalVendors);
+		summaryInfo.put(CASH_IN_KEY, totalCashIn.isPresent() ? totalCashIn.get() : BigInteger.ZERO);
+		summaryInfo.put(CASH_OUT_KEY, totalCashOut.isPresent() ? totalCashOut.get() : BigInteger.ZERO);
+		summaryInfo.put(CUSTOMERS_KEY, totalCustomers.isPresent() ? totalCustomers.get() : BigInteger.ZERO);
+		summaryInfo.put(VENDORS_KEY, totalVendors.isPresent() ? totalVendors.get() : BigInteger.ZERO);
 
 		return summaryInfo;
 	}

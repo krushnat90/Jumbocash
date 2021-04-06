@@ -120,8 +120,8 @@ const useStyles = theme => ({
 
 const columns = [
     //{ field: 'tranId', headerName: 'Id', width: 150 },
-    { field: 'tranDate', headerName: 'Date', width: 120, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-    { field: 'entityName', headerName: 'Entity Name', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+    { field: 'tranDate', headerName: 'Date', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+    { field: 'entityName', headerName: 'Entity Name', width: 190, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
     // { field: 'paymentMode', headerName: 'Payment Mode', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
     {
         field: 'tranType', headerName: 'Type', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
@@ -156,7 +156,7 @@ class DashboardComponent extends Component {
         super(props);
 
         this.state = {
-            analysisData:[],
+            analysisData: [],
             userSummaryInformation: {
                 "totalCashIn": 0,
                 "totalCustomers": 0,
@@ -164,14 +164,14 @@ class DashboardComponent extends Component {
                 "totalCashOut": 0
             },
             errorMessage: '',
-			transactions: [],
-            userId : props.userId,
-            isLoading : true
+            transactions: [],
+            userId: props.userId,
+            isLoading: true
         };
 
         this.fetchUserSummaryInformation = this.fetchUserSummaryInformation.bind(this);
         this.hideErrorAlert = this.hideErrorAlert.bind(this);
-		this.getTransactions = this.getTransactions.bind(this);
+        this.getTransactions = this.getTransactions.bind(this);
         this.hideErrorAlert = this.hideErrorAlert.bind(this);
         this.fetchAnalysisData = this.fetchAnalysisData.bind(this);
     }
@@ -192,11 +192,11 @@ class DashboardComponent extends Component {
         })
     }
 
-    fetchAnalysisData(){
+    fetchAnalysisData() {
         TransactionService.getLastSixMonthsTransactionSummary(this.props.userId).then(
             response => {
                 this.setState({
-                    analysisData : response.data
+                    analysisData: response.data
                 })
             }
         ).catch((error) => {
@@ -216,7 +216,7 @@ class DashboardComponent extends Component {
     }
 
     getTransactions() {
-        TransactionService.getTransactionsByUserIdWithLimit(this.props.userId,10).then(
+        TransactionService.getTransactionsByUserIdWithLimit(this.props.userId, 10).then(
             response => {
                 this.setState({
                     transactions: response.data,
@@ -226,11 +226,17 @@ class DashboardComponent extends Component {
             }
         ).catch(
             error => {
-                this.setState({
-                    errorMessage: 'Something went wrong! Please re-login and try again',
-                    isLoading: false
-                })
-
+                if (error.response.status == 404) {
+                    this.setState({
+                        errorMessage: 'No Transactions Found! Please add some...'
+                    })
+                }
+                else {
+                    this.setState({
+                        errorMessage: 'Something went wrong! Please re-login and try again',
+                        isLoading: false
+                    })
+                }
             }
         )
     }
@@ -264,37 +270,37 @@ class DashboardComponent extends Component {
                     </button>
                 </div>}
                 <Grid container spacing={3}>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={3}>
                         <Paper className={classes.paper}>
                             <AccountBalanceWalletTwoToneIcon className="blue-color" fontSize='large' />
                             <Typography variant="subtitle1">Total Cash In</Typography>
                             <Typography variant="h6" className="green-color"><b>₹{this.state.userSummaryInformation.totalCashIn}</b></Typography>
                         </Paper>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={3}>
                         <Paper className={classes.paper}>
                             <SwapHorizontalCircleTwoToneIcon className="purple-color" fontSize='large' />
                             <Typography variant="subtitle1">Total Cash Out</Typography>
                             <Typography variant="h6" className="red-color"><b>₹{this.state.userSummaryInformation.totalCashOut}</b></Typography>
                         </Paper>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={3}>
                         <Paper className={classes.paper}>
                             <ShoppingCartTwoToneIcon className="magenta-color" fontSize='large' />
                             <Typography variant="subtitle1">Total Customers</Typography>
                             <Typography variant="h6" className="skyblue-color"><b>{this.state.userSummaryInformation.totalCustomers}</b></Typography>
                         </Paper>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={3}>
                         <Paper className={classes.paper}>
                             <LocalShippingTwoToneIcon className="pink-color" fontSize='large' />
                             <Typography variant="subtitle1">Total Vendors</Typography>
-                            <Typography variant="h6" className="lavender -color"><b>{this.state.userSummaryInformation.totalVendors}</b></Typography>
+                            <Typography variant="h6" className="lavender-color"><b>{this.state.userSummaryInformation.totalVendors}</b></Typography>
 
                         </Paper>
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6}>
                         <Paper>
                             <Chart
                                 data={chartData}
@@ -325,7 +331,7 @@ class DashboardComponent extends Component {
                             </Chart>
                         </Paper>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6}>
                         <Paper>
                             <div style={{ height: 500, width: '100%' }} className="container">
                                 <DataGrid className={classes.root}
