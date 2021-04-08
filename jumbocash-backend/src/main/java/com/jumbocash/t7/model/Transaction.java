@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class Transaction {
 	@JsonProperty("id")
-	private Long tranId = null;
+	private BigInteger tranId = null;
 
 	/**
 	 * Gets or Sets tranType
@@ -64,7 +64,7 @@ public class Transaction {
 		this.tranDate = tranDate;
 	}
 
-	public Transaction tranId(Long tranId) {
+	public Transaction tranId(BigInteger tranId) {
 		this.tranId = tranId;
 		return this;
 	}
@@ -76,11 +76,11 @@ public class Transaction {
 	 **/
 	@Schema(description = "")
 
-	public Long getTranId() {
+	public BigInteger getTranId() {
 		return tranId;
 	}
 
-	public void setTranId(Long tranId) {
+	public void setTranId(BigInteger tranId) {
 		this.tranId = tranId;
 	}
 

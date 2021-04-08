@@ -16,7 +16,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.jumbocash.t7.api.ApiResponseMessage;
 import com.jumbocash.t7.beanMapper.impl.TransactionMapper;
+import com.jumbocash.t7.constant.ExceptionConstants;
 import com.jumbocash.t7.dto.AppUser;
 import com.jumbocash.t7.dto.EntityMaster;
 import com.jumbocash.t7.dto.TranMaster;
@@ -55,7 +57,7 @@ public class TransactionServiceImpl implements TransactionService {
 	public Optional<TranMaster> addTransaction(Transaction transaction) {
 
 		// validate
-		if (!tranValidationService.validateAddTransactionRequest(transaction))
+		if (!tranValidationService.validateAddOrUpdateTransactionRequest(transaction))
 			return Optional.empty();
 
 		Optional<AppUser> userDetails = userRepository.findById(transaction.getUserId());
@@ -69,6 +71,7 @@ public class TransactionServiceImpl implements TransactionService {
 		TranMaster transactionDetails = tranMapper.convertFromJsonToDto(transaction);
 		transactionDetails.setEntity(entityDetails.get());
 		transactionDetails.setUser(userDetails.get());
+		transactionDetails.setTranDate(LocalDate.parse(transaction.getTranDate()));
 
 		if (transactionDetails.getTranType().equalsIgnoreCase("debit"))
 			transactionDetails.setAmount(0 - transactionDetails.getAmount());
@@ -84,7 +87,7 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		if (transactionsByUserId.get().isEmpty())
 			return Optional.empty();
-		
+
 		return transactionsByUserId;
 	}
 
@@ -101,7 +104,7 @@ public class TransactionServiceImpl implements TransactionService {
 		LocalDate today = LocalDate.now();
 
 		for (int monthCounter = 6; monthCounter >= 0; monthCounter--) {
-			logger.debug("Start month :"+monthCounter);
+			logger.debug("Start month :" + monthCounter);
 			LocalDate currentMonth = today.minusMonths(monthCounter);
 
 			LocalDate firstDay = currentMonth.withDayOfMonth(1);
@@ -114,15 +117,14 @@ public class TransactionServiceImpl implements TransactionService {
 			logger.debug("Fetching debit txn from db");
 			List<TranMaster> debitTransactionsDuringDate = tranRepository.getTransactionsBetweenDates(firstDay, lastDay,
 					userId, "debit");
-			
+
 			logger.debug("calculating credit amount");
 			Long totalCreditAmount = creditTransactionsDuringDate.stream().map(TranMaster::getAmount).reduce(0L,
 					(subtotal, element) -> Long.sum(subtotal, Math.abs(element)));
-			
+
 			logger.debug("calculating debit amount");
 			Long totalDebitAmount = debitTransactionsDuringDate.stream().map(TranMaster::getAmount).reduce(0L,
 					(subtotal, element) -> Long.sum(subtotal, Math.abs(element)));
-
 
 			lastSixMonthTransactionInfo.add(
 					new MonthWiseTransactionSummary().month(currentMonth.format(DateTimeFormatter.ofPattern("MMM")))
@@ -131,6 +133,56 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 
 		return Optional.of(lastSixMonthTransactionInfo);
+	}
+
+	@Override
+	public Optional<ApiResponseMessage> updateTransaction(Transaction editTransactionRequest) {
+
+		logger.info("update request received for txn id ->" + editTransactionRequest.getTranId());
+		Optional<TranMaster> possibleTransactionToEdit = tranRepository
+				.findById(Optional.ofNullable(editTransactionRequest.getTranId()).isPresent()
+						? editTransactionRequest.getTranId() : BigInteger.ZERO);
+
+		Optional<EntityMaster> possibleEntityDetails = Optional.ofNullable(editTransactionRequest.getEntityId())
+				.isPresent() ? entityRepository.findById(editTransactionRequest.getEntityId()) : Optional.empty();
+
+		Optional<ApiResponseMessage> validationResponse = tranValidationService.validateUpdateTransactionRequest(
+				editTransactionRequest, possibleTransactionToEdit, possibleEntityDetails);
+
+		if (validationResponse.isPresent())
+			return validationResponse;
+
+		TranMaster transactionToEdit = tranMapper.convertFromJsonToDto(editTransactionRequest);
+
+		transactionToEdit.setEntity(possibleEntityDetails.isPresent() ? possibleEntityDetails.get()
+				: possibleTransactionToEdit.get().getEntity());
+		transactionToEdit.setUser(possibleTransactionToEdit.get().getUser());
+		transactionToEdit.setTranDate(LocalDate.parse(editTransactionRequest.getTranDate()));
+
+		if (transactionToEdit.getTranType().equalsIgnoreCase("debit"))
+			transactionToEdit.setAmount(0 - transactionToEdit.getAmount());
+
+		tranRepository.save(transactionToEdit);
+
+		logger.info("update request finished for txn id ->" + editTransactionRequest.getTranId());
+		return Optional.of(new ApiResponseMessage(4, ExceptionConstants.TRANSACTION_SUCCESS));
+	}
+
+	@Override
+	public Optional<ApiResponseMessage> deleteTransaction(Transaction deleteTransactionRequest) {
+
+		logger.info("delete request received for txn id ->" + deleteTransactionRequest.getTranId());
+		Optional<TranMaster> possibleTransactionToDelete = tranRepository
+				.findById(Optional.ofNullable(deleteTransactionRequest.getTranId()).isPresent()
+						? deleteTransactionRequest.getTranId() : BigInteger.ZERO);
+		
+		if(!possibleTransactionToDelete.isPresent())
+			return Optional.of(new ApiResponseMessage(1, ExceptionConstants.TRANSACTION_ABSENT));
+		
+		tranRepository.delete(possibleTransactionToDelete.get());
+		logger.info("delete request finished for txn id ->" + deleteTransactionRequest.getTranId());
+		return Optional.of(new ApiResponseMessage(4, ExceptionConstants.TRANSACTION_SUCCESS));
+		
 	}
 
 }

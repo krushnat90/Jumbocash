@@ -71,7 +71,15 @@ public interface TransactionApi {
     @RequestMapping(value = "/transaction",
         consumes = { "application/json" }, 
         method = RequestMethod.PATCH)
-    ResponseEntity<Void> updateTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Transaction body);
+    ResponseEntity<ApiResponseMessage> updateTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Transaction body);
+    
+    @Operation(summary = "Delete transaction", description = "", tags={ "transaction" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successful Operation") })
+    @RequestMapping(value = "/transaction",
+        consumes = { "application/json" }, 
+        method = RequestMethod.DELETE)
+    ResponseEntity<ApiResponseMessage> deleteTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be deleted.", required=true, schema=@Schema()) @Valid @RequestBody Transaction body);
 
 }
 

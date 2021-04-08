@@ -1,9 +1,7 @@
 package com.jumbocash.t7.api;
 
-import javax.xml.bind.annotation.XmlTransient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-03-07T11:46:35.995Z[GMT]")
-@javax.xml.bind.annotation.XmlRootElement
 public class ApiResponseMessage {
     public static final int ERROR = 1;
     public static final int WARNING = 2;
@@ -11,6 +9,7 @@ public class ApiResponseMessage {
     public static final int OK = 4;
     public static final int TOO_BUSY = 5;
 
+    @JsonIgnore
     int code;
     String type;
     String message;
@@ -42,7 +41,6 @@ public class ApiResponseMessage {
         this.message = message;
     }
 
-    @XmlTransient
     public int getCode() {
         return code;
     }

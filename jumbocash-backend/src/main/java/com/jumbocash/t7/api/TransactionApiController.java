@@ -1,6 +1,7 @@
 package com.jumbocash.t7.api;
 
 import com.jumbocash.t7.auth.GoogleAuthenticator;
+import com.jumbocash.t7.constant.ExceptionConstants;
 import com.jumbocash.t7.dto.TranMaster;
 import com.jumbocash.t7.model.MonthWiseTransactionSummary;
 import com.jumbocash.t7.model.Transaction;
@@ -50,7 +51,7 @@ public class TransactionApiController implements TransactionApi {
 	private final HttpServletRequest request;
 
 	private final TransactionService transactionService;
-	
+
 	private final GoogleAuthenticator googleAuthenticator;
 
 	public TransactionApiController(ObjectMapper objectMapper, HttpServletRequest request,
@@ -64,79 +65,102 @@ public class TransactionApiController implements TransactionApi {
 
 	public ResponseEntity<Transaction> addTransaction(
 			@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be added.", required = true, schema = @Schema()) @Valid @RequestBody Transaction body) {
-		
+
 		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
-		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+		if (!googleAuthenticator.isTokenIdValid(authorizationHeader))
 			return new ResponseEntity(HttpStatus.FORBIDDEN);
-		
+
 		Optional<TranMaster> addedTransaction = transactionService.addTransaction(body);
-		
-		if(!addedTransaction.isPresent())
+
+		if (!addedTransaction.isPresent())
 			return ResponseEntity.badRequest().build();
-		
+
 		return ResponseEntity.ok(body);
 	}
 
 	public ResponseEntity<Transaction> getTransactionByTransactionId(
 			@Parameter(in = ParameterIn.PATH, description = "Transaction ID", required = true, schema = @Schema()) @PathVariable("transactionId") BigInteger transactionId) {
-			try {
-				
-				String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
-				if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
-					return new ResponseEntity(HttpStatus.FORBIDDEN);
-				
-				Optional<Transaction> transactionByTranId = transactionService.getTransactionByTranId(transactionId);
-				
-				return transactionByTranId.isPresent()?ResponseEntity.ok(transactionByTranId.get()):ResponseEntity.notFound().build();
-				
-			} catch (Exception e) {
-				log.error("Couldn't serialize response for content type application/json", e);
-				return new ResponseEntity<Transaction>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+		try {
+
+			String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+			if (!googleAuthenticator.isTokenIdValid(authorizationHeader))
+				return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+			Optional<Transaction> transactionByTranId = transactionService.getTransactionByTranId(transactionId);
+
+			return transactionByTranId.isPresent() ? ResponseEntity.ok(transactionByTranId.get())
+					: ResponseEntity.notFound().build();
+
+		} catch (Exception e) {
+			log.error("Couldn't serialize response for content type application/json", e);
+			return new ResponseEntity<Transaction>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 	}
 
 	public ResponseEntity<List<Transaction>> getTransactionsByUserId(
-			@Parameter(in = ParameterIn.PATH, description = "User ID", required = true, schema = @Schema()) @PathVariable("userId") BigInteger userId,@RequestParam("limit") Optional<Integer> limit) {
-			try {
-				
-				String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
-				if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
-					return new ResponseEntity(HttpStatus.FORBIDDEN);
-				
-				
-				Optional<List<Transaction>> transactionsByUserId = transactionService.getTransactionsByUserId(userId);
-				
-				if(!transactionsByUserId.isPresent()){
-					return ResponseEntity.notFound().build();
-				}
-				
-				return ResponseEntity.ok(limit.isPresent() ? transactionsByUserId.get().subList(0, limit.get()) : transactionsByUserId.get());
-				
-			} catch (Exception e) {
-				log.error("Couldn't serialize response for content type application/json", e);
-				return new ResponseEntity<List<Transaction>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			@Parameter(in = ParameterIn.PATH, description = "User ID", required = true, schema = @Schema()) @PathVariable("userId") BigInteger userId,
+			@RequestParam("limit") Optional<Integer> limit) {
+		try {
+
+			String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+			if (!googleAuthenticator.isTokenIdValid(authorizationHeader))
+				return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+			Optional<List<Transaction>> transactionsByUserId = transactionService.getTransactionsByUserId(userId);
+
+			if (!transactionsByUserId.isPresent()) {
+				return ResponseEntity.notFound().build();
 			}
+
+			return ResponseEntity.ok(limit.isPresent() ? transactionsByUserId.get().subList(0, limit.get())
+					: transactionsByUserId.get());
+
+		} catch (Exception e) {
+			log.error("Couldn't serialize response for content type application/json", e);
+			return new ResponseEntity<List<Transaction>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 	}
 
-	public ResponseEntity<Void> updateTransaction(
+	public ResponseEntity<ApiResponseMessage> updateTransaction(
 			@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be updated.", required = true, schema = @Schema()) @Valid @RequestBody Transaction body) {
 		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
-		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+		if (!googleAuthenticator.isTokenIdValid(authorizationHeader))
 			return new ResponseEntity(HttpStatus.FORBIDDEN);
-		
-		return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+
+		try {
+			Optional<ApiResponseMessage> possibleUpdateTransactionResponse = transactionService.updateTransaction(body);
+
+			if (possibleUpdateTransactionResponse.isPresent())
+				return ResponseEntity.ok(possibleUpdateTransactionResponse.get());
+			else
+				return new ResponseEntity<ApiResponseMessage> (new ApiResponseMessage(4, "internal error"),HttpStatus.INTERNAL_SERVER_ERROR);
+
+		} catch (Exception e) {
+			log.error("Couldn't serialize response for content type application/json", e);
+			return new ResponseEntity<ApiResponseMessage>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@Override
 	public ResponseEntity<List<MonthWiseTransactionSummary>> getLastSixMonthsSummary(BigInteger userId) {
 		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+
+		if (!googleAuthenticator.isTokenIdValid(authorizationHeader))
+			return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+		return ResponseEntity.ok(transactionService.getLastSixMonthTransactions(userId).get());
+	}
+
+	@Override
+	public ResponseEntity<ApiResponseMessage> deleteTransaction(@Valid Transaction body) {
+		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
 		
-		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+		if (!googleAuthenticator.isTokenIdValid(authorizationHeader))
 			return new ResponseEntity(HttpStatus.FORBIDDEN);
 		
-		return ResponseEntity.ok(transactionService.getLastSixMonthTransactions(userId).get());
+		return ResponseEntity.ok(transactionService.deleteTransaction(body).get());
 	}
 
 }
