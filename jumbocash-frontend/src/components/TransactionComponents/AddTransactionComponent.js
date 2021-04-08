@@ -247,8 +247,8 @@ class AddTransactionComponent extends Component {
                           }}
 
                         >
-                          <MuiMenuItem value="Credit">Credit</MuiMenuItem>
-                          <MuiMenuItem value="Debit">Debit</MuiMenuItem>
+                          <MuiMenuItem value="credit">Credit</MuiMenuItem>
+                          <MuiMenuItem value="debit">Debit</MuiMenuItem>
 
                         </MuiSelect>
                       </FormControl>

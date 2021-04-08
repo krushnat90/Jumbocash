@@ -7,7 +7,10 @@ import {
 import CustomNoRowsOverlay from './CustomNoRowsOverlay'
 import EntityService from "../../services/EntityService";
 import { withStyles } from '@material-ui/core/styles';
-
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 
 const columns = [
   { field: 'entityName', headerName: 'Entity Name', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
@@ -34,6 +37,8 @@ function CustomToolbar() {
   return (
     <GridToolbarContainer>
       <GridToolbarExport />
+      <Button color="primary">EDIT</Button>
+      <Button color="primary">DELETE</Button>
     </GridToolbarContainer>
   );
 }
