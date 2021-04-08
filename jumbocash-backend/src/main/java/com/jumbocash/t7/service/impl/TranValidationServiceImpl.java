@@ -1,7 +1,13 @@
 package com.jumbocash.t7.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import com.jumbocash.t7.api.ApiResponseMessage;
+import com.jumbocash.t7.constant.ExceptionConstants;
+import com.jumbocash.t7.dto.EntityMaster;
+import com.jumbocash.t7.dto.TranMaster;
 import com.jumbocash.t7.model.Transaction;
 import com.jumbocash.t7.service.EntityService;
 import com.jumbocash.t7.service.TranValidationService;
@@ -20,10 +26,30 @@ public class TranValidationServiceImpl implements TranValidationService {
 	}
 
 	@Override
-	public boolean validateAddTransactionRequest(Transaction transaction) {
+	public boolean validateAddOrUpdateTransactionRequest(Transaction transaction) {
 		return transaction.getUserId() != null && transaction.getEntityId() != null;
-//				&& userService.existsUser(transaction.getUserId())
-//				&& entityService.existsEntity(transaction.getEntityId());
+		// && userService.existsUser(transaction.getUserId())
+		// && entityService.existsEntity(transaction.getEntityId());
+	}
+
+	@Override
+	public Optional<ApiResponseMessage> validateUpdateTransactionRequest(Transaction editTransactionRequest,
+			Optional<TranMaster> possibleTransactionToEdit,
+			Optional<EntityMaster> possibleEntityDetails) {
+
+		StringBuilder responseMessageBuilder = new StringBuilder();
+		int responseMessageCode = 4;
+
+		if (!possibleTransactionToEdit.isPresent()) {
+			responseMessageCode = 1;
+			responseMessageBuilder.append(ExceptionConstants.TRANSACTION_ABSENT);
+		} else if (Optional.ofNullable(editTransactionRequest.getEntityId()).isPresent()
+				&& !possibleEntityDetails.isPresent()) {
+			responseMessageCode = 1;
+			responseMessageBuilder.append(ExceptionConstants.TRANSACTION_ENTITYID_INVALID);
+		}
+
+		return (responseMessageCode == 1)?Optional.of(new ApiResponseMessage(responseMessageCode, responseMessageBuilder.toString())):Optional.empty();
 	}
 
 }
