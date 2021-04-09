@@ -11,6 +11,18 @@ import MuiMenuItem from "@material-ui/core/MenuItem";
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import Close from '@material-ui/icons/Close';
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = theme => ({
+    modalStyle:{
+      position:'absolute',
+      top:'10%',
+      left:'10%',
+      overflow:'scroll',
+      height:'100%',
+      display:'block'
+    }
+  });
 
 class EditEntityComponent extends Component {
 
@@ -174,6 +186,7 @@ class EditEntityComponent extends Component {
                     onClose={this.handleClose}
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
+                    className={this.props.classes.modalStyle}
                 >
                     <div className="container">
                         {this.state.message && <div className="alert alert-success" id="site-message">{this.state.message}
@@ -347,4 +360,4 @@ class EditEntityComponent extends Component {
 
 }
 
-export default EditEntityComponent;
+export default withStyles(styles, { withTheme: true }) (EditEntityComponent);

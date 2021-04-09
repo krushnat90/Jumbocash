@@ -63,7 +63,7 @@ body {
   background-color: rgb(219,192,212);
 }
 
-.modal{
+/* .modal{
   padding-top: 5%;
   width: 100%;
 }
@@ -71,7 +71,11 @@ body {
 .modal-header{
   background-color:  rgba(72, 81, 176, 0.877);
   color : white;
-}
+} */
+
+/* modal{
+  position: inherit;
+} */
 
 .text-field{
     margin: 10%;

@@ -13,6 +13,18 @@ import TransactionService from "../../services/TransactionService";
 import moment from "moment";
 import Modal from '@material-ui/core/Modal';
 import Close from '@material-ui/icons/Close';
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = theme => ({
+  modalStyle:{
+    position:'absolute',
+    top:'10%',
+    left:'10%',
+    overflow:'scroll',
+    height:'100%',
+    display:'block'
+  }
+});
 
 class EditTransactionComponent extends Component {
 
@@ -157,12 +169,13 @@ class EditTransactionComponent extends Component {
   render() {
     return (
 
-      <div class="container">
+      <div className="container">
         <Modal
           open={this.props.openModal}
           onClose={this.handleClose}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
+          className={this.props.classes.modalStyle}
         >
         
           <div className="container">
@@ -329,6 +342,6 @@ class EditTransactionComponent extends Component {
     );
   }
 }
-export default EditTransactionComponent;
+export default withStyles(styles, { withTheme: true }) (EditTransactionComponent);
 
 
