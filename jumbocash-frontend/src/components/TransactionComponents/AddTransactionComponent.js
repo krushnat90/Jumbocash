@@ -180,9 +180,7 @@ class AddTransactionComponent extends Component {
                       <FormControl className="form-control">
                         <MuiInputLabel id="entityName">Entity Name</MuiInputLabel>
                         <MuiSelect
-
                           labelId="entityName"
-                          value={this.state.entityName}
                           onChange={event => {
                             this.setState({ entityId: event.target.value })
                           }}
