@@ -105,3 +105,7 @@ body {
 .font-impact{
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
+
+.close-button{
+  float: right;
+}

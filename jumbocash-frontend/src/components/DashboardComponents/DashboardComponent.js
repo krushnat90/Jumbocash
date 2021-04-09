@@ -13,19 +13,16 @@ import {
     Legend,
 } from '@devexpress/dx-react-chart-material-ui';
 import { Animation } from '@devexpress/dx-react-chart';
-import {
-    DataGrid, GridToolbarContainer,
-    GridToolbarExport
-} from '@material-ui/data-grid';
+import { DataGrid } from '@material-ui/data-grid';
 import TransactionService from "../../services/TransactionService";
 import CustomNoRowsOverlay from '../TransactionComponents/CustomNoRowsOverlay'
 import LocalShippingTwoToneIcon from '@material-ui/icons/LocalShippingTwoTone';
 import SwapHorizontalCircleTwoToneIcon from '@material-ui/icons/SwapHorizontalCircleTwoTone';
 import ShoppingCartTwoToneIcon from '@material-ui/icons/ShoppingCartTwoTone';
 import AccountBalanceWalletTwoToneIcon from '@material-ui/icons/AccountBalanceWalletTwoTone';
-
-import { cashflow as data } from '../../demo-data/data';
 import UserService from "../../services/UserService";
+
+
 
 const format = () => tick => tick;
 const legendStyles = () => ({
@@ -119,10 +116,8 @@ const useStyles = theme => ({
 });
 
 const columns = [
-    //{ field: 'tranId', headerName: 'Id', width: 150 },
     { field: 'tranDate', headerName: 'Date', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
     { field: 'entityName', headerName: 'Entity Name', width: 190, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-    // { field: 'paymentMode', headerName: 'Payment Mode', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
     {
         field: 'tranType', headerName: 'Type', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
         , cellClassName: (params) =>
@@ -138,14 +133,6 @@ const columns = [
                 negative: params.value < 0
             }),
     },
-    // {
-    //     field: 'tranStatus', headerName: 'Status', width: 100, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', cellClassName: (params) =>
-    //         clsx('tranStatus', {
-    //             pending: params.value === 'Pending',
-    //             done: params.value === 'Done'
-    //         }),
-    // },
-    // { field: 'remarks', headerName: 'Remarks', width: 250, headerClassName: 'super-app-theme--header', align: 'center', headerAlign: 'center' }
 ];
 
 

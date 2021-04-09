@@ -51,9 +51,6 @@ class AddEntityComponent extends Component {
     }
 
     addEntity() {
-
-        console.log(this.state);
-
         // TODO : Form Validation
         let entity = {
             entityType: this.state.entityType,
@@ -97,42 +94,35 @@ class AddEntityComponent extends Component {
         }
         else if (!entity.address) {
             this.setState({ errorMessage: 'Address is mandatory', message: '' })
-            // this.state.message = ''
             return false;
         }
         else if (!entity.state) {
             this.setState({ errorMessage: 'State is mandatory', message: '' })
-            // this.state.message = ''
             return false;
         }
 
         else if (!entity.city) {
             this.setState({ errorMessage: 'city is mandatory', message: '' })
-            // this.state.message = ''
             return false;
         }
 
         else if (!entity.zip) {
             this.setState({ errorMessage: 'Zip code is mandatory', message: '' })
-            // this.state.message = ''
             return false;
         }
 
         else if (!entity.email) {
             this.setState({ errorMessage: 'Email is mandatory', message: '' })
-            // this.state.message = ''
             return false;
         }
 
         else if (!entity.entityType) {
             this.setState({ errorMessage: 'Entity type is mandatory', message: '' })
-            // this.state.message = ''
             return false;
         }
 
         else if (!entity.phone) {
             this.setState({ errorMessage: 'Phone is mandatory', message: '' })
-            // this.state.message = ''
             return false;
         }
 
@@ -303,81 +293,6 @@ class AddEntityComponent extends Component {
             </div>
         );
     }
-
-    // render() {
-    //     let { entityType, entityName, email, phone, address, state, zip } = this.state;
-    //     return (
-    //         <div class="container">
-    //             <Formik
-    //                 initialValues={{ entityType, entityName, email, phone, address, state, zip }}
-    //                 onSubmit={this.addEntity}
-    //                 validate={this.validate}
-    //             >
-    //                 {
-    //                     (props) => (
-    //                         <Form>
-    //                             {this.state.message && <div className="alert alert-success" id="site-message">{this.state.message}
-    //                                 <button type="button"
-    //                                     className="close"
-    //                                     data-dismiss="alert"
-    //                                     aria-label="Close"
-    //                                     onClick={() => this.hideMessageAlert()}>
-    //                                     <span aria-hidden="true">&times;</span>
-    //                                 </button>
-    //                             </div>}
-    //                             {this.state.errorMessage && <div className="alert alert-warning" role="alert">{this.state.errorMessage}
-    //                                 <button type="button"
-    //                                     className="close"
-    //                                     data-dismiss="alert"
-    //                                     aria-label="Close"
-    //                                     onClick={() => this.hideErrorAlert()}>
-    //                                     <span aria-hidden="true">&times;</span>
-    //                                 </button>
-    //                             </div>}
-    //                             <fieldset className="form-group">
-    //                                 <label>Entity Type :</label>
-    //                                 <Field className="form-control" component="select" name="entityType" required>
-    //                                     <option value="customer">customer</option>
-    //                                     <option value="vendor">vendor</option>
-    //                                 </Field>
-    //                             </fieldset>
-    //                             <fieldset className="form-group">
-    //                                 <label>Entity Name :</label>
-    //                                 <Field className="form-control" type="text" name="entityName" required />
-    //                             </fieldset>
-    //                             <fieldset className="form-group">
-    //                                 <label>Email :</label>
-    //                                 <Field className="form-control" type="email" name="email" required />
-    //                             </fieldset>
-    //                             <fieldset className="form-group">
-    //                                 <label>Phone :</label>
-    //                                 <Field className="form-control" type="number" name="phone" min="1000000000" max="9999999999" required />
-    //                             </fieldset>
-    //                             <fieldset className="form-group">
-    //                                 <label>Address :</label>
-    //                                 <Field className="form-control" type="text" name="address" required />
-    //                             </fieldset>
-    //                             <fieldset className="form-group">
-    //                                 <label>City :</label>
-    //                                 <Field className="form-control" type="text" name="city" required />
-    //                             </fieldset>
-    //                             <fieldset className="form-group">
-    //                                 <label>State :</label>
-    //                                 <Field className="form-control" type="text" name="state" required />
-    //                             </fieldset>
-    //                             <fieldset className="form-group">
-    //                                 <label>Zip Code :</label>
-    //                                 <Field className="form-control" type="number" name="zip" min="100000" max="999999" required />
-    //                             </fieldset>
-    //                             <button className="btn btn-success" type="submit" centered>add</button>
-    //                         </Form>
-    //                     )
-    //                 }
-    //             </Formik>
-    //         </div>
-    //     );
-
-    // }
 
 }
 

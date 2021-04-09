@@ -14,7 +14,7 @@ import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
 import Modal from '@material-ui/core/Modal';
 import EditTransactionComponent from '../TransactionComponents/EditTransactionComponent'
-import { DeleteTwoTone } from "@material-ui/icons";
+
 
 
 // Data grid styling

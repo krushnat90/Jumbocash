@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import Button from 'react-bootstrap/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import { Card, CardContent, IconButton } from "@material-ui/core";
 import MuiInputLabel from '@material-ui/core/InputLabel';
@@ -187,22 +187,25 @@ class EditTransactionComponent extends Component {
                 onClick={() => this.hideErrorAlert()}>
                 <span aria-hidden="true">&times;</span>
               </button>
-            </div>}<Card>
+            </div>}
+            <Card>
               <CardContent>
                 <React.Fragment>
-                  <Typography variant="h6" gutterBottom>
-                    Edit Transaction 
-                    <IconButton fontSize = "small" onClick = {this.props.handleClose}>
-                       <Close/>
-                    </IconButton>
-                </Typography>
                   <FormControl className="form-control">
-                    <Grid container spacing={3}>
+                    <Grid container spacing={3} alignItems="center" justify="center">
+                      <Grid item xs={12}>
+                        <Typography variant="h6" gutterBottom style={{ textAlign: 'center' }}>
+                          Edit Transaction Form
+                          <IconButton fontSize="small" onClick={this.props.handleClose} className="close-button">
+                            <Close />
+                          </IconButton>
+                        </Typography>
+                      </Grid>
                       <Grid item xs={12} sm={6}>
                         <TextField
                           required
                           id="entityName"
-                          // label="Transaction Date"
+                          label="Entity Name"
                           name="entityName"
                           value={this.state.entityName}
                           fullWidth
@@ -215,7 +218,7 @@ class EditTransactionComponent extends Component {
                         <TextField
                           required
                           id="tranDate"
-                          // label="Transaction Date"
+                          label="Transaction Date"
                           type="date"
                           name="tranDate"
                           style={{ paddingTop: 16 }}
@@ -316,17 +319,17 @@ class EditTransactionComponent extends Component {
                           autoComplete="remarks"
                         />
                       </Grid>
-                      <Grid item xs={12}>
-                        <Button variant="contained" color="secondary" className="submit-button" type="submit" onClick={this.addTransaction}>
+                      <Grid item xs={12} style={{ textAlign: 'center' }}>
+                        <Button variant="contained" color="secondary" type="submit"
+                          className="submit-button" onClick={this.editTransaction}>
                           SUBMIT
-                      </Button>
+                        </Button>
                       </Grid>
                     </Grid>
                   </FormControl>
                 </React.Fragment>
               </CardContent>
             </Card>
-
           </div>
         </Modal>
       </div>

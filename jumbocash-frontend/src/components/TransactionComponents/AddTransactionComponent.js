@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -197,7 +197,7 @@ class AddTransactionComponent extends Component {
                   New Transaction Form
                         </Typography>
                 <FormControl className="form-control">
-                  <Grid container spacing={3}>
+                  <Grid container spacing={3} >
                     <Grid item xs={12} sm={6}>
                       <FormControl className="form-control">
                         <MuiInputLabel id="entityName">Entity Name</MuiInputLabel>
