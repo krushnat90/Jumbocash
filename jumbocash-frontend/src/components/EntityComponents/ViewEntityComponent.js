@@ -11,6 +11,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
+import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
+import Modal from '@material-ui/core/Modal';
+import EditEntityComponent from '../EntityComponents/EditEntityComponent'
 
 const columns = [
   { field: 'entityName', headerName: 'Entity Name', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
@@ -37,8 +41,6 @@ function CustomToolbar() {
   return (
     <GridToolbarContainer>
       <GridToolbarExport />
-      <Button color="primary">EDIT</Button>
-      <Button color="primary">DELETE</Button>
     </GridToolbarContainer>
   );
 }
@@ -52,9 +54,15 @@ class ViewEntityComponent extends Component {
       entities: [],
       message: null,
       openAddFlag: false,
-      userId: props.userId
+      openModal: false,
+      userId: props.userId,
+      entityToEdit: null
     }
     this.getEntities = this.getEntities.bind(this);
+    this.editEntity = this.editEntity.bind(this);
+    this.deleteEntity = this.deleteEntity.bind(this);
+    this.rowSelected = this.rowSelected.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
@@ -68,7 +76,6 @@ class ViewEntityComponent extends Component {
           entities: response.data,
           isLoading: false
         })
-        console.log(response.data);
       }
     ).catch(
       error => {
@@ -80,6 +87,25 @@ class ViewEntityComponent extends Component {
       this.setState({ entities: [] });
     }
   }
+
+  editEntity() {
+    if (this.state.entityToEdit != null) {
+      this.setState({ openModal: true });
+    }
+  }
+
+  deleteEntity() {
+
+  }
+
+  handleClose() {
+    this.setState({ openModal: false });
+  }
+
+  async rowSelected(row) {
+    await this.setState({ entityToEdit: row.data });
+  }
+
 
   render() {
     const { classes } = this.props;
@@ -93,10 +119,36 @@ class ViewEntityComponent extends Component {
     } else {
       return (
         <div style={{ height: 500, width: '100%' }} className="container">
+          <div>
+            <Button variant="outlined" size="medium" color="primary"
+              startIcon={<EditTwoToneIcon fontSize="small" />}
+              onClick={this.editEntity}>
+              Edit
+            </Button>
+            <Button variant="outlined" size="medium" color="primary"
+              startIcon={<DeleteTwoToneIcon fontSize="small" />}
+              onClick={this.deleteEntity}>
+              Delete
+            </Button>
+            <Modal
+              open={this.state.openModal}
+              onClose={this.handleClose}
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+            >
+              <EditEntityComponent userId={this.props.userId}
+                entityToEdit={this.state.entityToEdit}
+                openModal={this.state.openModal}
+                handleClose={this.handleClose}
+              />
+            </Modal>
+          </div>
+          <br />
           <DataGrid className={classes.root} components={{
             NoRowsOverlay: CustomNoRowsOverlay,
             Toolbar: CustomToolbar,
           }}
+            onRowSelected={(row) => this.rowSelected(row)}
             rows={this.state.entities} columns={columns}
           />
         </div>
