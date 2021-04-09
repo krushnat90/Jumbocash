@@ -56,14 +56,7 @@ const legendItemBase = ({ classes, ...restProps }) => (
 const Root = withStyles(legendStyles, { name: 'LegendRoot' })(legendRootBase);
 const Label = withStyles(legendLabelStyles, { name: 'LegendLabel' })(legendLabelBase);
 const Item = withStyles(legendItemStyles, { name: 'LegendItem' })(legendItemBase);
-const demoStyles = () => ({
-    chart: {
-        paddingRight: '20px',
-    },
-    title: {
-        whiteSpace: 'pre',
-    },
-});
+
 
 const ValueLabel = (props) => {
     const { text } = props;
@@ -213,7 +206,7 @@ class DashboardComponent extends Component {
             }
         ).catch(
             error => {
-                if (error.response.status == 404) {
+                if (error.response.status === 404) {
                     this.setState({
                         errorMessage: 'No Transactions Found! Please add some...'
                     })
@@ -234,13 +227,6 @@ class DashboardComponent extends Component {
             errorMessage: false,
         });
     }
-
-    componentDidMount() {
-        this.fetchAnalysisData();
-        this.fetchUserSummaryInformation();
-        this.getTransactions();
-    }
-
 
     render() {
         const { analysisData: chartData } = this.state;

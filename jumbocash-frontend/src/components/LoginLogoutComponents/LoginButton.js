@@ -75,7 +75,7 @@ class LoginButton extends Component {
                         style={{ minHeight: '100vh' }}
                     >
                         <Grid item xs={12} sm={12}>
-                            <img src={JumbotailLogo} />
+                            <img src={JumbotailLogo} alt = "Jumbotail logo" />
                             <br />
                             <br />
                             <div className = "container">
@@ -109,7 +109,7 @@ class LoginButton extends Component {
                     >
 
                         <Grid item xs={12} sm={12}>
-                            <img className="landing-image" src={LandingImage} />
+                            <img className="landing-image" src={LandingImage} alt = "landing page" />
                         </Grid>
                     </Grid>
                 </div>

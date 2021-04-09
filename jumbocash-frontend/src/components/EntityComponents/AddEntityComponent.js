@@ -71,15 +71,12 @@ class AddEntityComponent extends Component {
                     this.setState({ message: "Entity Added Successfully" })
                 }
             ).catch(err => {
-                console.log(err.response.status);
-                if (err.response.status == 409) {
+                if (err.response.status === 409) {
                     this.setState({ errorMessage: "This entity already exists." })
                 }
                 else {
                     this.setState({ errorMessage: 'Entity could not be added' })
                 }
-                console.log(this.state.errorMessage);
-
             })
         }
 

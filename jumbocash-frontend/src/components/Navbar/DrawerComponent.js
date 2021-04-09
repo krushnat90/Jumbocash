@@ -120,15 +120,9 @@ function ResponsiveDrawer(props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [openTransactionCollapse, setOpenTransactionCollapse] = React.useState(false);
   const [openEntityCollapse, setOpenEntityCollapse] = React.useState(false);
-  const openMenu = Boolean(anchorEl);
-  const userId = props.userId;
-  const userName = props.userName;
-
-  let isLoggendIn = true;
-
+  
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -142,13 +136,6 @@ function ResponsiveDrawer(props) {
     setOpenEntityCollapse(!openEntityCollapse);
   };
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   //logout
   const history = useHistory();
@@ -187,6 +174,8 @@ function ResponsiveDrawer(props) {
         return <PermIdentityTwoTone className="pink-color" />;
       case "logout":
         return <ExitToAppTwoToneIcon className="coral-color" />;
+      default:
+        return
     }
   }
 
@@ -311,7 +300,6 @@ function ResponsiveDrawer(props) {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleMenu}
               color="inherit"
             >
               <AccountCircle />

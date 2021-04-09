@@ -7,10 +7,7 @@ import {
 import CustomNoRowsOverlay from './CustomNoRowsOverlay'
 import EntityService from "../../services/EntityService";
 import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
 import Modal from '@material-ui/core/Modal';
@@ -109,7 +106,6 @@ class ViewEntityComponent extends Component {
 
   render() {
     const { classes } = this.props;
-    console.log("isLoading" + this.state.isLoading);
     if (this.state.isLoading) {
       return (
         <Spinner animation="border" role="status">

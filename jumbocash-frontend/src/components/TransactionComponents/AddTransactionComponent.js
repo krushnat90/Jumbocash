@@ -19,9 +19,6 @@ class AddTransactionComponent extends Component {
   constructor(props) {
     super(props);
 
-    var today = new Date(),
-      date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-
     this.initialState = {
       entities: [],
       show: true,
