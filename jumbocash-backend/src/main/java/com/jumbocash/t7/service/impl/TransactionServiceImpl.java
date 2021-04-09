@@ -166,7 +166,7 @@ public class TransactionServiceImpl implements TransactionService {
 		tranRepository.save(transactionToEdit);
 
 		logger.info("update request finished for txn id ->" + editTransactionRequest.getTranId());
-		return Optional.of(new ApiResponseMessage(4, ExceptionConstants.TRANSACTION_SUCCESS));
+		return Optional.of(new ApiResponseMessage(4, ExceptionConstants.REQUEST_SUCCESS));
 	}
 
 	@Override
@@ -182,7 +182,7 @@ public class TransactionServiceImpl implements TransactionService {
 		
 		tranRepository.delete(possibleTransactionToDelete.get());
 		logger.info("delete request finished for txn id ->" + transactionId);
-		return Optional.of(new ApiResponseMessage(4, ExceptionConstants.TRANSACTION_SUCCESS));
+		return Optional.of(new ApiResponseMessage(4, ExceptionConstants.REQUEST_SUCCESS));
 		
 	}
 

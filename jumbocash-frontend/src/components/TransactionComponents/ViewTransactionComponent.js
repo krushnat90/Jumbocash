@@ -39,6 +39,7 @@ class ViewTransactionComponent extends Component {
     this.deleteTransaction = this.deleteTransaction.bind(this);
     this.rowSelected = this.rowSelected.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.hideMessageAlert = this.hideMessageAlert.bind(this);
   }
 
   componentDidMount() {
@@ -62,7 +63,7 @@ class ViewTransactionComponent extends Component {
       }
     ).catch(
       error => {
-        if (error.response.status === 404) {
+        if ((error.response) && error.response.status === 404) {
           this.setState({
             message: "No Transactions found!",
             isLoading: false
@@ -82,6 +83,11 @@ class ViewTransactionComponent extends Component {
   editTransaction() {
     if (this.state.transactionToEdit != null) {
       this.setState({ openModal: true });
+    }
+    else {
+      this.setState({
+        message: "Please select a transaction first"
+      })
     }
   }
 
@@ -160,6 +166,15 @@ class ViewTransactionComponent extends Component {
             </Modal>
           </div>
           <br />
+          {this.state.message && <div className="alert alert-warning" role="alert">{this.state.message}
+            <button type="button"
+              className="close"
+              data-dismiss="alert"
+              aria-label="Close"
+              onClick={() => this.hideMessageAlert()}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>}
           <div style={{ height: 450, width: '100%' }}>
             <DataGrid className={classes.root}
               components={{
@@ -207,22 +222,22 @@ const useStyles = theme => ({
 // Data grid columns
 const columns = [
   {
-    field: 'tranDate', headerName: 'Date', width : 120,
+    field: 'tranDate', headerName: 'Date', width: 120,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand
   },
   {
-    field: 'entityName', headerName: 'Entity Name', width : 200,
+    field: 'entityName', headerName: 'Entity Name', width: 200,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand
   },
   {
-    field: 'paymentMode', headerName: 'Payment Mode', width : 150,
+    field: 'paymentMode', headerName: 'Payment Mode', width: 150,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand
   },
   {
-    field: 'tranType', headerName: 'Type', width : 150,
+    field: 'tranType', headerName: 'Type', width: 150,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand,
     cellClassName: (params) =>
@@ -232,7 +247,7 @@ const columns = [
       }),
   },
   {
-    field: 'amount', headerName: 'Amount', width : 150,
+    field: 'amount', headerName: 'Amount', width: 150,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand,
     cellClassName: (params) =>
@@ -242,7 +257,7 @@ const columns = [
       }),
   },
   {
-    field: 'tranStatus', headerName: 'Status', width : 100,
+    field: 'tranStatus', headerName: 'Status', width: 100,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand,
     cellClassName: (params) =>
@@ -252,7 +267,7 @@ const columns = [
       }),
   },
   {
-    field: 'remarks', headerName: 'Remarks', width : 250,
+    field: 'remarks', headerName: 'Remarks', width: 250,
     headerClassName: 'super-app-theme--header', align: 'center', headerAlign: 'center',
     renderCell: renderCellExpand
   }

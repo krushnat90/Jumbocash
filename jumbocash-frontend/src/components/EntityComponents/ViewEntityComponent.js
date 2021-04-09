@@ -37,10 +37,18 @@ class ViewEntityComponent extends Component {
     this.deleteEntity = this.deleteEntity.bind(this);
     this.rowSelected = this.rowSelected.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.hideMessageAlert = this.hideMessageAlert.bind(this);
   }
 
   componentDidMount() {
     this.getEntities();
+  }
+
+  //close button functionality for message
+  hideMessageAlert() {
+    this.setState({
+      message: false,
+    });
   }
 
   getEntities() {
@@ -53,7 +61,18 @@ class ViewEntityComponent extends Component {
       }
     ).catch(
       error => {
-        this.setState({ message: "Error occurred", isLoading: false })
+        if ((error.response) && error.response.status === 404) {
+          this.setState({
+            message: "No Entities found!",
+            isLoading: false
+          })
+        }
+        else {
+          this.setState({
+            message: "Error occurred while fetching entities",
+            isLoading: false
+          })
+        }
       }
     )
 
@@ -66,10 +85,17 @@ class ViewEntityComponent extends Component {
     if (this.state.entityToEdit != null) {
       this.setState({ openModal: true });
     }
+    else {
+      this.setState({
+        message: "Please select an entity first"
+      })
+    }
   }
 
   deleteEntity() {
-
+    this.setState({
+      message: "Not implemented yet. Coming Soon..."
+    })
   }
 
   handleClose() {
@@ -113,10 +139,20 @@ class ViewEntityComponent extends Component {
                 entityToEdit={this.state.entityToEdit}
                 openModal={this.state.openModal}
                 handleClose={this.handleClose}
+                getEntities={this.getEntities}
               />
             </Modal>
           </div>
           <br />
+          {this.state.message && <div className="alert alert-warning" role="alert">{this.state.message}
+            <button type="button"
+              className="close"
+              data-dismiss="alert"
+              aria-label="Close"
+              onClick={() => this.hideMessageAlert()}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>}
           <div style={{ height: 450, width: '100%' }}>
             <DataGrid className={classes.root} components={{
               NoRowsOverlay: CustomNoRowsOverlay,

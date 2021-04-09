@@ -47,6 +47,10 @@ public class TranValidationServiceImpl implements TranValidationService {
 				&& !possibleEntityDetails.isPresent()) {
 			responseMessageCode = 1;
 			responseMessageBuilder.append(ExceptionConstants.TRANSACTION_ENTITYID_INVALID);
+		} else if(Optional.ofNullable(editTransactionRequest.getEntityId()).isPresent()
+				&& !possibleTransactionToEdit.get().getUser().getEntities().contains(possibleEntityDetails.get())){
+			responseMessageCode = 1;
+			responseMessageBuilder.append(ExceptionConstants.TRANSACTION_ENTITYID_INVALID);
 		}
 
 		return (responseMessageCode == 1)?Optional.of(new ApiResponseMessage(responseMessageCode, responseMessageBuilder.toString())):Optional.empty();

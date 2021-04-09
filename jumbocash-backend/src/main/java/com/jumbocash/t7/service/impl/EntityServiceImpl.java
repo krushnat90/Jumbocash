@@ -13,10 +13,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.jumbocash.t7.api.ApiResponseMessage;
 import com.jumbocash.t7.beanMapper.impl.EntityMapper;
 import com.jumbocash.t7.constant.ExceptionConstants;
 import com.jumbocash.t7.dto.AppUser;
 import com.jumbocash.t7.dto.EntityMaster;
+import com.jumbocash.t7.dto.TranMaster;
 import com.jumbocash.t7.dto.UserEntityLnk;
 import com.jumbocash.t7.exception.JumbocashException;
 import com.jumbocash.t7.model.Entity;
@@ -67,12 +69,16 @@ public class EntityServiceImpl implements EntityService {
 	}
 
 	@Override
-	public Void updateExistingEntity(Entity entity) throws Exception {
-		Optional<EntityMaster> entityMaster = entityMasterRepository.findById(entity.getEntityId());
-		if (entityMaster.isPresent()) {
-			entityMasterRepository.save(entityMapper.convertFromJsonToDto(entity));
+	public Entity updateExistingEntity(Entity entity) throws Exception {
+		Optional<EntityMaster> possibleEntityToUpdate = entityMasterRepository.findById(entity.getEntityId());
+		if (possibleEntityToUpdate.isPresent()) {
 			logger.info("updateExistingEntity :: Data updated successfully for ID : " + entity.getEntityId());
-			return null;
+			
+			EntityMaster entityToUpdate = entityMapper.convertFromJsonToDto(entity);
+			
+			entityToUpdate.setUsers(possibleEntityToUpdate.get().getUsers());
+			
+			return entityMapper.convertFromDtoToJson(entityMasterRepository.save(entityToUpdate));
 		}
 		throw new JumbocashException(ExceptionConstants.NO_ENTRY_FOUND_FOR_THIS_ENTITY);
 	}
@@ -106,6 +112,21 @@ public class EntityServiceImpl implements EntityService {
 	@Override
 	public boolean existsEntity(BigInteger entityId) {
 		return entityMasterRepository.findById(entityId).isPresent();
+	}
+
+	@Override
+	public Optional<ApiResponseMessage> deleteEntity(BigInteger entityId) {
+		logger.info("delete request received for entity id ->" + entityId);
+		Optional<EntityMaster> possibleEntityToDelete = entityMasterRepository
+				.findById(Optional.ofNullable(entityId).isPresent()
+						? entityId : BigInteger.ZERO);
+		
+		if(!possibleEntityToDelete.isPresent())
+			return Optional.of(new ApiResponseMessage(1, ExceptionConstants.TRANSACTION_ABSENT));
+		
+		entityMasterRepository.delete(possibleEntityToDelete.get());
+		logger.info("delete request finished for entity id ->" + entityId);
+		return Optional.of(new ApiResponseMessage(4, ExceptionConstants.REQUEST_SUCCESS));
 	}
 
 }

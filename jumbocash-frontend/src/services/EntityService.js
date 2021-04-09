@@ -27,6 +27,15 @@ class EntityService{
           });
     }
 
+    editEntity(entity){
+      const TOKEN_ID = sessionStorage.getItem("JUMBO_TOKEN_ID")
+        return axios.patch(`${BACKEND_API_URL}/${ENDPT_ENTITY}`,entity, {
+            headers: {
+              'AUTH_GOOGLE_TOKEN': TOKEN_ID
+            }
+          });
+    }
+
 }
 
 export default new EntityService();

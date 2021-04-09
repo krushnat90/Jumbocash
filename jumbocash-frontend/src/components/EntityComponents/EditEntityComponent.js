@@ -55,7 +55,7 @@ class EditEntityComponent extends Component {
                 email: entToEdit.email,
                 entityType: entToEdit.entityType,
                 phone: entToEdit.phone,
-                entityId: entToEdit.entityId,
+                id: entToEdit.id,
                 userId: entToEdit.userId,
             }
         )
@@ -80,8 +80,8 @@ class EditEntityComponent extends Component {
     }
 
     editEntity() {
-        // TODO : Form Validation
         let entity = {
+            id : this.state.id,
             entityType: this.state.entityType,
             entityName: this.state.entityName,
             email: this.state.email,
@@ -94,19 +94,21 @@ class EditEntityComponent extends Component {
         }
 
         if (this.validate(entity)) {
-            EntityService.addEntity(entity).then(
+            EntityService.editEntity(entity).then(
                 response => {
                     this.setState(this.initialState);
-                    this.setState({ message: "Entity Added Successfully" })
+                    this.setState({ message: "Entity Updated Successfully" })
                 }
             ).catch(err => {
                 if (err.response.status === 409) {
-                    this.setState({ errorMessage: "This entity already exists." })
+                    this.setState({ errorMessage: "Cannot update. This entity already exists." })
                 }
                 else {
-                    this.setState({ errorMessage: 'Entity could not be added' })
+                    this.setState({ errorMessage: 'Entity could not be updated due to an error' })
                 }
                 
+            }).then(()=>{
+                this.props.getEntities();
             })
         }
 

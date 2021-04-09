@@ -63,7 +63,15 @@ public interface EntityApi {
     @RequestMapping(value = "/entity",
         consumes = { "application/json" },
         method = RequestMethod.PATCH)
-    ResponseEntity<Void> updateEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Entity entity);
+    ResponseEntity<Entity> updateEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Entity entity);
+    
+    @Operation(summary = "Delete Entity", description = "", tags={ "entity" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successful Operation") })
+    @RequestMapping(value = "/entity/{entityId}",
+        produces = { "application/json" }, 
+        method = RequestMethod.DELETE)
+    ResponseEntity<ApiResponseMessage> deleteEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity id that needs to be deleted.", required=true, schema=@Schema()) @Valid @PathVariable("entityId") BigInteger entityId);
 
 }
 
