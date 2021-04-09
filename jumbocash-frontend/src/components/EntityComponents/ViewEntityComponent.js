@@ -144,35 +144,35 @@ const useStyles = theme => ({
 
 const columns = [
   {
-    field: 'entityName', headerName: 'Entity Name', flex: 1, renderCell: renderCellExpand,
+    field: 'entityName', headerName: 'Entity Name', width: 150, renderCell: renderCellExpand,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
   },
   {
-    field: 'entityType', headerName: 'Entity Type', flex: 0.8, renderCell: renderCellExpand,
+    field: 'entityType', headerName: 'Entity Type', width: 100, renderCell: renderCellExpand,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
   },
   {
-    field: 'address', headerName: 'Address', flex: 1.2, renderCell: renderCellExpand,
+    field: 'address', headerName: 'Address', width: 200, renderCell: renderCellExpand,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
   },
   {
-    field: 'city', headerName: 'City', flex: 0.7, renderCell: renderCellExpand,
+    field: 'city', headerName: 'City', width: 100, renderCell: renderCellExpand,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
   },
   {
-    field: 'state', headerName: 'State', flex: 0.7, renderCell: renderCellExpand,
+    field: 'state', headerName: 'State', width: 120, renderCell: renderCellExpand,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
   },
   {
-    field: 'zip', headerName: 'Zip', flex: 0.7, renderCell: renderCellExpand,
+    field: 'zip', headerName: 'Zip', width: 100, renderCell: renderCellExpand,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
   },
   {
-    field: 'email', headerName: 'Email', flex: 1.2, renderCell: renderCellExpand,
+    field: 'email', headerName: 'Email', width: 200, renderCell: renderCellExpand,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
   },
   {
-    field: 'phone', headerName: 'Phone', flex: 1, renderCell: renderCellExpand,
+    field: 'phone', headerName: 'Phone', width: 120, renderCell: renderCellExpand,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
   },
 ];

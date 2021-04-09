@@ -207,22 +207,22 @@ const useStyles = theme => ({
 // Data grid columns
 const columns = [
   {
-    field: 'tranDate', headerName: 'Date', flex: 1,
+    field: 'tranDate', headerName: 'Date', width : 120,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand
   },
   {
-    field: 'entityName', headerName: 'Entity Name', flex: 1,
+    field: 'entityName', headerName: 'Entity Name', width : 200,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand
   },
   {
-    field: 'paymentMode', headerName: 'Payment Mode', flex: 1,
+    field: 'paymentMode', headerName: 'Payment Mode', width : 150,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand
   },
   {
-    field: 'tranType', headerName: 'Type', flex: 1,
+    field: 'tranType', headerName: 'Type', width : 150,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand,
     cellClassName: (params) =>
@@ -232,7 +232,7 @@ const columns = [
       }),
   },
   {
-    field: 'amount', headerName: 'Amount', flex: 1,
+    field: 'amount', headerName: 'Amount', width : 150,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand,
     cellClassName: (params) =>
@@ -242,7 +242,7 @@ const columns = [
       }),
   },
   {
-    field: 'tranStatus', headerName: 'Status', flex: 0.7,
+    field: 'tranStatus', headerName: 'Status', width : 100,
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand,
     cellClassName: (params) =>
@@ -252,7 +252,7 @@ const columns = [
       }),
   },
   {
-    field: 'remarks', headerName: 'Remarks', flex: 2,
+    field: 'remarks', headerName: 'Remarks', width : 250,
     headerClassName: 'super-app-theme--header', align: 'center', headerAlign: 'center',
     renderCell: renderCellExpand
   }
