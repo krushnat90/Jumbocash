@@ -76,10 +76,10 @@ public interface TransactionApi {
     @Operation(summary = "Delete transaction", description = "", tags={ "transaction" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Successful Operation") })
-    @RequestMapping(value = "/transaction",
-        consumes = { "application/json" }, 
+    @RequestMapping(value = "/transaction/{transactionId}",
+        produces = { "application/json" }, 
         method = RequestMethod.DELETE)
-    ResponseEntity<ApiResponseMessage> deleteTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be deleted.", required=true, schema=@Schema()) @Valid @RequestBody Transaction body);
+    ResponseEntity<ApiResponseMessage> deleteTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be deleted.", required=true, schema=@Schema()) @Valid @PathVariable("transactionId") BigInteger transactionId);
 
 }
 

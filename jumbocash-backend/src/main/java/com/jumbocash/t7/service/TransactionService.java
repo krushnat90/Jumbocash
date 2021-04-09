@@ -23,6 +23,6 @@ public interface TransactionService {
 	
 	Optional<ApiResponseMessage> updateTransaction(Transaction transaction);
 	
-	Optional<ApiResponseMessage> deleteTransaction(Transaction transaction);
+	Optional<ApiResponseMessage> deleteTransaction(BigInteger transactionId);
 	
 }

@@ -120,6 +120,13 @@ class ViewTransactionComponent extends Component {
     this.getTransactions();
   }
 
+  //close button functionality for message
+  hideMessageAlert() {
+    this.setState({
+      message: false,
+    });
+  }
+
   getTransactions() {
     TransactionService.getTransactionsByUserId(this.state.userId).then(
       response => {
@@ -130,11 +137,18 @@ class ViewTransactionComponent extends Component {
       }
     ).catch(
       error => {
-        this.setState({
-          message: "Error occurred while fetching transactions",
-          isLoading: false
-        })
-
+        if (error.response.status === 404) {
+          this.setState({
+            message: "No Transactions found!",
+            isLoading: false
+          })
+        }
+        else {
+          this.setState({
+            message: "Error occurred while fetching transactions",
+            isLoading: false
+          })
+        }
       }
     )
 
@@ -147,7 +161,30 @@ class ViewTransactionComponent extends Component {
   }
 
   deleteTransaction() {
+    if (this.state.transactionToEdit != null) {
+      TransactionService.deleteTransaction(this.state.transactionToEdit.id).then(
+        response => {
+          this.setState({
+            message: "Transaction Deleted successfully!"
+          })
+        }
+      ).catch(
+        error => {
+          this.setState({
+            message: "Error occurred while deleting transaction",
+            isLoading: false
+          })
 
+        }
+      ).then(() => {
+        this.getTransactions();
+      })
+    }
+    else {
+      this.setState({
+        message: "Please select a transaction first"
+      })
+    }
   }
 
   handleClose() {
@@ -172,13 +209,13 @@ class ViewTransactionComponent extends Component {
       return (
         <div style={{ height: 500, width: '100%' }} className="container">
           <div>
-            <Button variant="outlined" size="medium" color="primary" 
-              startIcon={<EditTwoToneIcon fontSize = "small" />}
+            <Button variant="outlined" size="medium" color="primary"
+              startIcon={<EditTwoToneIcon fontSize="small" />}
               onClick={this.editTransaction}>
               Edit
             </Button>
-            <Button variant="outlined" size="medium" color="primary" 
-              startIcon={<DeleteTwoToneIcon fontSize = "small" />}
+            <Button variant="outlined" size="medium" color="primary"
+              startIcon={<DeleteTwoToneIcon fontSize="small" />}
               onClick={this.deleteTransaction}>
               Delete
             </Button>
@@ -188,14 +225,24 @@ class ViewTransactionComponent extends Component {
               aria-labelledby="simple-modal-title"
               aria-describedby="simple-modal-description"
             >
-              <EditTransactionComponent userId = {this.props.userId} 
-              transactionToEdit = {this.state.transactionToEdit}
-              openModal = {this.state.openModal}
-              handleClose = {this.handleClose}
+              <EditTransactionComponent userId={this.props.userId}
+                transactionToEdit={this.state.transactionToEdit}
+                openModal={this.state.openModal}
+                handleClose={this.handleClose}
+                getTransactions={this.getTransactions}
               />
             </Modal>
           </div>
-          <br/>
+          <br />
+          {this.state.message && <div className="alert alert-warning" role="alert">{this.state.message}
+            <button type="button"
+              className="close"
+              data-dismiss="alert"
+              aria-label="Close"
+              onClick={() => this.hideMessageAlert()}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>}
           <DataGrid className={classes.root}
             components={{
               NoRowsOverlay: CustomNoRowsOverlay,

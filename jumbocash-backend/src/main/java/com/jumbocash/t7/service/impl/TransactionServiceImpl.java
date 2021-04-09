@@ -14,6 +14,7 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jumbocash.t7.api.ApiResponseMessage;
@@ -169,18 +170,18 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public Optional<ApiResponseMessage> deleteTransaction(Transaction deleteTransactionRequest) {
+	public Optional<ApiResponseMessage> deleteTransaction(BigInteger transactionId) {
 
-		logger.info("delete request received for txn id ->" + deleteTransactionRequest.getTranId());
+		logger.info("delete request received for txn id ->" + transactionId);
 		Optional<TranMaster> possibleTransactionToDelete = tranRepository
-				.findById(Optional.ofNullable(deleteTransactionRequest.getTranId()).isPresent()
-						? deleteTransactionRequest.getTranId() : BigInteger.ZERO);
+				.findById(Optional.ofNullable(transactionId).isPresent()
+						? transactionId : BigInteger.ZERO);
 		
 		if(!possibleTransactionToDelete.isPresent())
 			return Optional.of(new ApiResponseMessage(1, ExceptionConstants.TRANSACTION_ABSENT));
 		
 		tranRepository.delete(possibleTransactionToDelete.get());
-		logger.info("delete request finished for txn id ->" + deleteTransactionRequest.getTranId());
+		logger.info("delete request finished for txn id ->" + transactionId);
 		return Optional.of(new ApiResponseMessage(4, ExceptionConstants.TRANSACTION_SUCCESS));
 		
 	}

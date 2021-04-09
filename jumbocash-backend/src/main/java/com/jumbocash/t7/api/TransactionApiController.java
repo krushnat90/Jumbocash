@@ -132,10 +132,13 @@ public class TransactionApiController implements TransactionApi {
 		try {
 			Optional<ApiResponseMessage> possibleUpdateTransactionResponse = transactionService.updateTransaction(body);
 
-			if (possibleUpdateTransactionResponse.isPresent())
-				return ResponseEntity.ok(possibleUpdateTransactionResponse.get());
-			else
-				return new ResponseEntity<ApiResponseMessage> (new ApiResponseMessage(4, "internal error"),HttpStatus.INTERNAL_SERVER_ERROR);
+			if (possibleUpdateTransactionResponse.isPresent()) {
+				return (possibleUpdateTransactionResponse.get().code == 4)
+						? ResponseEntity.ok(possibleUpdateTransactionResponse.get())
+						: ResponseEntity.badRequest().body(possibleUpdateTransactionResponse.get());
+			} else
+				return new ResponseEntity<ApiResponseMessage>(new ApiResponseMessage(4, "internal error"),
+						HttpStatus.INTERNAL_SERVER_ERROR);
 
 		} catch (Exception e) {
 			log.error("Couldn't serialize response for content type application/json", e);
@@ -154,13 +157,13 @@ public class TransactionApiController implements TransactionApi {
 	}
 
 	@Override
-	public ResponseEntity<ApiResponseMessage> deleteTransaction(@Valid Transaction body) {
+	public ResponseEntity<ApiResponseMessage> deleteTransaction(@PathVariable("transactionId") BigInteger transactionId) {
 		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
-		
+
 		if (!googleAuthenticator.isTokenIdValid(authorizationHeader))
 			return new ResponseEntity(HttpStatus.FORBIDDEN);
-		
-		return ResponseEntity.ok(transactionService.deleteTransaction(body).get());
+
+		return ResponseEntity.ok(transactionService.deleteTransaction(transactionId).get());
 	}
 
 }

@@ -52,16 +52,18 @@ class EditTransactionComponent extends Component {
 
   setData() {
     let tranToEdit = this.props.transactionToEdit;
+    console.log("update tran to edit");
+    console.log(this.props.transactionToEdit);
     this.setState(
       {
         entityName: tranToEdit.entityName,
         tranDate: tranToEdit.tranDate,
         tranType: tranToEdit.tranType,
         paymentMode: tranToEdit.paymentMode,
-        amount: tranToEdit.amount,
+        amount: tranToEdit.amount < 0 ? (0-tranToEdit.amount) : tranToEdit.amount,
         remarks: tranToEdit.remarks,
         userId: tranToEdit.userId,
-        tranId: tranToEdit.tranId,
+        id: tranToEdit.id,
         entityId: tranToEdit.entityId,
         tranStatus: tranToEdit.tranStatus === "Done" ? "DN" : "PN",
       }
@@ -122,6 +124,7 @@ class EditTransactionComponent extends Component {
 
   editTransaction() {
     let transaction = {
+      id:this.state.id,
       amount: this.state.amount,
       tranType: this.state.tranType,
       paymentMode: this.state.paymentMode,
@@ -132,17 +135,16 @@ class EditTransactionComponent extends Component {
       tranDate: this.state.tranDate
     }
     if (this.validate(transaction)) {
-      TransactionService.addTransaction(transaction)
+      TransactionService.editTransaction(transaction)
         .then(
           response => {
             this.setState(this.initialState);
-            this.setState({ message: "Transaction Added Successfully" })
+            this.setState({ message: "Transaction Updated Successfully" })
           }
         ).catch(err => {
-          this.setState({ errorMessage: 'Transaction could not be added' })
-        }).then(() => {
-
-          this.getEntities();
+          this.setState({ errorMessage: 'Transaction could not be updated' })
+        }).then(()=>{
+          this.props.getTransactions();
         })
     }
   }
@@ -155,7 +157,7 @@ class EditTransactionComponent extends Component {
   render() {
     return (
 
-      <div>
+      <div class="container">
         <Modal
           open={this.props.openModal}
           onClose={this.handleClose}

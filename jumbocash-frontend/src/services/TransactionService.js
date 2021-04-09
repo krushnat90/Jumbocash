@@ -36,6 +36,24 @@ class TransactionService {
             }
           })
     }
+
+    editTransaction(transaction){
+      const TOKEN_ID = sessionStorage.getItem("JUMBO_TOKEN_ID")
+        return axios.patch(`${BACKEND_API_URL}/${ENDPT_TRANSACTION}`,transaction, {
+            headers: {
+              'AUTH_GOOGLE_TOKEN': TOKEN_ID
+            }
+          })
+    }
+
+    deleteTransaction(transactionId){
+      const TOKEN_ID = sessionStorage.getItem("JUMBO_TOKEN_ID")
+        return axios.delete(`${BACKEND_API_URL}/${ENDPT_TRANSACTION}/${transactionId}`, {
+            headers: {
+              'AUTH_GOOGLE_TOKEN': TOKEN_ID
+            }
+          })
+    }
     
     getLastSixMonthsTransactionSummary(userId){
       const TOKEN_ID = sessionStorage.getItem("JUMBO_TOKEN_ID")
