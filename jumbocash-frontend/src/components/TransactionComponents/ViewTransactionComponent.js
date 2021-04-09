@@ -160,7 +160,7 @@ class ViewTransactionComponent extends Component {
             </Modal>
           </div>
           <br />
-          <div style={{ height: 400, width: '100%' }}>
+          <div style={{ height: 450, width: '100%' }}>
             <DataGrid className={classes.root}
               components={{
                 NoRowsOverlay: CustomNoRowsOverlay,

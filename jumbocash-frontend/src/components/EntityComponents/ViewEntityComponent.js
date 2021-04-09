@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Spinner } from 'react-bootstrap';
 import {
   DataGrid, GridToolbarContainer,
-  GridToolbarExport
+  GridToolbarExport, isOverflown
 } from '@material-ui/data-grid';
 import CustomNoRowsOverlay from './CustomNoRowsOverlay'
 import EntityService from "../../services/EntityService";
@@ -11,36 +11,13 @@ import Button from '@material-ui/core/Button';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
 import Modal from '@material-ui/core/Modal';
+import PropTypes from 'prop-types';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import Typography from '@material-ui/core/Typography';
 import EditEntityComponent from '../EntityComponents/EditEntityComponent'
 
-const columns = [
-  { field: 'entityName', headerName: 'Entity Name', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-  { field: 'entityType', headerName: 'Entity Type', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-  { field: 'address', headerName: 'Address', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-  { field: 'city', headerName: 'City', width: 100, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-  { field: 'state', headerName: 'State', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-  { field: 'zip', headerName: 'Zip', width: 100, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-  { field: 'email', headerName: 'Email', width: 200, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-  { field: 'phone', headerName: 'Phone', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-];
-
-const useStyles = theme => ({
-  root: {
-    '& .super-app-theme--header': {
-      backgroundColor: 'rgba(25,31,77, 0.7)',
-      color: 'white',
-      fontWeight: '600'
-    },
-  },
-});
-
-function CustomToolbar() {
-  return (
-    <GridToolbarContainer>
-      <GridToolbarExport />
-    </GridToolbarContainer>
-  );
-}
+import { makeStyles } from "@material-ui/core/styles";
 
 class ViewEntityComponent extends Component {
 
@@ -140,17 +117,202 @@ class ViewEntityComponent extends Component {
             </Modal>
           </div>
           <br />
-          <DataGrid className={classes.root} components={{
-            NoRowsOverlay: CustomNoRowsOverlay,
-            Toolbar: CustomToolbar,
-          }}
-            onRowSelected={(row) => this.rowSelected(row)}
-            rows={this.state.entities} columns={columns}
-          />
+          <div style={{ height: 450, width: '100%' }}>
+            <DataGrid className={classes.root} components={{
+              NoRowsOverlay: CustomNoRowsOverlay,
+              Toolbar: CustomToolbar,
+            }}
+              onRowSelected={(row) => this.rowSelected(row)}
+              rows={this.state.entities} columns={columns}
+            />
+          </div>
         </div>
       );
     }
   }
 }
+
+const useStyles = theme => ({
+  root: {
+    '& .super-app-theme--header': {
+      backgroundColor: 'rgba(25,31,77, 0.7)',
+      color: 'white',
+      fontWeight: '600'
+    },
+  },
+});
+
+const columns = [
+  {
+    field: 'entityName', headerName: 'Entity Name', flex: 1, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'entityType', headerName: 'Entity Type', flex: 0.8, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'address', headerName: 'Address', flex: 1.2, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'city', headerName: 'City', flex: 0.7, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'state', headerName: 'State', flex: 0.7, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'zip', headerName: 'Zip', flex: 0.7, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'email', headerName: 'Email', flex: 1.2, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'phone', headerName: 'Phone', flex: 1, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+];
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+}
+
+
+// Cell Expand Styling
+const expandCellStyles = makeStyles(() => ({
+  root: {
+    alignItems: "center",
+    lineHeight: "24px",
+    width: "100%",
+    height: "100%",
+    position: "relative",
+    display: "flex",
+    "& .cellValue": {
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis"
+    }
+  }
+}));
+
+
+const GridCellExpand = React.memo(function GridCellExpand(props) {
+  const { width, value } = props;
+  const wrapper = React.useRef(null);
+  const cellDiv = React.useRef(null);
+  const cellValue = React.useRef(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const classes = expandCellStyles();
+  const [showFullCell, setShowFullCell] = React.useState(false);
+  const [showPopper, setShowPopper] = React.useState(false);
+
+  const handleMouseEnter = () => {
+    const isCurrentlyOverflown = isOverflown(cellValue.current);
+    setShowPopper(isCurrentlyOverflown);
+    setAnchorEl(cellDiv.current);
+    setShowFullCell(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowFullCell(false);
+  };
+
+  React.useEffect(() => {
+    if (!showFullCell) {
+      return undefined;
+    }
+
+    function handleKeyDown(nativeEvent) {
+      // IE11, Edge (prior to using Bink?) use 'Esc'
+      if (nativeEvent.key === 'Escape' || nativeEvent.key === 'Esc') {
+        setShowFullCell(false);
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [setShowFullCell, showFullCell]);
+
+  return (
+    <div
+      ref={wrapper}
+      className={classes.root}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div
+        ref={cellDiv}
+        style={{
+          height: 1,
+          width,
+          display: 'block',
+          position: 'absolute',
+          top: 0,
+        }}
+      />
+      <div ref={cellValue} className="cellValue">
+        {value}
+      </div>
+      {showPopper && (
+        <Popper
+          open={showFullCell && anchorEl !== null}
+          anchorEl={anchorEl}
+          style={{ width, marginLeft: -17 }}
+        >
+          <Paper
+            elevation={1}
+            style={{ minHeight: wrapper.current.offsetHeight - 3 }}
+          >
+            <Typography variant="body2" style={{ padding: 8 }}>
+              {value}
+            </Typography>
+          </Paper>
+        </Popper>
+      )}
+    </div>
+  );
+});
+
+GridCellExpand.propTypes = {
+  value: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
+};
+
+function renderCellExpand(params) {
+  return (
+    <GridCellExpand
+      value={params.value ? params.value.toString() : ''}
+      width={params.colDef.width}
+    />
+  );
+}
+
+renderCellExpand.propTypes = {
+  /**
+   * The column of the row that the current cell belongs to.
+   */
+  colDef: PropTypes.any.isRequired,
+  /**
+   * The cell value, but if the column has valueGetter, use getValue.
+   */
+  value: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.bool,
+  ]),
+};
 
 export default withStyles(useStyles)(ViewEntityComponent);
