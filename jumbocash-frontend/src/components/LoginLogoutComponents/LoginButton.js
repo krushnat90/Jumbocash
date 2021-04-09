@@ -24,7 +24,6 @@ class LoginButton extends Component {
         var profileObj = authResponse.profileObj;
         sessionStorage.setItem("JUMBO_TOKEN_ID", authResponse.tokenId);
 
-        console.log("name :: " + profileObj.name + " email :: " + profileObj.email + " token ::" + profileObj.token)
         let user = {
             name: profileObj.name,
             email: profileObj.email,
@@ -38,7 +37,6 @@ class LoginButton extends Component {
                 sessionStorage.setItem("JUMBO_USER_NAME", profileObj.name);
                 sessionStorage.setItem("JUMBO_LOGIN_STATUS", true);
                 
-                console.log("session data :" + sessionStorage.getItem("JUMBO_USER_ID") + " " + sessionStorage.getItem("JUMBO_LOGIN_STATUS"));
                 this.props.history.push({
                     pathname: '/dashboard',
                     state: {
@@ -61,9 +59,7 @@ class LoginButton extends Component {
 
     render() {
         const responseGoogle = (response) => {
-
             this.onSuccess(response);
-            console.log(response);
         }
 
         return (

@@ -2,10 +2,6 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 
-import LoginButton from './LoginButton';
-
-
-
 class ProtectedRoute extends React.Component {
 
     constructor(props) {
@@ -23,13 +19,10 @@ class ProtectedRoute extends React.Component {
             userName = sessionStorage.getItem('JUMBO_USER_NAME');
         }
 
-        console.log("PROTECTED user ID:: " + userId);
-
         return userId > 0 ? (
             <Component userId={userId} userName={userName} />
         ) : (
             <Redirect to={{ pathname: '/' }} />
-            // <LoginButton />
         );
     }
 }

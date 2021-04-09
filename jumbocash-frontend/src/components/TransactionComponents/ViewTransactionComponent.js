@@ -9,7 +9,6 @@ import {
 import CustomNoRowsOverlay from './CustomNoRowsOverlay'
 import TransactionService from "../../services/TransactionService";
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
 import Modal from '@material-ui/core/Modal';
@@ -142,7 +141,6 @@ class ViewTransactionComponent extends Component {
   }
 
   editTransaction() {
-    console.log(this.state.transactionToEdit);
     if (this.state.transactionToEdit != null) {
       this.setState({ openModal: true });
     }
@@ -218,6 +216,5 @@ class ViewTransactionComponent extends Component {
 }
 
 export default withStyles(useStyles)(ViewTransactionComponent);
-//export default ViewTransactionComponent;
 
 

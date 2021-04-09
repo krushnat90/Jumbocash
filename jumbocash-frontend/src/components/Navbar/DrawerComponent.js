@@ -13,28 +13,19 @@ import ListItem from "@material-ui/core/ListItem";
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu'
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-
-import { Switch, Route, Link, BrowserRouter, useHistory } from "react-router-dom";
+import { Switch, Link, BrowserRouter, useHistory } from "react-router-dom";
 import ViewTransactionComponent from "../TransactionComponents/ViewTransactionComponent";
 import DashboardComponent from "../DashboardComponents/DashboardComponent";
 import { Redirect } from 'react-router-dom'
 
 
 //icons
-import Avatar from '@material-ui/core/Avatar';
-import PostAddTwoToneIcon from '@material-ui/icons/PostAddTwoTone';
-import CalendarViewDayTwoToneIcon from '@material-ui/icons/CalendarViewDayTwoTone';
 import SupervisedUserCircleTwoToneIcon from '@material-ui/icons/SupervisedUserCircleTwoTone';
 import GroupAddTwoToneIcon from '@material-ui/icons/GroupAddTwoTone';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -46,14 +37,11 @@ import AssessmentTwoTone from '@material-ui/icons/AssessmentTwoTone';
 import PermIdentityTwoTone from '@material-ui/icons/PermIdentityTwoTone';
 import AddTransactionComponent from "../TransactionComponents/AddTransactionComponent";
 import ViewEntityComponent from "../EntityComponents/ViewEntityComponent";
-import AddToQueueTwoToneIcon from '@material-ui/icons/AddToQueueTwoTone';
 import AddEntityComponent from "../EntityComponents/AddEntityComponent";
 import ProtectedRoute from "../LoginLogoutComponents/ProtectedRoute";
 import { CalendarViewDayTwoTone, PostAddTwoTone } from "@material-ui/icons";
-import LoginButton from "../LoginLogoutComponents/LoginButton";
 import LogoutButton from "../LoginLogoutComponents/LogoutButton";
 import ExitToAppTwoToneIcon from '@material-ui/icons/ExitToAppTwoTone';
-
 import { useGoogleLogout } from 'react-google-login';
 
 
@@ -138,8 +126,6 @@ function ResponsiveDrawer(props) {
   const openMenu = Boolean(anchorEl);
   const userId = props.userId;
   const userName = props.userName;
-  console.log("DRAWER USER ID " + userId);
-  console.log("DRAWER USER Name " + userName);
 
   let isLoggendIn = true;
 
@@ -168,7 +154,6 @@ function ResponsiveDrawer(props) {
   const history = useHistory();
 
   const onLogoutSuccess = (res) => {
-    console.log('Logged out Success');
     sessionStorage.removeItem('JUMBO_USER_ID');
     sessionStorage.removeItem('JUMBO_USER_NAME');
     sessionStorage.removeItem('JUMBO_LOGIN_STATUS');
@@ -177,7 +162,7 @@ function ResponsiveDrawer(props) {
   };
 
   const onFailure = () => {
-    console.log('Handle failure cases');
+    // TODO : Handle Failure Cases
   };
 
   const clientId = '193599941937-401iftc6u6hb3b92l27fvc80fomasg22.apps.googleusercontent.com';
@@ -207,7 +192,6 @@ function ResponsiveDrawer(props) {
 
   const drawer = (
     <div>
-      {/* <div className={classes.toolbar} /> */}
       <div className={classes.drawerHeader}>
         <IconButton onClick={handleDrawerToggle}>
           {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -288,7 +272,6 @@ function ResponsiveDrawer(props) {
             {iconSwitch("Logout".toLowerCase())}
           </ListItemIcon>
           <ListItemText primary="Logout" />
-          {/* <LogoutButton /> */}
         </ListItem>
         <Divider />
       </List>
@@ -297,7 +280,6 @@ function ResponsiveDrawer(props) {
   );
 
   if (!sessionStorage.getItem('JUMBO_LOGIN_STATUS')) {
-    console.log("dashboard redirect")
     return (<Redirect to={'/'} />)
   }
 
@@ -334,23 +316,6 @@ function ResponsiveDrawer(props) {
             >
               <AccountCircle />
             </IconButton>
-            {/* <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={openMenu}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
-            </Menu> */}
           </div>
         </Toolbar>
       </AppBar>
@@ -378,15 +343,7 @@ function ResponsiveDrawer(props) {
           [classes.contentShift]: !open,
         })}>
           <div className={classes.toolbar} />
-
-          {/* <Switch>
-            <Route exact path="/dashboard" render={(props) => <DashboardComponent userId={userId} userName={userName} {...props} />} />
-            <Route path="/transactions" render={(props) => <ViewTransactionComponent userId={userId} {...props} />} />
-            <Route path="/add-transaction" render={(props) => <AddTransactionComponent userId={userId} {...props} />} />
-            <Route path="/entities" render={(props) => <ViewEntityComponent userId={userId} {...props} />} />
-            <Route path="/add-entity" render={(props) => <AddEntityComponent userId={userId} {...props} />} />
-          </Switch> */}
-
+          
           <Switch>
             <ProtectedRoute exact path="/dashboard" component={DashboardComponent} />
             <ProtectedRoute path="/transactions" component={ViewTransactionComponent} />

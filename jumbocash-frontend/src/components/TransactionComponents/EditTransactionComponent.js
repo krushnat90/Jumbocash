@@ -9,7 +9,6 @@ import { Card, CardContent, IconButton } from "@material-ui/core";
 import MuiInputLabel from '@material-ui/core/InputLabel';
 import MuiSelect from "@material-ui/core/Select";
 import MuiMenuItem from "@material-ui/core/MenuItem";
-import EntityService from "../../services/EntityService";
 import TransactionService from "../../services/TransactionService";
 import moment from "moment";
 import Modal from '@material-ui/core/Modal';
@@ -125,7 +124,6 @@ class EditTransactionComponent extends Component {
   }
 
   editTransaction() {
-    console.log(this.state);
     let transaction = {
       amount: this.state.amount,
       tranType: this.state.tranType,
@@ -167,8 +165,7 @@ class EditTransactionComponent extends Component {
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
         >
-          {/* <EditTransactionComponent userId={this.props.userId} transactionToEdit={this.state.transactionToEdit} /> */}
-
+        
           <div className="container">
             {this.state.message && <div className="alert alert-success" id="site-message">{this.state.message}
               <button type="button"
@@ -235,7 +232,6 @@ class EditTransactionComponent extends Component {
                         <FormControl className="form-control">
                           <MuiInputLabel id="tranType">Transaction Type</MuiInputLabel>
                           <MuiSelect
-                            //onChange={this.handleChange}
                             labelId="tranType"
                             value={this.state.tranType}
                             onChange={event => {
@@ -254,7 +250,6 @@ class EditTransactionComponent extends Component {
                         <FormControl className="form-control">
                           <MuiInputLabel id="paymentMode">Payment Mode</MuiInputLabel>
                           <MuiSelect
-                            //onChange={this.handleChange}
                             labelId="paymentMode"
                             value={this.state.paymentMode}
                             onChange={event => {
@@ -292,7 +287,6 @@ class EditTransactionComponent extends Component {
                         <FormControl className="form-control">
                           <MuiInputLabel id="paymentMode">Transaction Status</MuiInputLabel>
                           <MuiSelect
-                            //onChange={this.handleChange}
                             labelId="tranStatus"
                             value={this.state.tranStatus}
                             onChange={event => {
@@ -338,83 +332,4 @@ class EditTransactionComponent extends Component {
 }
 export default EditTransactionComponent;
 
-//   render() {
-//     let { amount, tranType, paymentMode, entityName, remarks, tranStatus } = this.state;
-//     return (
-//       <div class="container">
-//           <Formik
-//             initialValues={{ amount, tranType, paymentMode, entityName, remarks, tranStatus }}
-//             validate={this.validate}
-//             onSubmit={this.addTransaction}
-//             enableReinitialize={true}
-//           >
-//             {
-//               (props) => (
-//                 <Form>
-//                   {this.state.message && <div className="alert alert-success" id="site-message">{this.state.message}
-//                     <button type="button"
-//                       className="close"
-//                       data-dismiss="alert"
-//                       aria-label="Close"
-//                       onClick={() => this.hideMessageAlert()}>
-//                       <span aria-hidden="true">&times;</span>
-//                     </button>
-//                   </div>}
-//                   {this.state.errorMessage && <div className="alert alert-warning" role="alert">{this.state.errorMessage}
-//                     <button type="button"
-//                       className="close"
-//                       data-dismiss="alert"
-//                       aria-label="Close"
-//                       onClick={() => this.hideErrorAlert()}>
-//                       <span aria-hidden="true">&times;</span>
-//                     </button>
-//                   </div>}
-//                   <fieldset className="form-group">
-//                     <label>Entity :</label>
-//                     <Field className="form-control" component="select" name="entityId">
-//                       {this.state.entities.map(
-//                         entity => <option value={entity.id}>{entity.entityName}</option>
-//                       )}
-//                     </Field>
-//                   </fieldset>
-//                   <fieldset className="form-group">
-//                     <label>Transaction Type :</label>
-//                     <Field className="form-control" component="select" name="tranType">
-//                       <option value="credit">credit</option>
-//                       <option value="debit">debit</option>
-//                     </Field>
-//                   </fieldset>
-//                   <fieldset className="form-group">
-//                     <label>Payment Mode :</label>
-//                     <Field className="form-control" component="select" name="paymentMode">
-//                       <option value="cash">cash</option>
-//                       <option value="credit card">credit card</option>
-//                       <option value="debit card">debit card</option>
-//                       <option value="UPI">UPI</option>
-//                     </Field>
-//                   </fieldset>
-//                   <fieldset className="form-group">
-//                     <label>Amount</label>
-//                     <Field className="form-control" type="number" name="amount" min="0" />
-//                   </fieldset>
-//                   <fieldset className="form-group">
-//                     <label>Transaction Status :</label>
-//                     <Field className="form-control" component="select" name="tranStatus">
-//                       <option value="DN">done</option>
-//                       <option value="PN">pending</option>
-//                     </Field>
-//                   </fieldset>
-//                   <fieldset className="form-group">
-//                     <label>Remarks</label>
-//                     <Field className="form-control" type="text" name="remarks" />
-//                   </fieldset>
-//                   <button className="btn btn-success" type="submit" centered>add</button>
-//                 </Form>
-//               )
-//             }
-//           </Formik>
-//           </div> 
-//     )
-//   }
-// }
 

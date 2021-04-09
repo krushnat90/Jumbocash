@@ -14,7 +14,6 @@ class LogoutButton extends Component {
     }
 
     onSuccess() {
-        console.log("logout successful");
         sessionStorage.removeItem('JUMBO_USER_ID');
         sessionStorage.removeItem('JUMBO_USER_NAME');
         sessionStorage.removeItem('JUMBO_LOGIN_STATUS');

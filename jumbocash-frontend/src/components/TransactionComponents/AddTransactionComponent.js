@@ -13,29 +13,15 @@ import EntityService from "../../services/EntityService";
 import TransactionService from "../../services/TransactionService";
 import moment from "moment";
 
-// import DateFnsUtils from '@date-io/date-fns';
-import {
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-import ResponsiveDrawer from "../Navbar/DrawerComponent";
-
-// import 'react-responsive-modal/styles.css';
-// import { Modal } from 'react-responsive-modal';
-
 
 class AddTransactionComponent extends Component {
 
   constructor(props) {
     super(props);
-    // this.state = {
-    //   entities: [],
-    //   show: true,
-    //   message: '',
-    //   errorMessage: ''
-    // }
 
     var today = new Date(),
       date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+
     this.initialState = {
       entities: [],
       show: true,
@@ -61,7 +47,6 @@ class AddTransactionComponent extends Component {
   }
 
   componentDidMount() {
-    console.log(" date " + this.state.today)
     this.getEntities();
   }
 
@@ -88,34 +73,34 @@ class AddTransactionComponent extends Component {
   validate(transaction) {
 
     if (!transaction.amount) {
-      this.setState({ errorMessage: 'Amount is mandatory', message: ''  })
+      this.setState({ errorMessage: 'Amount is mandatory', message: '' })
       return false;
     } else if (transaction.amount < 0) {
-      this.setState({ errorMessage: 'Amount must be positive', message: ''  })
+      this.setState({ errorMessage: 'Amount must be positive', message: '' })
       return false;
     }
     else if (!transaction.tranDate) {
-      this.setState({ errorMessage: 'Transaction date is mandatory', message: ''  })
+      this.setState({ errorMessage: 'Transaction date is mandatory', message: '' })
       return false;
     }
     else if (!transaction.tranType) {
-      this.setState({ errorMessage: 'Transaction type is mandatory', message: ''  })
+      this.setState({ errorMessage: 'Transaction type is mandatory', message: '' })
       return false;
     }
 
     else if (!transaction.paymentMode) {
-      this.setState({ errorMessage: 'Payment mode is mandatory', message: ''  })
+      this.setState({ errorMessage: 'Payment mode is mandatory', message: '' })
       return false;
     }
 
     else if (!transaction.entityId) {
-      this.setState({ errorMessage: 'No Entity is found', message: ''  })
+      this.setState({ errorMessage: 'No Entity is found', message: '' })
       return false;
     }
 
     else if (!transaction.tranStatus) {
-      this.setState({ errorMessage: 'Transaction status is mandatory', message: ''  })
-      
+      this.setState({ errorMessage: 'Transaction status is mandatory', message: '' })
+
       return false;
     }
 
@@ -137,7 +122,6 @@ class AddTransactionComponent extends Component {
   }
 
   addTransaction() {
-    console.log(this.state);
     let transaction = {
       amount: this.state.amount,
       tranType: this.state.tranType,
@@ -158,7 +142,7 @@ class AddTransactionComponent extends Component {
         ).catch(err => {
           this.setState({ errorMessage: 'Transaction could not be added' })
         }).then(() => {
-          
+
           this.getEntities();
         })
     }
@@ -169,9 +153,6 @@ class AddTransactionComponent extends Component {
   render() {
     return (
       <div>
-        {/* <div>
-          <ResponsiveDrawer />
-        </div> */}
         <div className="container">
           {this.state.message && <div className="alert alert-success" id="site-message">{this.state.message}
             <button type="button"
@@ -202,7 +183,7 @@ class AddTransactionComponent extends Component {
                       <FormControl className="form-control">
                         <MuiInputLabel id="entityName">Entity Name</MuiInputLabel>
                         <MuiSelect
-                          //onChange={this.handleChange}
+
                           labelId="entityName"
                           value={this.state.entityName}
                           onChange={event => {
@@ -212,7 +193,6 @@ class AddTransactionComponent extends Component {
                         >
                           {this.state.entities.map(
                             entity => <MuiMenuItem value={entity.id}>{entity.entityName}</MuiMenuItem>
-                            // entity => <option value={entity.id}>{entity.entityName}</option>
                           )}
 
                         </MuiSelect>
@@ -222,7 +202,6 @@ class AddTransactionComponent extends Component {
                       <TextField
                         required
                         id="tranDate"
-                        // label="Transaction Date"
                         type="date"
                         name="tranDate"
                         style={{ paddingTop: 16 }}
@@ -239,7 +218,7 @@ class AddTransactionComponent extends Component {
                       <FormControl className="form-control">
                         <MuiInputLabel id="tranType">Transaction Type</MuiInputLabel>
                         <MuiSelect
-                          //onChange={this.handleChange}
+
                           labelId="tranType"
                           value={this.state.tranType}
                           onChange={event => {
@@ -258,7 +237,7 @@ class AddTransactionComponent extends Component {
                       <FormControl className="form-control">
                         <MuiInputLabel id="paymentMode">Payment Mode</MuiInputLabel>
                         <MuiSelect
-                          //onChange={this.handleChange}
+
                           labelId="paymentMode"
                           value={this.state.paymentMode}
                           onChange={event => {
@@ -296,7 +275,7 @@ class AddTransactionComponent extends Component {
                       <FormControl className="form-control">
                         <MuiInputLabel id="paymentMode">Transaction Status</MuiInputLabel>
                         <MuiSelect
-                          //onChange={this.handleChange}
+
                           labelId="tranStatus"
                           value={this.state.tranStatus}
                           onChange={event => {
@@ -340,84 +319,4 @@ class AddTransactionComponent extends Component {
   }
 }
 export default AddTransactionComponent;
-
-//   render() {
-//     let { amount, tranType, paymentMode, entityName, remarks, tranStatus } = this.state;
-//     return (
-//       <div class="container">
-//           <Formik
-//             initialValues={{ amount, tranType, paymentMode, entityName, remarks, tranStatus }}
-//             validate={this.validate}
-//             onSubmit={this.addTransaction}
-//             enableReinitialize={true}
-//           >
-//             {
-//               (props) => (
-//                 <Form>
-//                   {this.state.message && <div className="alert alert-success" id="site-message">{this.state.message}
-//                     <button type="button"
-//                       className="close"
-//                       data-dismiss="alert"
-//                       aria-label="Close"
-//                       onClick={() => this.hideMessageAlert()}>
-//                       <span aria-hidden="true">&times;</span>
-//                     </button>
-//                   </div>}
-//                   {this.state.errorMessage && <div className="alert alert-warning" role="alert">{this.state.errorMessage}
-//                     <button type="button"
-//                       className="close"
-//                       data-dismiss="alert"
-//                       aria-label="Close"
-//                       onClick={() => this.hideErrorAlert()}>
-//                       <span aria-hidden="true">&times;</span>
-//                     </button>
-//                   </div>}
-//                   <fieldset className="form-group">
-//                     <label>Entity :</label>
-//                     <Field className="form-control" component="select" name="entityId">
-//                       {this.state.entities.map(
-//                         entity => <option value={entity.id}>{entity.entityName}</option>
-//                       )}
-//                     </Field>
-//                   </fieldset>
-//                   <fieldset className="form-group">
-//                     <label>Transaction Type :</label>
-//                     <Field className="form-control" component="select" name="tranType">
-//                       <option value="credit">credit</option>
-//                       <option value="debit">debit</option>
-//                     </Field>
-//                   </fieldset>
-//                   <fieldset className="form-group">
-//                     <label>Payment Mode :</label>
-//                     <Field className="form-control" component="select" name="paymentMode">
-//                       <option value="cash">cash</option>
-//                       <option value="credit card">credit card</option>
-//                       <option value="debit card">debit card</option>
-//                       <option value="UPI">UPI</option>
-//                     </Field>
-//                   </fieldset>
-//                   <fieldset className="form-group">
-//                     <label>Amount</label>
-//                     <Field className="form-control" type="number" name="amount" min="0" />
-//                   </fieldset>
-//                   <fieldset className="form-group">
-//                     <label>Transaction Status :</label>
-//                     <Field className="form-control" component="select" name="tranStatus">
-//                       <option value="DN">done</option>
-//                       <option value="PN">pending</option>
-//                     </Field>
-//                   </fieldset>
-//                   <fieldset className="form-group">
-//                     <label>Remarks</label>
-//                     <Field className="form-control" type="text" name="remarks" />
-//                   </fieldset>
-//                   <button className="btn btn-success" type="submit" centered>add</button>
-//                 </Form>
-//               )
-//             }
-//           </Formik>
-//           </div> 
-//     )
-//   }
-// }
 
