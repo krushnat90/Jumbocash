@@ -109,10 +109,10 @@ const useStyles = theme => ({
 });
 
 const columns = [
-    { field: 'tranDate', headerName: 'Date', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-    { field: 'entityName', headerName: 'Entity Name', width: 190, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+    { field: 'tranDate', headerName: 'Date', flex : 0.7, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+    { field: 'entityName', headerName: 'Entity Name', flex : 1, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
     {
-        field: 'tranType', headerName: 'Type', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+        field: 'tranType', headerName: 'Type', flex : 0.7, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
         , cellClassName: (params) =>
             clsx('tranType', {
                 credit: params.value === 'credit',
@@ -120,7 +120,7 @@ const columns = [
             }),
     },
     {
-        field: 'amount', headerName: 'Amount', width: 150, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', cellClassName: (params) =>
+        field: 'amount', headerName: 'Amount', flex : 1, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', cellClassName: (params) =>
             clsx('amount', {
                 positive: params.value > 0,
                 negative: params.value < 0
