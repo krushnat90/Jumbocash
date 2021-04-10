@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 @CrossOrigin
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-03-07T11:46:35.995Z[GMT]")
 public interface EntityApi {
 
     @Operation(summary = "Add new entity", description = "", tags={ "entity" })
