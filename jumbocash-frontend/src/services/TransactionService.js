@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //This is the service class to make REST requests to backend
 
-const BACKEND_API_URL = "http://localhost:8080/v1";
+const BACKEND_API_URL = process.env.REACT_APP_BACKEND_API_URL;
 const ENDPT_TRANSACTION = "transaction"
 const ENDPT_SUMMARY = "summary"
 const ENDPT_user = "user"
