@@ -43,6 +43,7 @@ import { CalendarViewDayTwoTone, PostAddTwoTone } from "@material-ui/icons";
 import LogoutButton from "../LoginLogoutComponents/LogoutButton";
 import ExitToAppTwoToneIcon from '@material-ui/icons/ExitToAppTwoTone';
 import { useGoogleLogout } from 'react-google-login';
+import ProfileComponent from "./ProfileComponent";
 
 
 const drawerWidth = 240;
@@ -339,6 +340,7 @@ function ResponsiveDrawer(props) {
             <ProtectedRoute path="/entities" component={ViewEntityComponent} />
             <ProtectedRoute path="/add-entity" component={AddEntityComponent} />
             <ProtectedRoute path="/logout" component={LogoutButton} />
+            <ProtectedRoute path="/profile" component={ProfileComponent} />
           </Switch>
         </main>
       </BrowserRouter>

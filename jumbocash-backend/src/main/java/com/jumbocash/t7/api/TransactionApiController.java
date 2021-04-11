@@ -113,7 +113,7 @@ public class TransactionApiController implements TransactionApi {
 				return ResponseEntity.notFound().build();
 			}
 
-			return ResponseEntity.ok(limit.isPresent() ? transactionsByUserId.get().subList(0, limit.get())
+			return ResponseEntity.ok(limit.isPresent() && transactionsByUserId.get().size()>limit.get() ? transactionsByUserId.get().subList(0, limit.get())
 					: transactionsByUserId.get());
 
 		} catch (Exception e) {

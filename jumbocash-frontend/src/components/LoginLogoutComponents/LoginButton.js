@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid'
 import LandingImage from '../../images/landing-page6.jpg';
 import JumbotailLogo from '../../images/jumbotail-logo.png';
 
-const clientId = '193599941937-401iftc6u6hb3b92l27fvc80fomasg22.apps.googleusercontent.com';
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 class LoginButton extends Component {
 
@@ -22,6 +22,7 @@ class LoginButton extends Component {
 
     onSuccess(authResponse) {
         var profileObj = authResponse.profileObj;
+        console.log(profileObj);
         sessionStorage.setItem("JUMBO_TOKEN_ID", authResponse.tokenId);
 
         let user = {
@@ -35,6 +36,8 @@ class LoginButton extends Component {
                 refreshTokenSetup(authResponse);
                 sessionStorage.setItem("JUMBO_USER_ID", response.data.userId);
                 sessionStorage.setItem("JUMBO_USER_NAME", profileObj.name);
+                sessionStorage.setItem("JUMBO_EMAIL", profileObj.email);
+                sessionStorage.setItem("JUMBO_IMG_URL", profileObj.imageUrl);
                 sessionStorage.setItem("JUMBO_LOGIN_STATUS", true);
                 
                 this.props.history.push({
