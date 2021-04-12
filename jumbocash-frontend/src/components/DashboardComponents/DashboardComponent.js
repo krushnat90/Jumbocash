@@ -22,8 +22,6 @@ import ShoppingCartTwoToneIcon from '@material-ui/icons/ShoppingCartTwoTone';
 import AccountBalanceWalletTwoToneIcon from '@material-ui/icons/AccountBalanceWalletTwoTone';
 import UserService from "../../services/UserService";
 
-
-
 const format = () => tick => tick;
 const legendStyles = () => ({
     root: {
@@ -109,10 +107,10 @@ const useStyles = theme => ({
 });
 
 const columns = [
-    { field: 'tranDate', headerName: 'Date', flex : 0.7, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
-    { field: 'entityName', headerName: 'Entity Name', flex : 1, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+    { field: 'tranDate', headerName: 'Date', flex: 0.7, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
+    { field: 'entityName', headerName: 'Entity Name', flex: 1, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center' },
     {
-        field: 'tranType', headerName: 'Type', flex : 0.7, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+        field: 'tranType', headerName: 'Type', flex: 0.7, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
         , cellClassName: (params) =>
             clsx('tranType', {
                 credit: params.value === 'credit',
@@ -120,7 +118,7 @@ const columns = [
             }),
     },
     {
-        field: 'amount', headerName: 'Amount', flex : 1, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', cellClassName: (params) =>
+        field: 'amount', headerName: 'Amount', flex: 1, headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', cellClassName: (params) =>
             clsx('amount', {
                 positive: params.value > 0,
                 negative: params.value < 0
@@ -155,6 +153,7 @@ class DashboardComponent extends Component {
         this.hideErrorAlert = this.hideErrorAlert.bind(this);
         this.fetchAnalysisData = this.fetchAnalysisData.bind(this);
     }
+
 
     fetchUserSummaryInformation() {
         UserService.getUserSummaryInfo(this.props.userId).then(
@@ -297,7 +296,7 @@ class DashboardComponent extends Component {
                                 />
                                 <Legend position="bottom" rootComponent={Root} itemComponent={Item} labelComponent={Label} />
                                 <Title
-                                    text={`Last Six Months Transaction Distribution`}
+                                    text={`Credit vs Debit Transaction Distribution`}
                                     textComponent={TitleText}
                                 />
                                 <Animation />
@@ -307,7 +306,7 @@ class DashboardComponent extends Component {
                     <Grid item xs={12} sm={6}>
                         <Paper>
                             <div style={{ height: 500, width: '100%' }} className="container">
-                                <DataGrid className={classes.root}
+                                <DataGrid disableColumnFilter className={classes.root}
                                     components={{
                                         NoRowsOverlay: CustomNoRowsOverlay,
                                     }}

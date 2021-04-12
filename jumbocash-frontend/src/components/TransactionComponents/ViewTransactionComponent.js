@@ -222,7 +222,7 @@ const useStyles = theme => ({
 // Data grid columns
 const columns = [
   {
-    field: 'tranDate', headerName: 'Date', width: 120,
+    field: 'tranDate', headerName: 'Date', width: 120, type : 'date', 
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand
   },
@@ -247,7 +247,7 @@ const columns = [
       }),
   },
   {
-    field: 'amount', headerName: 'Amount', width: 150,
+    field: 'amount', headerName: 'Amount', width: 150, type : 'number',
     headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',
     renderCell: renderCellExpand,
     cellClassName: (params) =>
