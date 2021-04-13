@@ -1,154 +1,354 @@
 import React, { Component } from "react";
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Button from 'react-bootstrap/Button';
-import AddEntityComponent from '../EntityComponents/AddEntityComponent';
+import { Spinner } from 'react-bootstrap';
+import {
+  DataGrid, GridToolbarContainer,
+  GridToolbarExport, isOverflown
+} from '@material-ui/data-grid';
+import CustomNoRowsOverlay from './CustomNoRowsOverlay'
 import EntityService from "../../services/EntityService";
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
+import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
+import Modal from '@material-ui/core/Modal';
+import PropTypes from 'prop-types';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import Typography from '@material-ui/core/Typography';
+import EditEntityComponent from '../EntityComponents/EditEntityComponent'
+
+import { makeStyles } from "@material-ui/core/styles";
 
 class ViewEntityComponent extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-          entities: [],
-          message: null,
-          openAddFlag : false,
-          userId:2
-        }
-        this.getHeader = this.getHeader.bind(this);
-        this.getEntities = this.getEntities.bind(this);
-        this.addButtonOnclick = this.addButtonOnclick.bind(this);
-        this.addButtonClose = this.addButtonClose.bind(this);
-      }
-    
-      componentDidMount() {
-        this.getEntities();
-      }
-    
-      getEntities() {
-        EntityService.getEntitiesByUserId(this.state.userId).then(
-          response => {
-            this.setState({
-              entities: response.data
-            })
-            console.log(response.data);
-          }
-    
-        ).catch(
-          error => {
-            this.setState({ message: "Error occurred" })
-          }
-        )
-      }
-    
-      addButtonOnclick() {
-        this.setState({
-          openAddFlag: true
-        })
-      }
-    
-      addButtonClose() {
-        this.setState({
-          openAddFlag: false
-        })
-      }
-    
-      getHeader() {
-        return [
-          { id: 'Name', label: 'Name', minWidth: 100, align: 'center' },
-          { id: 'Type', label: 'Type', minWidth: 100 , align: 'center' },
-          { id: 'Address', label: 'Address', minWidth: 200 , align: 'center' },
-          { id: 'City', label: 'City', minWidth: 100 , align: 'center' },
-          { id: 'State', label: 'State', minWidth: 100 , align: 'center' },
-          { id: 'Zip', label: 'Zip', minWidth: 100 , align: 'center' },
-          { id: 'Email', label: 'Email', minWidth: 100 , align: 'center' },
-          { id: 'Phone', label: 'Phone', minWidth: 100 , align: 'center' },
-        //   {
-        //     id: 'Transaction Type',
-        //     label: 'Transaction Type',
-        //     minWidth: 170,
-        //     align: 'right',
-        //     format: (value) => value.toLocaleString('en-US'),
-        //   },
-        //   {
-        //     id: 'Payment Mode',
-        //     label: 'Payment Mode',
-        //     minWidth: 170,
-        //     align: 'right',
-        //     format: (value) => value.toLocaleString('en-US'),
-        //   },
-        //   {
-        //     id: 'Entity',
-        //     label: 'Entity',
-        //     minWidth: 170,
-        //     align: 'center',
-        //     format: (value) => value.toFixed(2),
-        //   },
-        //   {
-        //     id: 'Remarks',
-        //     label: 'Remarks',
-        //     minWidth: 170,
-        //     align: 'center',
-        //     format: (value) => value.toFixed(2),
-        //   },
-        ]
-      }
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      entities: [],
+      message: null,
+      openAddFlag: false,
+      openModal: false,
+      userId: props.userId,
+      entityToEdit: null
+    }
+    this.getEntities = this.getEntities.bind(this);
+    this.editEntity = this.editEntity.bind(this);
+    this.deleteEntity = this.deleteEntity.bind(this);
+    this.rowSelected = this.rowSelected.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.hideMessageAlert = this.hideMessageAlert.bind(this);
+  }
 
-    render() {
-        return (
+  componentDidMount() {
+    this.getEntities();
+  }
+
+  //close button functionality for message
+  hideMessageAlert() {
+    this.setState({
+      message: false,
+    });
+  }
+
+  getEntities() {
+    EntityService.getEntitiesByUserId(this.state.userId).then(
+      response => {
+        this.setState({
+          entities: response.data,
+          isLoading: false
+        })
+      }
+    ).catch(
+      error => {
+        if ((error.response) && error.response.status === 404) {
+          this.setState({
+            message: "No Entities found!",
+            isLoading: false
+          })
+        }
+        else {
+          this.setState({
+            message: "Error occurred while fetching entities",
+            isLoading: false
+          })
+        }
+      }
+    )
+
+    if (this.state.entities === null) {
+      this.setState({ entities: [] });
+    }
+  }
+
+  editEntity() {
+    if (this.state.entityToEdit != null) {
+      this.setState({ openModal: true });
+    }
+    else {
+      this.setState({
+        message: "Please select an entity first"
+      })
+    }
+  }
+
+  deleteEntity() {
+    this.setState({
+      message: "Not implemented yet. Coming Soon..."
+    })
+  }
+
+  handleClose() {
+    this.setState({ openModal: false });
+  }
+
+  async rowSelected(row) {
+    await this.setState({ entityToEdit: row.data });
+  }
+
+
+  render() {
+    const { classes } = this.props;
+    if (this.state.isLoading) {
+      return (
+        <Spinner animation="border" role="status">
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+      );
+    } else {
+      return (
+        <div style={{ height: 500, width: '100%' }} className="container">
           <div>
-            <Button variant="primary" onClick={this.addButtonOnclick}>New Entity</Button>
-            {this.state.openAddFlag && 
-            <AddEntityComponent addButtonCloseFunc={this.addButtonClose} 
-            getEntityFunc={this.getEntities} userId={this.state.userId}/>}
-            <hr/>
-            <TableContainer component={Paper}>
-    
-              <Table size="small" aria-label="a dense table">
-    
-                <TableHead>
-                  <TableRow>
-                    {this.getHeader().map((column) => (
-                      <TableCell
-                        key={column.id}
-                        align={column.align}
-                        style={{ minWidth: column.minWidth }}
-                      >
-                        <b>
-                          {column.label}
-                        </b>
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {
-                    this.state.entities.map(
-                      entity =>
-                        <TableRow key={entity.entityId}>
-                          <TableCell align="center">{entity.entityName}</TableCell>
-                          <TableCell align="center">{entity.entityType}</TableCell>
-                          <TableCell align="center">{entity.address}</TableCell>
-                          <TableCell align="center">{entity.city}</TableCell>
-                          <TableCell align="center">{entity.state}</TableCell>
-                          <TableCell align="center">{entity.zip}</TableCell>
-                          <TableCell align="center">{entity.email}</TableCell>
-                          <TableCell align="center">{entity.phone}</TableCell>
-                        </TableRow>
-    
-                    )
-                  }
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <Button variant="outlined" size="medium" color="primary"
+              startIcon={<EditTwoToneIcon fontSize="small" />}
+              onClick={this.editEntity}>
+              Edit
+            </Button>
+            <Button variant="outlined" size="medium" color="primary"
+              startIcon={<DeleteTwoToneIcon fontSize="small" />}
+              onClick={this.deleteEntity}>
+              Delete
+            </Button>
+            <Modal
+              open={this.state.openModal}
+              onClose={this.handleClose}
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+            >
+              <EditEntityComponent userId={this.props.userId}
+                entityToEdit={this.state.entityToEdit}
+                openModal={this.state.openModal}
+                handleClose={this.handleClose}
+                getEntities={this.getEntities}
+              />
+            </Modal>
           </div>
-        )
+          <br />
+          {this.state.message && <div className="alert alert-warning" role="alert">{this.state.message}
+            <button type="button"
+              className="close"
+              data-dismiss="alert"
+              aria-label="Close"
+              onClick={() => this.hideMessageAlert()}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>}
+          <div style={{ height: 450, width: '100%' }}>
+            <DataGrid className={classes.root} components={{
+              NoRowsOverlay: CustomNoRowsOverlay,
+              Toolbar: CustomToolbar,
+            }}
+              onRowSelected={(row) => this.rowSelected(row)}
+              rows={this.state.entities} columns={columns}
+            />
+          </div>
+        </div>
+      );
+    }
+  }
+}
+
+const useStyles = theme => ({
+  root: {
+    '& .super-app-theme--header': {
+      backgroundColor: 'rgba(25,31,77, 0.7)',
+      color: 'white',
+      fontWeight: '600'
+    },
+  },
+});
+
+const columns = [
+  {
+    field: 'entityName', headerName: 'Entity Name', width: 150, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'entityType', headerName: 'Entity Type', width: 100, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'address', headerName: 'Address', width: 200, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'city', headerName: 'City', width: 100, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'state', headerName: 'State', width: 120, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'zip', headerName: 'Zip', width: 100, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'email', headerName: 'Email', width: 200, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+  {
+    field: 'phone', headerName: 'Phone', width: 120, renderCell: renderCellExpand,
+    headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center'
+  },
+];
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+}
+
+
+// Cell Expand Styling
+const expandCellStyles = makeStyles(() => ({
+  root: {
+    alignItems: "center",
+    lineHeight: "24px",
+    width: "100%",
+    height: "100%",
+    position: "relative",
+    display: "flex",
+    "& .cellValue": {
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis"
+    }
+  }
+}));
+
+
+const GridCellExpand = React.memo(function GridCellExpand(props) {
+  const { width, value } = props;
+  const wrapper = React.useRef(null);
+  const cellDiv = React.useRef(null);
+  const cellValue = React.useRef(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const classes = expandCellStyles();
+  const [showFullCell, setShowFullCell] = React.useState(false);
+  const [showPopper, setShowPopper] = React.useState(false);
+
+  const handleMouseEnter = () => {
+    const isCurrentlyOverflown = isOverflown(cellValue.current);
+    setShowPopper(isCurrentlyOverflown);
+    setAnchorEl(cellDiv.current);
+    setShowFullCell(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowFullCell(false);
+  };
+
+  React.useEffect(() => {
+    if (!showFullCell) {
+      return undefined;
+    }
+
+    function handleKeyDown(nativeEvent) {
+      // IE11, Edge (prior to using Bink?) use 'Esc'
+      if (nativeEvent.key === 'Escape' || nativeEvent.key === 'Esc') {
+        setShowFullCell(false);
       }
     }
 
-export default ViewEntityComponent
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [setShowFullCell, showFullCell]);
+
+  return (
+    <div
+      ref={wrapper}
+      className={classes.root}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div
+        ref={cellDiv}
+        style={{
+          height: 1,
+          width,
+          display: 'block',
+          position: 'absolute',
+          top: 0,
+        }}
+      />
+      <div ref={cellValue} className="cellValue">
+        {value}
+      </div>
+      {showPopper && (
+        <Popper
+          open={showFullCell && anchorEl !== null}
+          anchorEl={anchorEl}
+          style={{ width, marginLeft: -17 }}
+        >
+          <Paper
+            elevation={1}
+            style={{ minHeight: wrapper.current.offsetHeight - 3 }}
+          >
+            <Typography variant="body2" style={{ padding: 8 }}>
+              {value}
+            </Typography>
+          </Paper>
+        </Popper>
+      )}
+    </div>
+  );
+});
+
+GridCellExpand.propTypes = {
+  value: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
+};
+
+function renderCellExpand(params) {
+  return (
+    <GridCellExpand
+      value={params.value ? params.value.toString() : ''}
+      width={params.colDef.width}
+    />
+  );
+}
+
+renderCellExpand.propTypes = {
+  /**
+   * The column of the row that the current cell belongs to.
+   */
+  colDef: PropTypes.any.isRequired,
+  /**
+   * The cell value, but if the column has valueGetter, use getValue.
+   */
+  value: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.bool,
+  ]),
+};
+
+export default withStyles(useStyles)(ViewEntityComponent);

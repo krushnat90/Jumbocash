@@ -7,7 +7,6 @@ code {
 }
 
 body {
-  background-color: red;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -16,14 +15,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#root{
-  /* background-color: rgb(243, 245, 252); */
-  
-}
-
 .toolbar{
   /* background-image: linear-gradient(to right, rgb(17,115,239),  rgb(17,202,239)); */
   background-image: linear-gradient(to right, rgba(255,0,0,0), rgb(245,54,92));
+}
+
+.form-control{
+  width : 100%;
 }
 
 .blue-color{
@@ -42,27 +40,30 @@ body {
   color : rgb(242,54,92);
 }
 .green-color{
-  color : rgb(45,206,137);
+  color : rgb(165,223,223);
 }
 .red-color{
-  color :rgb(245,54,92) ;
+  color: rgb(255,177,193);
 }
-
-Thead{
-  background-color: rgba(72, 81, 176, 0.877);
+.lavender-color{
+  color:rgb(204,178,255);
+}
+.yellow-color{
+  color : rgb(250,210,171);
+}
+.skyblue-color{
+  color : rgb(154,208,245);
+}
+.white-color{
   color : white;
 }
 
-Td, Th{
-  padding: 1%;
+.table-head{
+  /* background-color: linear-gradient(to right, rgb(193, 192, 209), rgb(142, 137, 211)); */
+  background-color: rgb(219,192,212);
 }
 
-Tr{
-  border-bottom-style  :  solid;
-  border-color : rgb(224, 194, 201);  
-}
-
-.modal{
+/* .modal{
   padding-top: 5%;
   width: 100%;
 }
@@ -70,5 +71,45 @@ Tr{
 .modal-header{
   background-color:  rgba(72, 81, 176, 0.877);
   color : white;
+} */
+
+/* modal{
+  position: inherit;
+} */
+
+.text-field{
+    margin: 10%;
 }
 
+.submit-button{
+  width : 30%;
+}
+
+.login-card{
+  background-image: linear-gradient(to right, rgb(65,80,181), rgb(245,54,92));
+}
+
+.padding-btm{
+  padding-bottom: 200%;
+}
+
+.landing-image{
+  width: 100%;
+}
+
+.column-bg-color{
+  /* background-image: linear-gradient(to right, rgb(108,70,242), rgb(243,215,232)); */
+  background-image: linear-gradient(to right, rgb(40,48,121), rgb(115,76,136));
+}
+
+.column{
+  width : 50%;
+}
+
+.font-impact{
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.close-button{
+  float: right;
+}

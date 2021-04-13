@@ -7,15 +7,14 @@ package com.jumbocash.t7.api;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
+import com.jumbocash.t7.model.MonthWiseTransactionSummary;
 import com.jumbocash.t7.model.Transaction;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +26,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-03-07T11:46:35.995Z[GMT]")
+@CrossOrigin
 public interface TransactionApi {
 
     @Operation(summary = "Add new transaction", description = "", tags={ "transaction" })
@@ -54,7 +53,15 @@ public interface TransactionApi {
     @RequestMapping(value = "/transaction/user/{userId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Transaction>> getTransactionsByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") BigInteger userId);
+    ResponseEntity<List<Transaction>> getTransactionsByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") BigInteger userId, @Parameter(in = ParameterIn.QUERY, description = "Limit rows", required=false) @RequestParam("limit") Optional<Integer> limit);
+    
+    @Operation(summary = "Display all transaction.", description = "Display all transctions for an user.", tags={ "transaction" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Transaction.class)))) })
+    @RequestMapping(value = "/transaction/summary/user/{userId}",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    ResponseEntity<List<MonthWiseTransactionSummary>> getLastSixMonthsSummary(@Parameter(in = ParameterIn.PATH, description = "User ID", required=true, schema=@Schema()) @PathVariable("userId") BigInteger userId);
 
 
     @Operation(summary = "Update transaction details", description = "", tags={ "transaction" })
@@ -63,7 +70,15 @@ public interface TransactionApi {
     @RequestMapping(value = "/transaction",
         consumes = { "application/json" }, 
         method = RequestMethod.PATCH)
-    ResponseEntity<Void> updateTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Transaction body);
+    ResponseEntity<ApiResponseMessage> updateTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Transaction body);
+    
+    @Operation(summary = "Delete transaction", description = "", tags={ "transaction" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successful Operation") })
+    @RequestMapping(value = "/transaction/{transactionId}",
+        produces = { "application/json" }, 
+        method = RequestMethod.DELETE)
+    ResponseEntity<ApiResponseMessage> deleteTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "Transaction object that needs to be deleted.", required=true, schema=@Schema()) @Valid @PathVariable("transactionId") BigInteger transactionId);
 
 }
 

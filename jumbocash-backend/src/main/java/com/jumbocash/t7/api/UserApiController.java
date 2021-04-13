@@ -1,6 +1,9 @@
 package com.jumbocash.t7.api;
 
+import com.jumbocash.t7.auth.GoogleAuthenticator;
+import com.jumbocash.t7.model.User;
 import com.jumbocash.t7.model.UserEntityLink;
+import com.jumbocash.t7.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,6 +14,8 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,28 +34,69 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-03-07T11:46:35.995Z[GMT]")
 @RestController
 public class UserApiController implements UserApi {
 
-    private static final Logger log = LoggerFactory.getLogger(UserApiController.class);
+	private static final Logger log = LoggerFactory.getLogger(UserApiController.class);
 
-    private final ObjectMapper objectMapper;
+	private final HttpServletRequest request;
 
-    private final HttpServletRequest request;
+	UserService userService;
+	
+	GoogleAuthenticator googleAuthenticator; 
 
-    @org.springframework.beans.factory.annotation.Autowired
-    public UserApiController(ObjectMapper objectMapper, HttpServletRequest request) {
-        this.objectMapper = objectMapper;
-        this.request = request;
-    }
+	
 
-    public ResponseEntity<Void> linkEntity(@Parameter(in = ParameterIn.DEFAULT, description = "User Entity Link Object.", required=true, schema=@Schema()) @Valid @RequestBody UserEntityLink body) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
-    }
+	public UserApiController(HttpServletRequest request, UserService userService,
+			GoogleAuthenticator googleAuthenticator) {
+		super();
+		this.request = request;
+		this.userService = userService;
+		this.googleAuthenticator = googleAuthenticator;
+	}
+
+	public ResponseEntity<Void> linkEntity(
+			@Parameter(in = ParameterIn.DEFAULT, description = "User Entity Link Object.", required = true, schema = @Schema()) @Valid @RequestBody UserEntityLink body) {
+		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+			return new ResponseEntity(HttpStatus.FORBIDDEN);
+		return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+	}
+
+	@Override
+	public ResponseEntity<User> addOrUpdateUser(@Valid User user) {
+
+		String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+		if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+			return new ResponseEntity(HttpStatus.FORBIDDEN);
+		
+		Optional<User> operatedUser = userService.addOrUpdateUser(user);
+
+		if (!operatedUser.isPresent())
+			return ResponseEntity.badRequest().build();
+
+		return ResponseEntity.ok(operatedUser.get());
+	}
+
+	@Override
+	public ResponseEntity<Map<String, BigInteger>> getSummaryInfoByUserId(BigInteger userId) {
+
+		try {
+			
+			String authorizationHeader = request.getHeader("AUTH_GOOGLE_TOKEN");
+			if(!googleAuthenticator.isTokenIdValid(authorizationHeader))
+				return new ResponseEntity(HttpStatus.FORBIDDEN);
+			
+			return ResponseEntity.ok(userService.getSummaryInfoByUserId(userId));
+		} catch (Exception ex) {
+			log.error("Exception in user api controller : "+ExceptionUtils.getStackTrace(ex));
+			return new ResponseEntity<Map<String, BigInteger>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 }

@@ -10,22 +10,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class AppConfig {
 	
-	@Value("${AllowedOrigins}")
-	private String allowedOrigins;
-	
+//	@Value("${AllowedOrigins}")
+//	private String allowedOrigins;
+//
 	@Bean
 	ModelMapper modelMapper(){
 		return new ModelMapper();
 	}
 	
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins(allowedOrigins).allowedMethods("GET", "POST", "PUT",
-						"OPTIONS", "DELETE", "PATCH");
-			}
-		};
-	}
+//	@Bean
+//	public WebMvcConfigurer corsConfigurer() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry registry) {
+//				registry.addMapping("/**").allowedOrigins(allowedOrigins).allowedMethods("GET", "POST", "PUT",
+//						"OPTIONS", "DELETE", "PATCH");
+//			}
+//		};
+//	}
 }

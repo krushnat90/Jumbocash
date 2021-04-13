@@ -17,15 +17,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -33,7 +26,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-03-07T11:46:35.995Z[GMT]")
+@CrossOrigin
 public interface EntityApi {
 
     @Operation(summary = "Add new entity", description = "", tags={ "entity" })
@@ -69,7 +62,15 @@ public interface EntityApi {
     @RequestMapping(value = "/entity",
         consumes = { "application/json" },
         method = RequestMethod.PATCH)
-    ResponseEntity<Void> updateEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Entity entity);
+    ResponseEntity<Entity> updateEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity object that needs to be updated.", required=true, schema=@Schema()) @Valid @RequestBody Entity entity);
+    
+    @Operation(summary = "Delete Entity", description = "", tags={ "entity" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Successful Operation") })
+    @RequestMapping(value = "/entity/{entityId}",
+        produces = { "application/json" }, 
+        method = RequestMethod.DELETE)
+    ResponseEntity<ApiResponseMessage> deleteEntity(@Parameter(in = ParameterIn.DEFAULT, description = "Entity id that needs to be deleted.", required=true, schema=@Schema()) @Valid @PathVariable("entityId") BigInteger entityId);
 
 }
 

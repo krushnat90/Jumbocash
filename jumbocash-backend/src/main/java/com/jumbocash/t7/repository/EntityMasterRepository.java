@@ -13,11 +13,13 @@ import java.util.Optional;
 @Repository
 public interface EntityMasterRepository extends JpaRepository<EntityMaster, BigInteger> {
 
-    @Query("SELECT e FROM EntityMaster e WHERE e.email = :email")
-    Optional<EntityMaster> getEntityByEmail(@Param("email") String email);
+    @Query("SELECT e FROM EntityMaster e JOIN UserEntityLnk u on u.entityId = e.entityId WHERE u.userId = :userId and e.email = :email and e.entityType = :entityType")
+    Optional<List<EntityMaster>> getEntityByEmail(@Param("email") String email, @Param("userId") BigInteger userId, @Param("entityType") String entityType);
 
     @Query("SELECT e FROM EntityMaster e JOIN UserEntityLnk u on u.entityId = e.entityId WHERE u.userId = :userId")
     Optional<List<EntityMaster>> getEntitiesByUserId(@Param("userId") BigInteger userId);
-
+    
+    @Query("SELECT count(e.entityId) FROM EntityMaster e JOIN UserEntityLnk u on u.entityId = e.entityId WHERE u.userId = :userId AND e.entityType=:entityType")
+    BigInteger getCountOfEntitiesByEntityType(@Param("userId") BigInteger userId, @Param("entityType")  String entityType);
 
 }
