@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid'
 import LandingImage from '../../images/landing-page6.jpg';
 import JumbotailLogo from '../../images/jumbotail-logo.png';
 
-const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+const clientId =process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 
 class LoginButton extends Component {

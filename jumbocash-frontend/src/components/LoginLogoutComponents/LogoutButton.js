@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { GoogleLogout } from 'react-google-login';
 
-const clientId = '193599941937-401iftc6u6hb3b92l27fvc80fomasg22.apps.googleusercontent.com';
+const clientId =process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 class LogoutButton extends Component {
 
