@@ -1,6 +1,8 @@
-# JUMBOCASH-T7
-Team ID: JUMBOCASH-T7 | Team Members: KRISHNAKANT THAKUR &amp; Shivani Jadhav
+# JUMBOCASH
+## An application for small business owners to track their credit and debit transactions
 
-https://jumbocash-t7.herokuapp.com/
+Team Members: KRISHNAKANT THAKUR &amp; Shivani Jadhav
 
-https://jumbocash-t7-backend.herokuapp.com/v1/swagger-ui/
+Frontend : https://jumbocash-t7.herokuapp.com/
+
+API : https://jumbocash-t7-backend.herokuapp.com/v1/swagger-ui/
